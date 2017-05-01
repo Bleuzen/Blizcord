@@ -32,10 +32,15 @@ public class Bot extends ListenerAdapter {
 
     public static void start() {
         	try {
-				if(!Config.load()) {
+        		//TODO: moved to a, test with ProGuard
+				/*if(!Config.load()) {
 					Log.print("Failed to load config.");
 		    		a.errExit();
-				}
+				}*/
+        		
+        		//TODO: remove, just for testing
+        		System.out.println("TOKEN: " + Config.get(Config.BOT_TOKEN));
+        		
         		
 				if(Config.get(Config.BOT_TOKEN).isEmpty()) {
 					Log.print("You must specify a Token in the config file or as argument! You can get it here: https://discordapp.com/developers/applications/me");

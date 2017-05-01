@@ -16,6 +16,7 @@ public class a {
 	//TODO: translations
 	//TODO: better logging
 	//TODO: replace admin IDs by Roles
+	//TODO: argument (bot token) in Blizcord.sh ($1 or hardcoded)
 	//TODO: update maven libs (JDA and lavaplayer, versions from https://github.com/sedmelluq/lavaplayer/blob/master/demo-jda/build.gradle)
 	
 	public static void main(String[] args) {
@@ -76,7 +77,13 @@ public class a {
 			System.out.println(" OK");
 		}
 		
-		//TODO: Test
+		// load the config file
+		if(!Config.load()) {
+			Log.print("Failed to load config.");
+    		errExit();
+		}
+		
+		//TODO: Test, (also in sh)
 		if(args.length > 0) {
 			Config.overrideToken(args[0]);
 		}

@@ -1,7 +1,7 @@
 
 public class Values {
 
-	static final boolean TESTING = false;
+	static final boolean TESTING = true;
 	static final boolean GENERATE_CHECKSUMS = false;
 	
 	static final String BOT_VERSION = "0.1" 	+ (TESTING ? "-testing" : "");
