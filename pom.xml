@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Blizcord</groupId>
+  <artifactId>Blizcord</artifactId>
+  <version>0.0.1</version>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  
+  <repositories>
+    <repository>
+      <id>jcenter</id>
+      <name>jcenter-bintray</name>
+      <url>http://jcenter.bintray.com</url>
+    </repository>
+  </repositories>
+
+
+  <dependencies>
+  
+    <dependency>
+      <groupId>com.sedmelluq</groupId>
+      <artifactId>lavaplayer</artifactId>
+      <version>1.2.36</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>net.dv8tion</groupId>
+      <artifactId>JDA</artifactId>
+      <version>3.0.0_175</version>
+    </dependency>
+  
+  </dependencies>
+  
+</project>

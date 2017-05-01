@@ -1,0 +1,6 @@
+BOT_TOKEN=
+CONTROL_CHANNEL=bot
+COMMAND_PREFIX=/
+VOICE_CHANNEL=Music
+DISPLAY_SONG_AS_GAME=true
+ADMIN_IDS=#uncomment this (remove "#") and put admin IDs here splitted with ":"
