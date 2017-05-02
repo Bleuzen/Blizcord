@@ -14,9 +14,8 @@ import java.util.ResourceBundle;
 public class a {
 	
 	//TODO: translations
-	//TODO: better logging
+	//TODO: better logging (and test it with this class and proguard)
 	//TODO: replace admin IDs by Roles
-	//TODO: argument (bot token) in Blizcord.sh ($1 or hardcoded)
 	//TODO: update maven libs (JDA and lavaplayer, versions from https://github.com/sedmelluq/lavaplayer/blob/master/demo-jda/build.gradle)
 	
 	public static void main(String[] args) {
@@ -79,11 +78,10 @@ public class a {
 		
 		// load the config file
 		if(!Config.load()) {
-			Log.print("Failed to load config.");
+			System.out.println("[" + Values.BOT_NAME + "] Failed to load config.");
     		errExit();
 		}
 		
-		//TODO: Test, (also in sh)
 		if(args.length > 0) {
 			Config.overrideToken(args[0]);
 		}
