@@ -5,3 +5,6 @@ Discord Bot written in Java using JDA and lavaplayer
 JDA: https://github.com/DV8FromTheWorld/JDA
 
 lavaplayer: https://github.com/sedmelluq/lavaplayer
+
+## Wiki
+https://github.com/Bleuzen/Blizcord/wiki
