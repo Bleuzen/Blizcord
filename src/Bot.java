@@ -32,10 +32,7 @@ public class Bot extends ListenerAdapter {
 
     public static void start() {
         	try {
-				if(!Config.load()) {
-					Log.print("Failed to load config.");
-		    		a.errExit();
-				}
+        		// config got loaded in a
         		
 				if(Config.get(Config.BOT_TOKEN).isEmpty()) {
 					Log.print("You must specify a Token in the config file or as argument! You can get it here: https://discordapp.com/developers/applications/me");

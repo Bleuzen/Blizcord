@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 public class a {
 	
 	//TODO: translations
-	//TODO: better logging
+	//TODO: better logging (and test it with this class and proguard)
 	//TODO: replace admin IDs by Roles
 	//TODO: update maven libs (JDA and lavaplayer, versions from https://github.com/sedmelluq/lavaplayer/blob/master/demo-jda/build.gradle)
 	
@@ -76,7 +76,12 @@ public class a {
 			System.out.println(" OK");
 		}
 		
-		//TODO: Test
+		// load the config file
+		if(!Config.load()) {
+			System.out.println("[" + Values.BOT_NAME + "] Failed to load config.");
+    		errExit();
+		}
+		
 		if(args.length > 0) {
 			Config.overrideToken(args[0]);
 		}
