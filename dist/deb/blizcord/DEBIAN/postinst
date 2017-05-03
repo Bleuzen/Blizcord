@@ -1,0 +1,4 @@
+#!/bin/sh
+chmod +x /opt/Blizcord/Blizcord
+ln -s /opt/Blizcord/Blizcord /usr/bin/blizcord
+chmod +x /usr/bin/blizcord-config

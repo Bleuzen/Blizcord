@@ -28,7 +28,7 @@ public class PlayerThread implements Runnable {
 	    AudioSourceManagers.registerRemoteSources(playerManager);
 	    AudioSourceManagers.registerLocalSource(playerManager);
 	    
-	    initGuildAudioPlayer(Bot.guild);
+	    initGuildAudioPlayer(Bot.getGuild());
 	}
 	
 	static GuildMusicManager getMusicManager() {
@@ -42,10 +42,7 @@ public class PlayerThread implements Runnable {
 
 		    guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
 	  }
-	
-	/* --- END OF LAVAPLAYER STUFF --- */
     
-	//TODO: handle too long messages
 	  static void sendPlaylist(User user, TextChannel channel) {
 	    	if(isPlaying()) {
 	    		StringBuilder toSend = new StringBuilder(user.getAsMention() + ""

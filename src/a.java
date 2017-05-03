@@ -12,10 +12,12 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class a {
-	
-	//TODO: translations
+
+	//TODO: DEB: don't override config (create it by script?)
+	//TODO: Update config after Bot update, keep values
 	//TODO: better logging (and test it with this class and proguard)
 	//TODO: replace admin IDs by Roles
+	//TODO: translations
 	//TODO: update maven libs (JDA and lavaplayer, versions from https://github.com/sedmelluq/lavaplayer/blob/master/demo-jda/build.gradle)
 	
 	public static void main(String[] args) {
@@ -23,7 +25,8 @@ public class a {
 		// Don't use Log before libraries are checked, because ProGuard doesn't like it
 		System.out.println(Values.BOT_NAME + " v" + Values.BOT_VERSION + " by " + Values.BOT_DEVELOPER);
 		System.out.println("[" + Values.BOT_NAME + "] Starting ...");
-
+		
+		
 		if(Values.GENERATE_CHECKSUMS) {
 			try {
 				generateLibChecksums();
@@ -79,7 +82,7 @@ public class a {
 		// load the config file
 		if(!Config.load()) {
 			System.out.println("[" + Values.BOT_NAME + "] Failed to load config.");
-    		errExit();
+			errExit();
 		}
 		
 		if(args.length > 0) {

@@ -20,15 +20,20 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 public class Bot extends ListenerAdapter {
     
     private static JDA api;
-
+    private static Guild guild;
+    private static TextChannel controlChannel; 
+    
     private static ArrayList<Long> admins = new ArrayList<>();
     
-    static Guild guild;
-    private static TextChannel controlChannel; 
     static boolean joined;
-
-    static int votesSkip;
-    static ArrayList<String> usersVotedForSkip = new ArrayList<>();
+    
+    static JDA getApi() {
+        return api;
+    }
+    
+    static Guild getGuild() {
+    	return guild;
+    }
 
     public static void start() {
         	try {
@@ -87,7 +92,6 @@ public class Bot extends ListenerAdapter {
                 	controlChannel = guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).get(0); // true for Ignore Case
                 } catch(IndexOutOfBoundsException e) {
                 	Log.print("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.");
-                	//TODO: Test shutdown
                 	a.errExit();
                 }
                 
@@ -97,6 +101,11 @@ public class Bot extends ListenerAdapter {
                 // Start game update thread
                 if(Boolean.valueOf(Config.get(Config.DISPLAY_SONG_AS_GAME))) {
                     new Thread(new PlayerThread()).start();	
+                }
+                
+                // Check for updates
+                if(Boolean.valueOf(Config.get(Config.CHECK_FOR_UPDATES))) {
+                	new Thread(new UpdateChecker()).start();
                 }
                 
                 Log.print("Successfully started.");
@@ -110,10 +119,6 @@ public class Bot extends ListenerAdapter {
 		//api.shutdown(); // done by shutdown hook of JDA
         System.exit(0);
     }
-    
-    static JDA getApi() {
-        return api;
-    }
 
     static void leave() {
     	// only defined guild, for one server
@@ -126,7 +131,6 @@ public class Bot extends ListenerAdapter {
     }
     
     
-	@SuppressWarnings("unused")
 	@Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         String message = event.getMessage().getContent();
@@ -141,10 +145,11 @@ public class Bot extends ListenerAdapter {
         	} catch (IndexOutOfBoundsException e) {
 				arg = null;
 			}
+        	User author = event.getAuthor();
         	
         	switch (cmd) {
 			case "help":
-				event.getChannel().sendMessage(event.getAuthor().getAsMention() + " **Commands:**\n"
+				event.getChannel().sendMessage(author.getAsMention() + " **Commands:**\n"
 						+ "\n**Everyone:**" // "\n" not here
 						+ "```\n" // after "```", don't ask me why
 						+ "list\n"
@@ -154,8 +159,9 @@ public class Bot extends ListenerAdapter {
 						+ "```"
 						+ "play <file, folder or link>\n"
 						+ "pause\n"
-						+ "skip <how many songs>\n"
-						+ "repeat <how many times>\n"
+						+ "skip (<how many songs>)\n"
+						+ "jump (<how many seconds>)\n"
+						+ "repeat (<how many times>)\n"
 						+ "stop\n"
 						+ "version\n"
 						+ "kill"
@@ -164,20 +170,18 @@ public class Bot extends ListenerAdapter {
 				break;
 				
 			case "kill":
-                if(isAdmin(event.getAuthor())) {
+                if(isAdmin(author)) {
     				event.getChannel().sendMessage("Bye").complete(); // complete(): block this thread (send the message first, than shutdown)
                     shutdown();
                 } else {
-                	event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Only admins may kill me.``").queue();
+                	event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may kill me.``").queue();
                 }
 				
 				break;
 				
 			case "skip":
 				if(PlayerThread.isPlaying()) {
-					User author = event.getMessage().getAuthor();
-					
-	                if(isAdmin(event.getAuthor())) {
+	                if(isAdmin(author)) {
 	                	
 	                	int skips;
 	                	if(arg == null) {
@@ -189,24 +193,50 @@ public class Bot extends ListenerAdapter {
 	        						throw new NumberFormatException();
 	        					}
 	        				} catch(NumberFormatException e) {
-	        					event.getChannel().sendMessage(event.getAuthor().getAsMention() +  " Invalid number").queue();
+	        					event.getChannel().sendMessage(author.getAsMention() +  " Invalid number").queue();
 	        					return;
 	        				}
 	                	}
 	                	
 	                	PlayerThread.getMusicManager().scheduler.nextTrack(skips);
 	                } else {
-	                	event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Only admins may skip.``").queue();
+	                	event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may skip.``").queue();
 	                }
 					
                 } else {
-                    event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Currently I'm not playing.``").queue();
+                    event.getChannel().sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
+                }
+				
+				break;
+				
+			case "jump":
+                if(isAdmin(author)) {
+                	int seconds;
+                	if(arg == null) {
+                		seconds = 10;
+                	} else {
+        				try {
+        					seconds = Integer.valueOf(arg);
+        					if(seconds < 1) {
+        						throw new NumberFormatException();
+        					}
+        				} catch(NumberFormatException e) {
+        					event.getChannel().sendMessage(author.getAsMention() +  " Invalid number").queue();
+        					return;
+        				}
+                	}
+                	
+                	AudioTrack track = PlayerThread.getMusicManager().player.getPlayingTrack();
+                	track.setPosition(track.getPosition() + (1000*seconds)); // starts next track when jumping over end
+                	
+                } else {
+                	event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may jump.``").queue();
                 }
 				
 				break;
 				
 			case "repeat":
-                if(isAdmin(event.getAuthor())) {
+                if(isAdmin(author)) {
     		
     				int repeats;
                 	if(arg == null) {
@@ -218,7 +248,7 @@ public class Bot extends ListenerAdapter {
         						throw new NumberFormatException();
         					}
         				} catch(NumberFormatException e) {
-        					event.getChannel().sendMessage(event.getAuthor().getAsMention() +  " Invalid number").queue();
+        					event.getChannel().sendMessage(author.getAsMention() +  " Invalid number").queue();
         					return;
         				}
                 	}
@@ -242,22 +272,22 @@ public class Bot extends ListenerAdapter {
                     	
                     	event.getChannel().sendMessage("``Repeated the playlist " + repeats + " times.``").queue();
                 	} else {
-                		event.getChannel().sendMessage(event.getAuthor().getAsMention() +  " ``The playlist is empty. There is nothing to repeat.``").queue();
+                		event.getChannel().sendMessage(author.getAsMention() +  " ``The playlist is empty. There is nothing to repeat.``").queue();
                 	}
     				
                 } else {
-                	event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Sorry, only admins may use the repeat command.``").queue();
+                	event.getChannel().sendMessage(author.getAsMention() + " ``Sorry, only admins may use the repeat command.``").queue();
                 }
 				
 				break;
 
 			case "list":
-				PlayerThread.sendPlaylist(event.getAuthor(), event.getChannel());
+				PlayerThread.sendPlaylist(author, event.getChannel());
 				
 				break;
 				
 			case "pause":
-				if(isAdmin(event.getAuthor())) {
+				if(isAdmin(author)) {
 					if(PlayerThread.isPaused()) {
 						event.getChannel().sendMessage("Continue playback ...").queue();
 						PlayerThread.setPaused(false);
@@ -266,13 +296,13 @@ public class Bot extends ListenerAdapter {
 						event.getChannel().sendMessage("Paused").queue();
 					}
                 } else {
-                	event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Only admins may pause me.``").queue();
+                	event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may pause me.``").queue();
                 }
 				
 				break;
 				
 			case "stop":
-                if(isAdmin(event.getAuthor())) {
+                if(isAdmin(author)) {
     				// stop the music
                 	PlayerThread.stop();
     				// leave the channel
@@ -282,18 +312,18 @@ public class Bot extends ListenerAdapter {
     				// clear the playlist
     				PlayerThread.getMusicManager().scheduler.clear();
                 } else {
-                	event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Only admins may stop me.``").queue();
+                	event.getChannel().sendMessage(author + " ``Only admins may stop me.``").queue();
                 }
 				
 				break;
 				
 			case "id":
-				event.getAuthor().getPrivateChannel().sendMessage("Your (admin-)ID: " + event.getAuthor().getId()).queue();
+				author.getPrivateChannel().sendMessage("Your (admin-)ID: " + author.getId()).queue();
 				
 				break;
 				
 			case "version":
-				event.getChannel().sendMessage(event.getAuthor().getAsMention() + "\n"
+				event.getChannel().sendMessage(author.getAsMention() + "\n"
 						+ "``"
 						+ Values.BOT_NAME + ": " + Values.BOT_VERSION
 						+ "\n"
@@ -305,7 +335,7 @@ public class Bot extends ListenerAdapter {
 				break;
 				
 			case "play":
-                if(isAdmin(event.getAuthor())) {
+                if(isAdmin(author)) {
                 	
     				if(arg == null) {
                 		event.getChannel().sendMessage("Please specify what I should play. Put it behind this command.").queue();
@@ -341,14 +371,14 @@ public class Bot extends ListenerAdapter {
 	                }
 	                
                 } else {
-                	event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Sorry, only admins may play something.``").queue();
+                	event.getChannel().sendMessage(author.getAsMention() + " ``Sorry, only admins may play something.``").queue();
                 }
 				
 				break;
 				
 				
 			default:
-				event.getChannel().sendMessage(event.getAuthor().getAsMention() + " ``Unknown command``").queue();
+				event.getChannel().sendMessage(author.getAsMention() + " ``Unknown command``").queue();
 				break;
 			}
              

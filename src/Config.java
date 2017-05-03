@@ -10,6 +10,7 @@ public class Config {
 	static final String ADMIN_IDS = "ADMIN_IDS";
 	static final String COMMAND_PREFIX = "COMMAND_PREFIX";
 	static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
+	static final String CHECK_FOR_UPDATES = "CHECK_FOR_UPDATES";
 	
 	private static Properties properties = new Properties();
 	
@@ -27,7 +28,11 @@ public class Config {
 	}
 	
 	static String get(String key) {
-		return properties.getProperty(key);
+		String value = properties.getProperty(key);
+		if(value == null) {
+			Log.crash("Config value not found: " + key);
+		}
+		return value;
 	}
 	
 	// For starting the bot with the bot token as argument
