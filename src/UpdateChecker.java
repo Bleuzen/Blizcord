@@ -10,13 +10,13 @@ public class UpdateChecker implements Runnable {
 
 	private void checkForUpdate() {
 		try {
-			final InputStream inputStream = new URL("https://api.github.com/repos/" + Values.BOT_GITHUB_REPO + "/releases/latest").openStream();
-			final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+			InputStream inputStream = new URL("https://api.github.com/repos/" + Values.BOT_GITHUB_REPO + "/releases/latest").openStream();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 			json = bufferedReader.readLine();
 
-			final String tagName = getJsonValue("tag_name");
-			final int online = toVersionNumber(tagName);
-			final int local = toVersionNumber(Values.BOT_VERSION);
+			String tagName = getJsonValue("tag_name");
+			int online = toVersionNumber(tagName);
+			int local = toVersionNumber(Values.BOT_VERSION);
 
 			if(online > local) {
 				Log.print("A new version is available!");
@@ -24,13 +24,13 @@ public class UpdateChecker implements Runnable {
 			} else {
 				Log.print("You are using the latest version.");
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			Log.print("Failed to check for updates.");
 		}
 	}
 
 	private String getJsonValue(final String key) throws Exception {
-		final int i = json.indexOf(key);
+		int i = json.indexOf(key);
 		if(i == -1) { // json doesn't contain the key
 			throw new Exception();
 		}

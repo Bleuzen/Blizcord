@@ -45,7 +45,7 @@ public class PlayerThread implements Runnable {
 
 	static void sendPlaylist(User user, TextChannel channel) {
 		if(isPlaying()) {
-			final StringBuilder toSend = new StringBuilder(user.getAsMention() + ""
+			StringBuilder toSend = new StringBuilder(user.getAsMention() + ""
 					+ " Currently playing:"
 					+ "\n"
 					+ "```"
@@ -56,7 +56,7 @@ public class PlayerThread implements Runnable {
 				toSend.append("Upcoming songs:"
 						+ "\n"
 						+ "```");
-				final ArrayList<AudioTrack> list = musicManager.scheduler.getList();
+				ArrayList<AudioTrack> list = musicManager.scheduler.getList();
 				for(int i = 0; i < list.size(); i++) {
 					toSend.append("\n" + Bot.getTrackName(list.get(i)));
 				}
@@ -154,7 +154,7 @@ public class PlayerThread implements Runnable {
 				try {
 					Thread.sleep(sleepTime);
 					updateDelay -= sleepTime;
-				} catch (final InterruptedException e) {
+				} catch (InterruptedException e) {
 					//e.printStackTrace();
 				}
 			} while(skipping); // sleep again during song skipping to avoid useless game updates
@@ -163,7 +163,7 @@ public class PlayerThread implements Runnable {
 
 				// Update game if needed
 				Game game;
-				final AudioTrack currentTrack = musicManager.player.getPlayingTrack();
+				AudioTrack currentTrack = musicManager.player.getPlayingTrack();
 				if(currentTrack == null) {
 					game = null;
 				} else {

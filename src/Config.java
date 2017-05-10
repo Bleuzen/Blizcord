@@ -1,6 +1,10 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.Charset;
 import java.util.Properties;
+
+import org.apache.commons.io.output.FileWriterWithEncoding;
 
 public class Config {
 
@@ -14,21 +18,28 @@ public class Config {
 
 	private static Properties properties = new Properties();
 
-	static boolean load() {
+
+	//TODO: Default Config Enum: seperate value and key to check if key exists (for config updates)
+	private static final String[] DEFAULT_CONFIG = {"BOT_TOKEN=",
+			"CONTROL_CHANNEL=bot",
+			"COMMAND_PREFIX=/",
+			"VOICE_CHANNEL=Music",
+			"DISPLAY_SONG_AS_GAME=true",
+			"CHECK_FOR_UPDATES=true",
+	"ADMIN_IDS=#uncomment this (remove \"#\") and put admin IDs here splitted with \":\""};
+
+
+	static boolean load(File configFile) {
 		try {
-			if(Values.TESTING) {
-				properties.load(new FileReader(new File("testingConfig.txt")));
-			} else {
-				properties.load(new FileReader(new File("config.txt")));
-			}
+			properties.load(new FileReader(configFile));
 			return true;
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
 
 	static String get(String key) {
-		final String value = properties.getProperty(key);
+		String value = properties.getProperty(key);
 		if(value == null) {
 			Log.crash("Config value not found: " + key);
 		}
@@ -38,6 +49,25 @@ public class Config {
 	// For starting the bot with the bot token as argument
 	static void overrideToken(String token) {
 		properties.setProperty(BOT_TOKEN, token);
+	}
+
+	static boolean generate(File configFile) {
+		//TODO: Test with ProGuard (should remove String arr from Values
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(configFile, Charset.forName("UTF-8")));
+			for(String s : DEFAULT_CONFIG) {
+				writer.write(s + System.lineSeparator());
+			}
+			writer.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	static void update(File configFile) {
+		//TODO
+		// Enum ... see DEFAULT_CONFIG
 	}
 
 }

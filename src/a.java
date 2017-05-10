@@ -13,14 +13,6 @@ import java.util.ResourceBundle;
 
 public class a {
 
-	//TODO: use private channel to control
-	//TODO: DEB: don't override config (create it by script?)
-	//TODO: Update config after Bot update, keep values
-	//TODO: better logging (and test it with this class and proguard)
-	//TODO: replace admin IDs by Roles
-	//TODO: translations
-	//TODO: update maven libs (JDA and lavaplayer, versions from https://github.com/sedmelluq/lavaplayer/blob/master/demo-jda/build.gradle)
-
 	public static void main(String[] args) {
 
 		// Don't use Log before libraries are checked, because ProGuard doesn't like it
@@ -33,7 +25,7 @@ public class a {
 				generateLibChecksums();
 				System.err.println("NEW CHECKSUMS: " + Values.CHECKSUMS_FILE_NAME + ".properties" + ": " + getFileChecksum(new File("src/" + Values.CHECKSUMS_FILE_NAME + ".properties")));
 				System.exit(0);
-			} catch (final Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -41,21 +33,21 @@ public class a {
 		if(!Values.TESTING) {
 			System.out.print("[" + Values.BOT_NAME + "] Checking libraries ...");
 
-			final File libdir = new File(Values.BOT_NAME + "_lib");
+			File libdir = new File(Values.BOT_NAME + "_lib");
 			if(libdir.isDirectory()) {
 
 				try {
 
-					final InputStream is = a.class.getResourceAsStream(Values.CHECKSUMS_FILE_NAME + ".properties");
+					InputStream is = a.class.getResourceAsStream(Values.CHECKSUMS_FILE_NAME + ".properties");
 					if(!getChecksum(is).equals(Values.CHECKSUMS_FILE_HASH)) {
 						throw new Exception();
 					}
 
-					final ResourceBundle checksums = ResourceBundle.getBundle(Values.CHECKSUMS_FILE_NAME); // here without ".properties"
-					final Enumeration<String> keys = checksums.getKeys();
+					ResourceBundle checksums = ResourceBundle.getBundle(Values.CHECKSUMS_FILE_NAME); // here without ".properties"
+					Enumeration<String> keys = checksums.getKeys();
 
 					while(keys.hasMoreElements()) {
-						final File file = new File(libdir, keys.nextElement());
+						File file = new File(libdir, keys.nextElement());
 
 						if(!checksums.getString(file.getName()).equals(getFileChecksum(file))) {
 							System.out.println();
@@ -64,7 +56,7 @@ public class a {
 						}
 					}
 
-				} catch(final Exception e) {
+				} catch(Exception e) {
 					// Libs check Error
 					System.out.println(" Error");
 					errExit();
@@ -80,8 +72,26 @@ public class a {
 			System.out.println(" OK");
 		}
 
+
+		// init config
+		File configFile;
+		if(Values.TESTING) {
+			configFile = new File("testingConfig.txt");
+		} else {
+			configFile = new File("config.txt");
+		}
+
+		if(!configFile.exists()) {
+			if(Config.generate(configFile)) {
+				System.out.println("[" + Values.BOT_NAME + "] Config file got generated. Please edit it.");
+			} else {
+				System.out.println("[" + Values.BOT_NAME + "] Failed to generate config. (Do you have write access here?)");
+			}
+			errExit();
+		}
+
 		// load the config file
-		if(!Config.load()) {
+		if(!Config.load(configFile)) {
 			System.out.println("[" + Values.BOT_NAME + "] Failed to load config.");
 			errExit();
 		}
@@ -96,7 +106,7 @@ public class a {
 	static void errExit() {
 		try {
 			Thread.sleep(5000);
-		} catch (final InterruptedException e) {
+		} catch (InterruptedException e) {
 			//e.printStackTrace();
 		}
 		System.exit(1);
@@ -104,10 +114,10 @@ public class a {
 
 	static String getChecksum(InputStream is) {
 		try {
-			final MessageDigest digest = MessageDigest.getInstance("MD5");
+			MessageDigest digest = MessageDigest.getInstance("MD5");
 
 			// Create byte array to read data in chunks
-			final byte[] byteArray = new byte[1024];
+			byte[] byteArray = new byte[1024];
 			int bytesCount = 0;
 
 			// Read file data and update in message digest
@@ -119,18 +129,18 @@ public class a {
 			is.close();
 
 			// Get the hash's bytes
-			final byte[] bytes = digest.digest();
+			byte[] bytes = digest.digest();
 
 			// This bytes[] has bytes in decimal format;
 			// Convert it to hexadecimal format
-			final StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < bytes.length; i++) {
 				sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
 			}
 
 			// return complete hash
 			return sb.toString();
-		} catch(final Exception e) {
+		} catch(Exception e) {
 			return null;
 		}
 	}
@@ -138,27 +148,27 @@ public class a {
 	static String getFileChecksum(File f) {
 		try {
 			return getChecksum(new FileInputStream(f));
-		} catch(final Exception e) {
+		} catch(Exception e) {
 			return null;
 		}
 	}
 
 	private static void generateLibChecksums() throws Exception {
 
-		final Properties p = new Properties();
-		final File[] files = new File(Config.get("TESTING_LIBS_FOLDER")).listFiles();
-		for(final File f : files) {
+		Properties p = new Properties();
+		File[] files = new File(Config.get("TESTING_LIBS_FOLDER")).listFiles();
+		for(File f : files) {
 			p.setProperty(f.getName(), getFileChecksum(f));
 		}
-		final File outProps = new File("src/" + Values.CHECKSUMS_FILE_NAME + ".properties");
+		File outProps = new File("src/" + Values.CHECKSUMS_FILE_NAME + ".properties");
 		try {
-			final OutputStream os = new FileOutputStream(outProps);
+			OutputStream os = new FileOutputStream(outProps);
 			p.store(os, null);
-		} catch(final Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 
-		final FileReader fr = new FileReader(outProps);
+		FileReader fr = new FileReader(outProps);
 		String s;
 		String totalStr = "";
 		boolean firstLine = true;
@@ -173,7 +183,7 @@ public class a {
 					totalStr += s;
 				}
 			}
-			final FileWriter fw = new FileWriter(outProps);
+			FileWriter fw = new FileWriter(outProps);
 			fw.write(totalStr);
 			fw.close();
 		}

@@ -44,13 +44,13 @@ public class Bot extends ListenerAdapter {
 				a.errExit();
 			}
 
-			final String adms = Config.get(Config.ADMIN_IDS);
+			String adms = Config.get(Config.ADMIN_IDS);
 			if(!adms.isEmpty() && !adms.startsWith("#")) {
-				final String[] admsArr = adms.split(":");
-				for(final String admin : admsArr) {
+				String[] admsArr = adms.split(":");
+				for(String admin : admsArr) {
 					try {
 						admins.add(Long.parseLong(admin));
-					} catch(final NumberFormatException e) {
+					} catch(NumberFormatException e) {
 						Log.print("Invalid admin ID: " + admin);
 					}
 				}
@@ -74,13 +74,10 @@ public class Bot extends ListenerAdapter {
 				}));*/
 
 			// test for only one server
-			final int guilds = api.getGuilds().size();
+			int guilds = api.getGuilds().size();
 
 			if(guilds == 0) {
-				// start with permissions
-				//Log.print("To add the bot to your server, please visit: " + api.asBot().getInviteUrl(Permission.ADMINISTRATOR));
-
-				// print invite URL without permissions
+				//Log.print("To add the bot to your server, please visit: " + api.asBot().getInviteUrl(Permission.ADMINISTRATOR)); // start with permissions
 				Log.print("To add the bot to your server, please visit: " + api.asBot().getInviteUrl());
 				a.errExit();
 
@@ -92,9 +89,8 @@ public class Bot extends ListenerAdapter {
 			guild = api.getGuilds().get(0);
 
 			try {
-				// set control channel, true for Ignore Case
-				controlChannel = guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).get(0);
-			} catch(final IndexOutOfBoundsException e) {
+				controlChannel = guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).get(0); // true for Ignore Case
+			} catch(IndexOutOfBoundsException e) {
 				Log.print("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.");
 				a.errExit();
 			}
@@ -113,17 +109,14 @@ public class Bot extends ListenerAdapter {
 			}
 
 			Log.print("Successfully started.");
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	static void shutdown() {
 		Log.print("Shutting down ...");
-
-		// done by shutdown hook of JDA
-		//api.shutdown();
-
+		//api.shutdown(); // done by shutdown hook of JDA
 		System.exit(0);
 	}
 
@@ -140,19 +133,19 @@ public class Bot extends ListenerAdapter {
 
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		final String message = event.getMessage().getContent();
+		String message = event.getMessage().getContent();
 
 		if ( (event.getChannel() == controlChannel) && message.startsWith(Config.get(Config.COMMAND_PREFIX)) ) {
 
-			final String[] cmdarg = message.substring(Config.get(Config.COMMAND_PREFIX).length()).split(" ", 2);
-			final String cmd = cmdarg[0].toLowerCase();
+			String[] cmdarg = message.substring(Config.get(Config.COMMAND_PREFIX).length()).split(" ", 2);
+			String cmd = cmdarg[0].toLowerCase();
 			String arg;
 			try {
 				arg = cmdarg[1];
-			} catch (final IndexOutOfBoundsException e) {
+			} catch (IndexOutOfBoundsException e) {
 				arg = null;
 			}
-			final User author = event.getAuthor();
+			User author = event.getAuthor();
 
 			switch (cmd) {
 			case "help":
@@ -199,7 +192,7 @@ public class Bot extends ListenerAdapter {
 								if(skips < 1) {
 									throw new NumberFormatException();
 								}
-							} catch(final NumberFormatException e) {
+							} catch(NumberFormatException e) {
 								event.getChannel().sendMessage(author.getAsMention() +  " Invalid number").queue();
 								return;
 							}
@@ -227,13 +220,13 @@ public class Bot extends ListenerAdapter {
 							if(seconds < 1) {
 								throw new NumberFormatException();
 							}
-						} catch(final NumberFormatException e) {
+						} catch(NumberFormatException e) {
 							event.getChannel().sendMessage(author.getAsMention() +  " Invalid number").queue();
 							return;
 						}
 					}
 
-					final AudioTrack track = PlayerThread.getMusicManager().player.getPlayingTrack();
+					AudioTrack track = PlayerThread.getMusicManager().player.getPlayingTrack();
 					track.setPosition(track.getPosition() + (1000*seconds)); // starts next track when jumping over end
 
 				} else {
@@ -254,7 +247,7 @@ public class Bot extends ListenerAdapter {
 							if(repeats < 1) {
 								throw new NumberFormatException();
 							}
-						} catch(final NumberFormatException e) {
+						} catch(NumberFormatException e) {
 							event.getChannel().sendMessage(author.getAsMention() +  " Invalid number").queue();
 							return;
 						}
@@ -262,9 +255,9 @@ public class Bot extends ListenerAdapter {
 
 					if(PlayerThread.isPlaying()) {
 
-						final ArrayList<AudioTrack> songs = new ArrayList<>();
+						ArrayList<AudioTrack> songs = new ArrayList<>();
 						songs.add(PlayerThread.getMusicManager().player.getPlayingTrack());
-						final ArrayList<AudioTrack> upcoming = PlayerThread.getMusicManager().scheduler.getList();
+						ArrayList<AudioTrack> upcoming = PlayerThread.getMusicManager().scheduler.getList();
 						if(!upcoming.isEmpty()) {
 							for(int i = 0; i < upcoming.size(); i++) {
 								songs.add(upcoming.get(i));
@@ -350,23 +343,23 @@ public class Bot extends ListenerAdapter {
 					}
 
 					if (!joined) {
-						final VoiceChannel channel = event.getGuild().getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(Config.get(Config.VOICE_CHANNEL))).findFirst().orElse(null);
+						VoiceChannel channel = event.getGuild().getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(Config.get(Config.VOICE_CHANNEL))).findFirst().orElse(null);
 						try {
 							event.getGuild().getAudioManager().openAudioConnection(channel);
 							joined = true;
-						} catch(final NullPointerException e) {
+						} catch(NullPointerException e) {
 							Log.print("Failed to join Voice Channel.");
 						}
 					}
 
 					if(joined) {
 
-						final File inputFile = new File(arg);
+						File inputFile = new File(arg);
 						if(inputFile.isDirectory()) {
 							event.getChannel().sendMessage("Adding folder to queue: " + inputFile).queue();
-							final File[] files = inputFile.listFiles();
+							File[] files = inputFile.listFiles();
 							Arrays.sort(files);
-							for(final File f : files) {
+							for(File f : files) {
 								if(f.isFile()) {
 									PlayerThread.loadAndPlay(event.getChannel(), f.getAbsolutePath(), true);
 								}
@@ -394,10 +387,11 @@ public class Bot extends ListenerAdapter {
 
 	static void setGame(Game game) {
 		api.getPresence().setGame(game);
+		//System.out.println("GAME UPDATE: " + game);
 	}
 
 	static String getTrackName(AudioTrack track) {
-		final String sourceName = track.getSourceManager().getSourceName();
+		String sourceName = track.getSourceManager().getSourceName();
 		if(sourceName.equals("local") || sourceName.equals("http")) {
 			return track.getIdentifier();
 		} else {
