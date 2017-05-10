@@ -38,7 +38,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 			lastFrame = audioPlayer.provide();
 		}
 
-		byte[] data = lastFrame != null ? lastFrame.data : null;
+		final byte[] data = lastFrame != null ? lastFrame.data : null;
 		lastFrame = null;
 
 		return data;

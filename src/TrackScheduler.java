@@ -54,15 +54,15 @@ public class TrackScheduler extends AudioEventAdapter {
 		// or not. In case queue was empty, we are
 		// giving null to startTrack, which is a valid argument and will simply
 		// stop the player.
-		AudioTrack track = queue.poll();
+		final AudioTrack track = queue.poll();
 		player.startTrack(track, false);
 	}
-	
+
 	public void nextTrack(int tracks) {
 		// Hey PlayerThread, I'm skipping, stop the updates!
 		PlayerThread.skipping = true;
-		
-		int preSkips = tracks - 1;
+
+		final int preSkips = tracks - 1;
 		if(preSkips > 0) {
 			for(int i = 0; i < preSkips; i++) {
 				// queue.poll() to remove one song
@@ -86,16 +86,16 @@ public class TrackScheduler extends AudioEventAdapter {
 			nextTrack();
 		}
 	}
-	
+
 	public ArrayList<AudioTrack> getList() {
-		Iterator<AudioTrack> i = queue.iterator();
-		ArrayList<AudioTrack> al = new ArrayList<>();
+		final Iterator<AudioTrack> i = queue.iterator();
+		final ArrayList<AudioTrack> al = new ArrayList<>();
 		while(i.hasNext()) {
 			al.add(i.next());
 		}
 		return al;
 	}
-	
+
 	public void clear() {
 		queue.clear();
 	}

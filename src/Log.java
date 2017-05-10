@@ -1,6 +1,6 @@
 
 public class Log {
-	
+
 	static void print(String msg) {
 		if(Values.TESTING) {
 			System.out.println("[" + Values.BOT_NAME + "-Testing] " + msg);
@@ -8,7 +8,7 @@ public class Log {
 			System.out.println("[" + Values.BOT_NAME + "] " + msg);
 		}
 	}
-	
+
 	static void crash(String reason) {
 		if(Values.TESTING) {
 			System.out.println("[" + Values.BOT_NAME + "-Testing] Crash! Reason:");
