@@ -3,10 +3,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.TimerTask;
 
-public class UpdateChecker implements Runnable {
+public class UpdateChecker extends TimerTask {
 
 	private String json;
+	private String tagName;
+
+	private boolean updateAvailable = false;
+	private boolean alreadyNotified = false;
 
 	private void checkForUpdate() {
 		try {
@@ -14,15 +19,13 @@ public class UpdateChecker implements Runnable {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 			json = bufferedReader.readLine();
 
-			String tagName = getJsonValue("tag_name");
+			tagName = getJsonValue("tag_name");
+
 			int online = toVersionNumber(tagName);
 			int local = toVersionNumber(Values.BOT_VERSION);
 
 			if(online > local) {
-				Log.print("A new version is available!");
-				Log.print("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/tag/" + tagName);
-			} else {
-				Log.print("You are using the latest version.");
+				updateAvailable = true;
 			}
 		} catch (Exception e) {
 			Log.print("Failed to check for updates.");
@@ -43,7 +46,14 @@ public class UpdateChecker implements Runnable {
 
 	@Override
 	public void run() {
-		checkForUpdate();
+		if(!alreadyNotified) {
+			checkForUpdate();
+			if(updateAvailable) {
+				Bot.getControlChannel().sendMessage("A new version is available!\n"
+						+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/tag/" + tagName).queue();
+				alreadyNotified = true;
+			}
+		}
 	}
 
 }

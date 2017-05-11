@@ -1,6 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -35,6 +36,10 @@ public class Bot extends ListenerAdapter {
 		return guild;
 	}
 
+	static TextChannel getControlChannel() {
+		return controlChannel;
+	}
+
 	public static void start() {
 		try {
 			// config got loaded in a
@@ -45,7 +50,7 @@ public class Bot extends ListenerAdapter {
 			}
 
 			String adms = Config.get(Config.ADMIN_IDS);
-			if(!adms.isEmpty() && !adms.startsWith("#")) {
+			if(!adms.isEmpty()) {
 				String[] admsArr = adms.split(":");
 				for(String admin : admsArr) {
 					try {
@@ -103,9 +108,16 @@ public class Bot extends ListenerAdapter {
 				new Thread(new PlayerThread()).start();
 			}
 
-			// Check for updates
-			if(Boolean.valueOf(Config.get(Config.CHECK_FOR_UPDATES))) {
-				new Thread(new UpdateChecker()).start();
+			// Start checking for updates
+			int updateCheckInterval;
+			try {
+				updateCheckInterval= Integer.valueOf(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
+			} catch (NumberFormatException e) {
+				updateCheckInterval = 0;
+			}
+			if(updateCheckInterval > 0) {
+				// First update check delayed 5 seconds, then all updateCheckInterval hours
+				new Timer().schedule(new UpdateChecker(), 5000, (1000 * 3600 * updateCheckInterval));
 			}
 
 			Log.print("Successfully started.");

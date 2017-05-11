@@ -14,7 +14,7 @@ public class Config {
 	static final String ADMIN_IDS = "ADMIN_IDS";
 	static final String COMMAND_PREFIX = "COMMAND_PREFIX";
 	static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
-	static final String CHECK_FOR_UPDATES = "CHECK_FOR_UPDATES";
+	static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
 
 	private static Properties properties = new Properties();
 
@@ -25,7 +25,7 @@ public class Config {
 			"COMMAND_PREFIX=/",
 			"VOICE_CHANNEL=Music",
 			"DISPLAY_SONG_AS_GAME=true",
-			"CHECK_FOR_UPDATES=true",
+			"UPDATE_CHECK_INTERVAL_HOURS=24 #set to 0 to disable",
 	"ADMIN_IDS=#uncomment this (remove \"#\") and put admin IDs here splitted with \":\""};
 
 
@@ -43,7 +43,7 @@ public class Config {
 		if(value == null) {
 			Log.crash("Config value not found: " + key);
 		}
-		return value;
+		return value.split("#")[0].trim(); // ignore comments, trim
 	}
 
 	// For starting the bot with the bot token as argument
