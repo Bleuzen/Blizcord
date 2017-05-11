@@ -2,3 +2,5 @@
 chmod +x /opt/Blizcord/Blizcord.sh
 chmod +x /usr/bin/blizcord
 chmod +x /usr/bin/blizcord-config
+
+chmod o+rwx /opt/Blizcord/

@@ -1,7 +1,7 @@
 # 1. Place Blizcord in opt/Blizcord
 
 # 2. Change the version
-VERSION="0.0.1"
+VERSION="0.1.3"
 
 sudo sh -c "echo \"Package: blizcord
 Version: $VERSION

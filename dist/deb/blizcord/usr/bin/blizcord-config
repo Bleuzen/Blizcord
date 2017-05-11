@@ -6,4 +6,4 @@ if [ -z "$1" ]
     exit
 fi
 
-sudo $1 /opt/Blizcord/config.txt
+$1 /opt/Blizcord/config.txt
