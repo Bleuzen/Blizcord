@@ -10,6 +10,6 @@ public class Values {
 	static final String BOT_GITHUB_REPO = "Bleuzen/Blizcord";
 
 	static final String CHECKSUMS_FILE_NAME = "META-INF/lib";
-	static final String CHECKSUMS_FILE_HASH = "2681737f4e66030f7ee70da2e5aa5c1b";
+	static final String CHECKSUMS_FILE_HASH = "9d2e30c12db4a446bbf4462307ab49dd";
 
 }

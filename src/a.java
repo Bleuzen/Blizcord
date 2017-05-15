@@ -22,6 +22,7 @@ public class a {
 
 		if(Values.GENERATE_CHECKSUMS) {
 			try {
+				Config.load(new File("testingConfig.txt"));
 				generateLibChecksums();
 				System.err.println("NEW CHECKSUMS: " + Values.CHECKSUMS_FILE_NAME + ".properties" + ": " + getFileChecksum(new File("src/" + Values.CHECKSUMS_FILE_NAME + ".properties")));
 				System.exit(0);

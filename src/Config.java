@@ -47,7 +47,6 @@ public class Config {
 	}
 
 	static boolean generate(File configFile) {
-		//TODO: Test with ProGuard (should remove String arr from Values
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(configFile, Charset.forName("UTF-8")));
 			for(String s : DEFAULT_CONFIG) {
