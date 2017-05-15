@@ -78,12 +78,18 @@ public class a {
 		if(Values.TESTING) {
 			configFile = new File("testingConfig.txt");
 		} else {
-			configFile = new File("config.txt");
+			if(args.length > 1 && args[0].equalsIgnoreCase("--config")) {
+				configFile = new File(args[1]);
+			} else {
+				configFile = new File("config.txt");
+			}
 		}
+
+		System.out.println("[" + Values.BOT_NAME + "] Config: " + configFile.getAbsolutePath());
 
 		if(!configFile.exists()) {
 			if(Config.generate(configFile)) {
-				System.out.println("[" + Values.BOT_NAME + "] Config file got generated. Please edit it.");
+				System.out.println("[" + Values.BOT_NAME + "] Config file got generated. Please edit it and restart me.");
 			} else {
 				System.out.println("[" + Values.BOT_NAME + "] Failed to generate config. (Do you have write access here?)");
 			}
@@ -96,9 +102,6 @@ public class a {
 			errExit();
 		}
 
-		if(args.length > 0) {
-			Config.overrideToken(args[0]);
-		}
 
 		Bot.start();
 	}

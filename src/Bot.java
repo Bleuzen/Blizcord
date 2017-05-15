@@ -45,7 +45,7 @@ public class Bot extends ListenerAdapter {
 			// config got loaded in a
 
 			if(Config.get(Config.BOT_TOKEN).isEmpty()) {
-				Log.print("You must specify a Token in the config file or as argument! You can get it here: https://discordapp.com/developers/applications/me");
+				Log.print("You must specify a Token in the config file!");
 				a.errExit();
 			}
 

@@ -20,13 +20,13 @@ public class Config {
 
 
 	//TODO: Default Config Enum: seperate value and key to check if key exists (for config updates)
-	private static final String[] DEFAULT_CONFIG = {"BOT_TOKEN=",
+	private static final String[] DEFAULT_CONFIG = {"BOT_TOKEN=#uncomment this (remove \"#\") and put bot token here. You can create your app / bot and get your token here: https://discordapp.com/developers/applications/me",
 			"CONTROL_CHANNEL=bot",
 			"COMMAND_PREFIX=/",
 			"VOICE_CHANNEL=Music",
 			"DISPLAY_SONG_AS_GAME=true",
 			"UPDATE_CHECK_INTERVAL_HOURS=24 #set to 0 to disable",
-	"ADMIN_IDS=#uncomment this (remove \"#\") and put admin IDs here splitted with \":\""};
+	"ADMIN_IDS=#uncomment this and put admin IDs here splitted with \":\""};
 
 
 	static boolean load(File configFile) {
@@ -44,11 +44,6 @@ public class Config {
 			Log.crash("Config value not found: " + key);
 		}
 		return value.split("#")[0].trim(); // ignore comments, trim
-	}
-
-	// For starting the bot with the bot token as argument
-	static void overrideToken(String token) {
-		properties.setProperty(BOT_TOKEN, token);
 	}
 
 	static boolean generate(File configFile) {
