@@ -132,6 +132,23 @@ public class Bot extends ListenerAdapter {
 		System.exit(0);
 	}
 
+	private static void join() {
+		String cName = Config.get(Config.VOICE_CHANNEL);
+		VoiceChannel channel = guild.getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(cName)).findFirst().orElse(null);
+		try {
+			// for multi server: GuildMessageReceivedEvent#event.getGuild()
+			guild.getAudioManager().openAudioConnection(channel);
+			joined = true;
+
+			if(Boolean.valueOf(Config.get(Config.SHOW_BITRATE_HINT)) && channel.getBitrate() != 96000) {
+				controlChannel.sendMessage(guild.getOwner().getAsMention() + " Hint: You should set your channel's bitrate to 96kbps (highest) if you want to listen to music.").queue();
+			}
+		} catch(Exception e) {
+			controlChannel.sendMessage("Failed to join voice channel: " + cName + "\n"
+					+ "Please check your config and give me the permission to join it.").queue();
+		}
+	}
+
 	static void leave() {
 		// only defined guild, for one server
 		guild.getAudioManager().closeAudioConnection();
@@ -186,7 +203,7 @@ public class Bot extends ListenerAdapter {
 					event.getChannel().sendMessage("Bye").complete(); // complete(): block this thread (send the message first, than shutdown)
 					shutdown();
 				} else {
-					event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may kill me.``").queue();
+					event.getChannel().sendMessage(author.getAsMention() + " ``Only admins can kill me.``").queue();
 				}
 
 				break;
@@ -212,7 +229,7 @@ public class Bot extends ListenerAdapter {
 
 						PlayerThread.getMusicManager().scheduler.nextTrack(skips);
 					} else {
-						event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may skip.``").queue();
+						event.getChannel().sendMessage(author.getAsMention() + " ``Only admins can skip.``").queue();
 					}
 
 				} else {
@@ -242,7 +259,7 @@ public class Bot extends ListenerAdapter {
 					track.setPosition(track.getPosition() + (1000*seconds)); // starts next track when jumping over end
 
 				} else {
-					event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may jump.``").queue();
+					event.getChannel().sendMessage(author.getAsMention() + " ``Only admins can jump.``").queue();
 				}
 
 				break;
@@ -282,13 +299,13 @@ public class Bot extends ListenerAdapter {
 							}
 						}
 
-						event.getChannel().sendMessage("``Repeated the playlist " + repeats + " times.``").queue();
+						event.getChannel().sendMessage( "``Repeated the playlist" + (repeats == 1 ? ".``" : (" " + repeats + " times.``") )).queue();
 					} else {
 						event.getChannel().sendMessage(author.getAsMention() +  " ``The playlist is empty. There is nothing to repeat.``").queue();
 					}
 
 				} else {
-					event.getChannel().sendMessage(author.getAsMention() + " ``Sorry, only admins may use the repeat command.``").queue();
+					event.getChannel().sendMessage(author.getAsMention() + " ``Sorry, only admins can use the repeat command.``").queue();
 				}
 
 				break;
@@ -308,7 +325,7 @@ public class Bot extends ListenerAdapter {
 						event.getChannel().sendMessage("Paused").queue();
 					}
 				} else {
-					event.getChannel().sendMessage(author.getAsMention() + " ``Only admins may pause me.``").queue();
+					event.getChannel().sendMessage(author.getAsMention() + " ``Only admins can pause me.``").queue();
 				}
 
 				break;
@@ -324,7 +341,7 @@ public class Bot extends ListenerAdapter {
 					// clear the playlist
 					PlayerThread.getMusicManager().scheduler.clear();
 				} else {
-					event.getChannel().sendMessage(author + " ``Only admins may stop me.``").queue();
+					event.getChannel().sendMessage(author + " ``Only admins can stop me.``").queue();
 				}
 
 				break;
@@ -355,20 +372,15 @@ public class Bot extends ListenerAdapter {
 					}
 
 					if (!joined) {
-						VoiceChannel channel = event.getGuild().getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(Config.get(Config.VOICE_CHANNEL))).findFirst().orElse(null);
-						try {
-							event.getGuild().getAudioManager().openAudioConnection(channel);
-							joined = true;
-						} catch(NullPointerException e) {
-							Log.print("Failed to join Voice Channel.");
-						}
+						join();
 					}
 
 					if(joined) {
 
 						File inputFile = new File(arg);
+
 						if(inputFile.isDirectory()) {
-							event.getChannel().sendMessage("Adding folder to queue: " + inputFile).queue();
+							event.getChannel().sendMessage("Adding all supported files from folder to queue: " + inputFile).queue();
 							File[] files = inputFile.listFiles();
 							Arrays.sort(files);
 							for(File f : files) {
@@ -383,7 +395,7 @@ public class Bot extends ListenerAdapter {
 					}
 
 				} else {
-					event.getChannel().sendMessage(author.getAsMention() + " ``Sorry, only admins may play something.``").queue();
+					event.getChannel().sendMessage(author.getAsMention() + " ``Sorry, only admins can play something.``").queue();
 				}
 
 				break;

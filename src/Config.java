@@ -15,16 +15,18 @@ public class Config {
 	static final String COMMAND_PREFIX = "COMMAND_PREFIX";
 	static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
 	static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
+	static final String SHOW_BITRATE_HINT = "SHOW_BITRATE_HINT";
 
 	private static Properties properties = new Properties();
 
 
-	//TODO: Default Config Enum: seperate value and key to check if key exists (for config updates)
+	//TODO: Default properties, add missing values to config (update)
 	private static final String[] DEFAULT_CONFIG = {"BOT_TOKEN=#uncomment this (remove \"#\") and put bot token here. You can create your app / bot and get your token here: https://discordapp.com/developers/applications/me",
 			"CONTROL_CHANNEL=bot",
 			"COMMAND_PREFIX=/",
 			"VOICE_CHANNEL=Music",
 			"DISPLAY_SONG_AS_GAME=true",
+			"SHOW_BITRATE_HINT=true",
 			"UPDATE_CHECK_INTERVAL_HOURS=24 #set to 0 to disable",
 	"ADMIN_IDS=#uncomment this and put admin IDs here splitted with \":\""};
 

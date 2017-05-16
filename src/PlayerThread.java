@@ -111,7 +111,9 @@ public class PlayerThread implements Runnable {
 
 			@Override
 			public void loadFailed(FriendlyException exception) {
-				channel.sendMessage("Could not play: " + exception.getMessage()).queue();
+				if(!quiet) {
+					channel.sendMessage("Could not play: " + exception.getMessage()).queue();
+				}
 			}
 		});
 	}
