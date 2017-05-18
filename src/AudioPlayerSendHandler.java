@@ -3,7 +3,7 @@ import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 
 import net.dv8tion.jda.core.audio.AudioSendHandler;
 
-//source: https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda
+//source (edited): https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda
 
 /**
  * This is a wrapper around AudioPlayer which makes it behave as an

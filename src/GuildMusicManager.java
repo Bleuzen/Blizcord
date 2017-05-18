@@ -2,7 +2,7 @@
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 
-//source: https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda
+//source (edited): https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda
 
 /**
  * Holder for both the player and a track scheduler for one guild.

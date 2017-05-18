@@ -9,7 +9,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-//source: https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda
+//source (edited): https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda
 
 /**
  * This class schedules tracks for the audio player. It contains the queue of
@@ -86,6 +86,11 @@ public class TrackScheduler extends AudioEventAdapter {
 			nextTrack();
 		}
 	}
+
+	/*@Override
+	public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
+	  // An already playing track threw an exception (track end event will still be received separately)
+	}*/
 
 	public ArrayList<AudioTrack> getList() {
 		Iterator<AudioTrack> i = queue.iterator();

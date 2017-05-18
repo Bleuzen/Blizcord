@@ -1,7 +1,7 @@
 
 public class Values {
 
-	static final boolean TESTING = true;
+	static final boolean TESTING = false;
 	static final boolean GENERATE_CHECKSUMS = false;
 
 	static final String BOT_VERSION = "0.1.5" 	+ (TESTING ? "-testing" : "");
@@ -10,6 +10,6 @@ public class Values {
 	static final String BOT_GITHUB_REPO = "Bleuzen/Blizcord";
 
 	static final String CHECKSUMS_FILE_NAME = "META-INF/lib";
-	static final String CHECKSUMS_FILE_HASH = "fcb5f44764369c58bcb90276f0573f0f";
+	static final String CHECKSUMS_FILE_HASH = "9d08e992ca44a937cbb0e5630ef400f8";
 
 }

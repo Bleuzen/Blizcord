@@ -19,10 +19,9 @@ public class a {
 		System.out.println(Values.BOT_NAME + " v" + Values.BOT_VERSION + " by " + Values.BOT_DEVELOPER);
 		System.out.println("[" + Values.BOT_NAME + "] Starting ...");
 
-
 		if(Values.GENERATE_CHECKSUMS) {
 			try {
-				Config.load(new File("testingConfig.txt"));
+				Config.init(new File("testingConfig.txt"));
 				generateLibChecksums();
 				System.err.println("NEW CHECKSUMS: " + Values.CHECKSUMS_FILE_NAME + ".properties" + ": " + getFileChecksum(new File("src/" + Values.CHECKSUMS_FILE_NAME + ".properties")));
 				System.exit(0);
@@ -88,17 +87,8 @@ public class a {
 
 		System.out.println("[" + Values.BOT_NAME + "] Config: " + configFile.getAbsolutePath());
 
-		if(!configFile.exists()) {
-			if(Config.generate(configFile)) {
-				System.out.println("[" + Values.BOT_NAME + "] Config file got generated. Please edit it and restart me.");
-			} else {
-				System.out.println("[" + Values.BOT_NAME + "] Failed to generate config. (Do you have write access here?)");
-			}
-			errExit();
-		}
-
 		// load the config file
-		if(!Config.load(configFile)) {
+		if(!Config.init(configFile)) {
 			System.out.println("[" + Values.BOT_NAME + "] Failed to load config.");
 			errExit();
 		}
