@@ -133,19 +133,21 @@ public class Bot extends ListenerAdapter {
 	}
 
 	private static void join() {
-		String cName = Config.get(Config.VOICE_CHANNEL);
-		VoiceChannel channel = guild.getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(cName)).findFirst().orElse(null);
-		try {
-			// for multi server: GuildMessageReceivedEvent#event.getGuild()
-			guild.getAudioManager().openAudioConnection(channel);
-			joined = true;
+		if (!joined) {
+			String cName = Config.get(Config.VOICE_CHANNEL);
+			VoiceChannel channel = guild.getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(cName)).findFirst().orElse(null);
+			try {
+				// for multi server: GuildMessageReceivedEvent#event.getGuild()
+				guild.getAudioManager().openAudioConnection(channel);
+				joined = true;
 
-			if(Boolean.valueOf(Config.get(Config.SHOW_BITRATE_HINT)) && channel.getBitrate() != 96000) {
-				controlChannel.sendMessage(guild.getOwner().getAsMention() + " Hint: You should set your channel's bitrate to 96kbps (highest) if you want to listen to music.").queue();
+				if(Boolean.valueOf(Config.get(Config.SHOW_BITRATE_HINT)) && channel.getBitrate() != 96000) {
+					controlChannel.sendMessage(guild.getOwner().getAsMention() + " Hint: You should set your channel's bitrate to 96kbps (highest) if you want to listen to music.").queue();
+				}
+			} catch(Exception e) {
+				controlChannel.sendMessage("Failed to join voice channel: " + cName + "\n"
+						+ "Please check your config and give me the permission to join it.").queue();
 			}
-		} catch(Exception e) {
-			controlChannel.sendMessage("Failed to join voice channel: " + cName + "\n"
-					+ "Please check your config and give me the permission to join it.").queue();
 		}
 	}
 
@@ -179,21 +181,22 @@ public class Bot extends ListenerAdapter {
 			switch (cmd) {
 			case "help":
 				event.getChannel().sendMessage(author.getAsMention() + " **Commands:**\n"
-						+ "\n**Everyone:**" // "\n" not here
-						+ "```\n" // after "```", don't ask me why
-						+ "list\n"
-						+ "id"
+						+ "\n**Everyone:**"
+						+ "```\n"
+						+ "/list                           (Show the playlist)\n"
+						+ "/id                             (Send your (admin-)ID)"
 						+ "```"
 						+ "\n**Admins:**\n"
 						+ "```"
-						+ "play <file, folder or link>\n"
-						+ "pause\n"
-						+ "skip (<how many songs>)\n"
-						+ "jump (<how many seconds>)\n"
-						+ "repeat (<how many times>)\n"
-						+ "stop\n"
-						+ "version\n"
-						+ "kill"
+						+ "/play <file or link>            (Play given track now)\n"
+						+ "/add <file, folder or link>     (Add given track to playlist)\n"
+						+ "/pause                          (Pause or resume the current track)\n"
+						+ "/skip (<how many songs>)        (Skip one or more songs from the playlist)\n"
+						+ "/jump (<how many seconds>)      (Jump forward in the current track)\n"
+						+ "/repeat (<how many times>)      (Repeat the current playlist)\n"
+						+ "/stop                           (Stop the playback and clear the playlist)\n"
+						+ "/version                        (Print versions)\n"
+						+ "/kill                           (Kill the bot)"
 						+ "```").queue();
 
 				break;
@@ -363,19 +366,17 @@ public class Bot extends ListenerAdapter {
 
 				break;
 
-			case "play":
+			case "add":
 				if(isAdmin(author)) {
 
 					if(arg == null) {
-						event.getChannel().sendMessage("Please specify what I should play. Put it behind this command.").queue();
+						event.getChannel().sendMessage("Please specify what I should add to the playlist. Put it behind this command.").queue();
 						return;
 					}
 
-					if (!joined) {
-						join();
-					}
+					join(); // try to join if not already
 
-					if(joined) {
+					if(joined) { // if successfully joined
 
 						File inputFile = new File(arg);
 
@@ -385,13 +386,33 @@ public class Bot extends ListenerAdapter {
 							Arrays.sort(files);
 							for(File f : files) {
 								if(f.isFile()) {
-									PlayerThread.loadAndPlay(event.getChannel(), f.getAbsolutePath(), true);
+									PlayerThread.loadAndPlay(event.getChannel(), f.getAbsolutePath(), false, true);
 								}
 							}
 						} else {
-							PlayerThread.loadAndPlay(event.getChannel(), arg, false);
+							PlayerThread.loadAndPlay(event.getChannel(), arg, false, false);
 						}
 
+					}
+
+				} else {
+					event.getChannel().sendMessage(author.getAsMention() + " ``Sorry, only admins can add something.``").queue();
+				}
+
+				break;
+
+			case "play":
+				if(isAdmin(author)) {
+
+					if(arg == null) {
+						event.getChannel().sendMessage("Please specify what I should play. Put it behind this command.").queue();
+						return;
+					}
+
+					join(); // try to join if not already
+
+					if(joined) { // if successfully joined
+						PlayerThread.loadAndPlay(event.getChannel(), arg, true, false);
 					}
 
 				} else {

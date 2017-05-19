@@ -77,16 +77,21 @@ public class PlayerThread implements Runnable {
 		}
 	}
 
-	static void loadAndPlay(final TextChannel channel, final String trackUrl, boolean quiet) {
+	static void loadAndPlay(final TextChannel channel, final String trackUrl, boolean direct, boolean quiet) {
 		playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {
 
-				if(!quiet) {
-					channel.sendMessage("Added track to queue: " + Bot.getTrackName(track)).queue();
+				if(direct) {
+					playDirect(track);
+					// quiet check not needed, since there will be never more than one track / message
+					channel.sendMessage("Now playing: " + Bot.getTrackName(track)).queue();
+				} else {
+					play(track);
+					if(!quiet) {
+						channel.sendMessage("Added track to queue: " + Bot.getTrackName(track)).queue();
+					}
 				}
-
-				play(track);
 			}
 
 			@Override
@@ -122,6 +127,11 @@ public class PlayerThread implements Runnable {
 		//connectToFirstVoiceChannel(guild.getAudioManager());
 
 		musicManager.scheduler.queue(track);
+	}
+
+	static void playDirect(AudioTrack track) {
+		//connectToFirstVoiceChannel(guild.getAudioManager());
+		musicManager.player.startTrack(track, false);
 	}
 
 	static void stop() {
