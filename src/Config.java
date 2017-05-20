@@ -18,7 +18,6 @@ public class Config {
 	static final String COMMAND_PREFIX = "COMMAND_PREFIX";
 	static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
 	static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
-	static final String SHOW_BITRATE_HINT = "SHOW_BITRATE_HINT";
 
 	private static Properties properties;
 
@@ -30,7 +29,6 @@ public class Config {
 		defaults.setProperty(COMMAND_PREFIX, "/");
 		defaults.setProperty(VOICE_CHANNEL, "Music");
 		defaults.setProperty(DISPLAY_SONG_AS_GAME, "true");
-		defaults.setProperty(SHOW_BITRATE_HINT, "true");
 		defaults.setProperty(UPDATE_CHECK_INTERVAL_HOURS, "24 #set to 0 to disable");
 
 		Properties loaded = new Properties();

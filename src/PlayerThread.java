@@ -10,7 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
 public class PlayerThread implements Runnable {
@@ -43,7 +43,7 @@ public class PlayerThread implements Runnable {
 		guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
 	}
 
-	static void sendPlaylist(User user, TextChannel channel) {
+	static void sendPlaylist(User user, MessageChannel channel) {
 		if(isPlaying()) {
 			StringBuilder toSend = new StringBuilder(user.getAsMention() + ""
 					+ " Currently playing:"
@@ -77,7 +77,7 @@ public class PlayerThread implements Runnable {
 		}
 	}
 
-	static void loadAndPlay(final TextChannel channel, final String trackUrl, boolean direct, boolean quiet) {
+	static void loadAndPlay(final MessageChannel channel, final String trackUrl, boolean direct, boolean quiet) {
 		playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {
