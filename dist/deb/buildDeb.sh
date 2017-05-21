@@ -16,6 +16,8 @@ Description: Blizcord
  .
  https://github.com/Bleuzen/Blizcord\" > blizcord/DEBIAN/control"
 
+sudo rm blizcord/opt/Blizcord/Blizcord.bat
+
 sudo chown -R root:root blizcord/
 sudo dpkg-deb --build blizcord/
 sudo mv blizcord.deb blizcord-$VERSION.deb
