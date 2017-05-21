@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
-  <headerType>console</headerType>
+  <headerType>gui</headerType>
   <jar>Blizcord-pg.jar</jar>
   <outfile>Blizcord.exe</outfile>
   <errTitle>Blizcord</errTitle>
