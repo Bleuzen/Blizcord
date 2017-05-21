@@ -2,16 +2,16 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>Blizcord.jar</jar>
+  <jar>Blizcord-pg.jar</jar>
   <outfile>Blizcord.exe</outfile>
   <errTitle>Blizcord</errTitle>
-  <cmdLine></cmdLine>
+  <cmdLine>--gui</cmdLine>
   <chdir>.</chdir>
   <priority>high</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl></supportUrl>
   <stayAlive>false</stayAlive>
-  <restartOnCrash>false</restartOnCrash>
+  <restartOnCrash>true</restartOnCrash>
   <manifest></manifest>
   <icon></icon>
   <jre>

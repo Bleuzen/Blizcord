@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar Blizcord.exe $1
+java -jar Blizcord.exe "$@"

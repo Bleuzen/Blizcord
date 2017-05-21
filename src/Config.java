@@ -55,11 +55,10 @@ public class Config {
 			return true;
 		} else {
 			if(generate(configFile, toAdd)) {
-				System.out.println("[" + Values.BOT_NAME + "] Config file got generated (or updated). Please edit it and restart me.");
+				a.errExit("Config file got generated or updated. Please edit it and restart me.");
 			} else {
-				System.out.println("[" + Values.BOT_NAME + "] Failed to generate config. (Do you have write access here?)");
+				a.errExit("Failed to generate config. (Do you have write access here?)");
 			}
-			a.errExit();
 			return false; // will never get called, but Eclipse wants it
 		}
 
@@ -69,7 +68,7 @@ public class Config {
 	static String get(String key) {
 		String value = properties.getProperty(key);
 		if(value == null) {
-			Log.crash("Config value not found: " + key);
+			a.errExit("Config value not found: " + key);
 		}
 		return value.split("#")[0].trim(); // ignore comments, trim
 	}

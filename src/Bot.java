@@ -48,8 +48,7 @@ public class Bot extends ListenerAdapter {
 			// config got loaded in a
 
 			if(Config.get(Config.BOT_TOKEN).isEmpty()) {
-				Log.print("You must specify a Token in the config file!");
-				a.errExit();
+				a.errExit("You must specify a Token in the config file!");
 			}
 
 			String adms = Config.get(Config.ADMIN_IDS);
@@ -85,13 +84,10 @@ public class Bot extends ListenerAdapter {
 			int guilds = api.getGuilds().size();
 
 			if(guilds == 0) {
-				//Log.print("To add the bot to your server, please visit: " + api.asBot().getInviteUrl(Permission.ADMINISTRATOR)); // start with permissions
-				Log.print("To add the bot to your server, please visit: " + api.asBot().getInviteUrl());
-				a.errExit();
+				a.errExit("To add the bot to your server visit: " + api.asBot().getInviteUrl()); //TODO: GUI: "Open / Visit now" button
 
 			} else if(guilds > 1) {
-				Log.print("This bot is on more than 1 server. This is currently not supported.");
-				a.errExit();
+				a.errExit("The bot is on more than 1 server. This is currently not supported.");
 			}
 
 			guild = api.getGuilds().get(0);
@@ -113,8 +109,7 @@ public class Bot extends ListenerAdapter {
 			try {
 				controlChannel = guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).get(0); // true for Ignore Case
 			} catch(IndexOutOfBoundsException e) {
-				Log.print("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.");
-				a.errExit();
+				a.errExit("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.");
 			}
 
 			// Init Player
@@ -139,7 +134,7 @@ public class Bot extends ListenerAdapter {
 
 			Log.print("Successfully started.");
 		} catch (Exception e) {
-			e.printStackTrace();
+			a.errExit(e.getMessage());
 		}
 	}
 
