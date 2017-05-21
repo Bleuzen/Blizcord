@@ -11,9 +11,26 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javax.swing.UIManager;
+
 public class a {
 
 	public static void main(String[] args) {
+		if(args.length > 0 && args[0].equalsIgnoreCase("--gui")) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				GUI frame = new GUI();
+				frame.setVisible(true);
+			} catch (Exception e) {
+				System.out.print("[" + Values.BOT_NAME + "] Failed to start GUI: " + e.getMessage());
+				errExit();
+			}
+		} else {
+			launch(args);
+		}
+	}
+
+	static void launch(String[] args) {
 
 		// Don't use Log before libraries are checked, because ProGuard doesn't like it
 		System.out.println(Values.BOT_NAME + " v" + Values.BOT_VERSION + " by " + Values.BOT_DEVELOPER);

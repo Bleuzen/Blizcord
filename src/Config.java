@@ -55,7 +55,7 @@ public class Config {
 			return true;
 		} else {
 			if(generate(configFile, toAdd)) {
-				System.out.println("[" + Values.BOT_NAME + "] Config file got generated (or updated). Please edit it and restart me.");
+				System.out.println("[" + Values.BOT_NAME + "] Config file got generated or updated. Please edit it and restart me.");
 			} else {
 				System.out.println("[" + Values.BOT_NAME + "] Failed to generate config. (Do you have write access here?)");
 			}
