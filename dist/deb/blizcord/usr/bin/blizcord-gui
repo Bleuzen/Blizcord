@@ -1,3 +1,8 @@
 #!/bin/bash
 cd /opt/Blizcord
-./Blizcord.sh --gui
+
+false
+until [ $? -eq 0 ]
+do
+  ./Blizcord.sh --gui
+done
