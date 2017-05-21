@@ -9,14 +9,4 @@ public class Log {
 		}
 	}
 
-	static void crash(String reason) {
-		if(Values.TESTING) {
-			System.out.println("[" + Values.BOT_NAME + "-Testing] Crash! Reason:");
-		} else {
-			System.out.println("[" + Values.BOT_NAME + "] Crash! Reason:");
-		}
-		System.out.println(reason);
-		a.errExit();
-	}
-
 }

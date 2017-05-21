@@ -1,7 +1,7 @@
 
 public class Values {
 
-	static final boolean TESTING = true;
+	static final boolean TESTING = false;
 	static final boolean GENERATE_CHECKSUMS = false;
 
 	static final String BOT_VERSION = "0.1.8" 	+ (TESTING ? "-testing" : "");
@@ -13,5 +13,7 @@ public class Values {
 	static final String CHECKSUMS_FILE_HASH = "e6a60b172be8b66fe7a4f7c82e5ae107";
 
 	static final int DISCORD_MAX_BITRATE = 96000;
+
+	static final String DEFAULT_CONFIG = "config.txt";
 
 }

@@ -15,8 +15,11 @@ import javax.swing.UIManager;
 
 public class a {
 
+	private static boolean gui;
+
 	public static void main(String[] args) {
 		if(args.length > 0 && args[0].equalsIgnoreCase("--gui")) {
+			gui = true;
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				GUI frame = new GUI();
@@ -68,8 +71,7 @@ public class a {
 
 						if(!checksums.getString(file.getName()).equals(getFileChecksum(file))) {
 							System.out.println();
-							System.out.println("[" + Values.BOT_NAME + "] Error: The md5 sum of '" + file + "' is not correct.");
-							errExit();
+							errExit("The md5 sum of '" + file + "' is not correct.");
 						}
 					}
 
@@ -81,8 +83,7 @@ public class a {
 
 			} else {
 				System.out.println();
-				System.out.println("The folder '" + Values.BOT_NAME + "_lib" + "' doesn't exist here. Make sure you changed your working directory first.");
-				errExit();
+				errExit("The folder '" + Values.BOT_NAME + "_lib" + "' doesn't exist here. Make sure you changed your working directory first.");
 			}
 
 			// Libs ok, print newline and there version in Bot class
@@ -98,7 +99,7 @@ public class a {
 			if(args.length > 1 && args[0].equalsIgnoreCase("--config")) {
 				configFile = new File(args[1]);
 			} else {
-				configFile = new File("config.txt");
+				configFile = new File(Values.DEFAULT_CONFIG);
 			}
 		}
 
@@ -106,8 +107,7 @@ public class a {
 
 		// load the config file
 		if(!Config.init(configFile)) {
-			System.out.println("[" + Values.BOT_NAME + "] Failed to load config.");
-			errExit();
+			errExit("[" + Values.BOT_NAME + "] Failed to load config.");
 		}
 
 
@@ -115,10 +115,24 @@ public class a {
 	}
 
 	static void errExit() {
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			//e.printStackTrace();
+		errExit(null);
+	}
+
+	static void errExit(String msg) {
+		if(gui) {
+			GUI.onErrExit(msg);
+		} else {
+			if(Values.TESTING) {
+				System.out.println("[" + Values.BOT_NAME + "-Testing] Crash! Reason:");
+			} else {
+				System.out.println("[" + Values.BOT_NAME + "] Crash! Reason:");
+			}
+			System.out.println(msg);
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				//e.printStackTrace();
+			}
 		}
 		System.exit(1);
 	}
