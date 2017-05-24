@@ -92,21 +92,20 @@ public class PlayerThread implements Runnable {
 						channel.sendMessage("Added track to queue: " + Bot.getTrackName(track)).queue();
 					}
 				}
+
 			}
 
 			@Override
 			public void playlistLoaded(AudioPlaylist playlist) {
-				AudioTrack firstTrack = playlist.getSelectedTrack();
 
-				if (firstTrack == null) {
-					firstTrack = playlist.getTracks().get(0);
+				for (AudioTrack track : playlist.getTracks()) {
+					play(track);
 				}
 
 				if(!quiet) {
 					channel.sendMessage("Added playlist to queue: " + playlist.getName()).queue();
 				}
 
-				play(firstTrack);
 			}
 
 			@Override

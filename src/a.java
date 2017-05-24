@@ -1,3 +1,4 @@
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,11 +7,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.security.MessageDigest;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 public class a {
@@ -135,6 +138,23 @@ public class a {
 			}
 		}
 		System.exit(1);
+	}
+
+	//TODO: maybe find a better way
+	static void addToServerMessage(String link) {
+		if(gui) {
+			int r = JOptionPane.showConfirmDialog(null, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
+			if(r == JOptionPane.YES_OPTION) {
+				try {
+					Desktop.getDesktop().browse(new URI(link));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			System.exit(1); // exit / restart after invite
+		} else {
+			errExit("To add the bot to your server visit: " + link);
+		}
 	}
 
 	static String getChecksum(InputStream is) {

@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,6 +78,9 @@ public class Config {
 		Collections.sort(toAdd);
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(configFile, Charset.forName("UTF-8"), true));
+			if(needNewLine(configFile)) {
+				writer.write(System.lineSeparator());
+			}
 			for(String s : toAdd) {
 				writer.write(s + System.lineSeparator());
 			}
@@ -85,6 +89,27 @@ public class Config {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	private static boolean needNewLine(File file) {
+		try {
+			RandomAccessFile fileHandler = new RandomAccessFile(file, "r");
+			long fileLength = fileHandler.length() - 1;
+			if (fileLength < 0) {
+				fileHandler.close();
+				return false;
+			}
+			fileHandler.seek(fileLength);
+			byte readByte = fileHandler.readByte();
+			fileHandler.close();
+
+			if (readByte == 0xA || readByte == 0xD) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch(Exception e) {}
+		return false;
 	}
 
 }

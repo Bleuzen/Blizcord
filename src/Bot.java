@@ -84,7 +84,7 @@ public class Bot extends ListenerAdapter {
 			int guilds = api.getGuilds().size();
 
 			if(guilds == 0) {
-				a.errExit("To add the bot to your server visit: " + api.asBot().getInviteUrl()); //TODO: GUI: "Open / Visit now" button
+				a.addToServerMessage(api.asBot().getInviteUrl());
 
 			} else if(guilds > 1) {
 				a.errExit("The bot is on more than 1 server. This is currently not supported.");

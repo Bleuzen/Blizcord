@@ -1,7 +1,13 @@
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.Base64;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -11,6 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import org.apache.commons.io.output.FileWriterWithEncoding;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
@@ -104,16 +112,26 @@ public class GUI extends JFrame {
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// disable controls
 				btnStart.setEnabled(false);
+				btnBrowse.setEnabled(false);
+				txtCustomconfig.setEnabled(false);
+				chckbxUseCustomConfig.setEnabled(false);
+				btnEdit.setEnabled(false);
+
 				lblCurrstatus.setText("Starting");
+
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
+
+						// start bot
 						if(chckbxUseCustomConfig.isSelected()) {
 							a.launch(new String[]{"--config", new File(txtCustomconfig.getText()).getAbsolutePath()});
 						} else {
 							a.launch(new String[]{});
 						}
+
 						lblCurrstatus.setText("Started");
 					}
 				}).start();
@@ -130,6 +148,48 @@ public class GUI extends JFrame {
 		lblCurrstatus = new JLabel("Stopped");
 		lblCurrstatus.setBounds(95, 143, 392, 28);
 		contentPane.add(lblCurrstatus);
+
+		// Load the GUI Config
+		File guiConfigFileCustomConfig = new File(System.getProperty("java.io.tmpdir"), "blizcordguicustomconfig");
+		if(guiConfigFileCustomConfig.exists()) {
+			try {
+				// read
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(guiConfigFileCustomConfig), "UTF-8"));
+				String readLine = bufferedReader.readLine(); // path to custom config in Base64
+				bufferedReader.close();
+
+				// decode and set
+				String decodedFileName = new String(Base64.getDecoder().decode(readLine), "UTF-8");
+				File customConfig = new File(decodedFileName);
+				if(customConfig.isFile()) { // ignore if it got deleted or is invalid
+					txtCustomconfig.setText(customConfig.getAbsolutePath());
+					txtCustomconfig.setEnabled(true);
+					btnBrowse.setEnabled(true);
+					chckbxUseCustomConfig.setSelected(true);
+				}
+			} catch(Exception e) {
+				// Failed to read file, ignore
+			}
+		}
+
+		// Save last custom config on exit if set
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(chckbxUseCustomConfig.isSelected()) {
+					try {
+						BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(guiConfigFileCustomConfig, Charset.forName("UTF-8"), false));
+						writer.write(Base64.getEncoder().encodeToString(txtCustomconfig.getText().getBytes("UTF-8")));
+						writer.close();
+					} catch(Exception e) {
+						// Ignore
+						// maybe we don't have the write permission here, at least we tryed it ;)
+					}
+				} else {
+					guiConfigFileCustomConfig.delete(); // delete if it exists
+				}
+			}
+		}));
 	}
 
 	static void onErrExit(String msg) {

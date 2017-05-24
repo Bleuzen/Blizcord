@@ -4,7 +4,7 @@ public class Values {
 	static final boolean TESTING = false;
 	static final boolean GENERATE_CHECKSUMS = false;
 
-	static final String BOT_VERSION = "0.1.8" 	+ (TESTING ? "-testing" : "");
+	static final String BOT_VERSION = "0.1.9" 	+ (TESTING ? "-testing" : "");
 	static final String BOT_NAME = "Blizcord";
 	static final String BOT_DEVELOPER = "Bleuzen <supgesu@gmail.com>";
 	static final String BOT_GITHUB_REPO = "Bleuzen/Blizcord";
