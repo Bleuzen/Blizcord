@@ -1,7 +1,14 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
+
+import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -14,6 +21,7 @@ import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -25,9 +33,8 @@ public class Bot extends ListenerAdapter {
 
 	private static JDA api;
 	private static Guild guild;
+	private static Role adminRole;
 	private static TextChannel controlChannel;
-
-	private static ArrayList<Long> admins = new ArrayList<>();
 
 	static boolean joined;
 
@@ -44,41 +51,20 @@ public class Bot extends ListenerAdapter {
 	}
 
 	public static void start() {
+
+		// config got loaded in a
+
+		if(Config.get(Config.BOT_TOKEN).isEmpty()) {
+			a.errExit("You must specify a Token in the config file!");
+		}
+
+		Log.print("Starting JDA ...");
+
 		try {
-			// config got loaded in a
-
-			if(Config.get(Config.BOT_TOKEN).isEmpty()) {
-				a.errExit("You must specify a Token in the config file!");
-			}
-
-			String adms = Config.get(Config.ADMIN_IDS);
-			if(!adms.isEmpty()) {
-				String[] admsArr = adms.split(":");
-				for(String admin : admsArr) {
-					try {
-						admins.add(Long.parseLong(admin));
-					} catch(NumberFormatException e) {
-						Log.print("Invalid admin ID: " + admin);
-					}
-				}
-			}
-
-			Log.print("Starting JDA ...");
-
 			api = new JDABuilder(AccountType.BOT).setToken(Config.get(Config.BOT_TOKEN))
 					//.setEnableShutdownHook(false) // default: true
 					.buildBlocking();
 			api.addEventListener(new Bot());
-
-			// old shutdown hook
-			/*Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-					@Override
-					public void run() {
-						Log.printWithoutNL("Shutting down ...");
-						api.shutdown();
-						Log.printRawWithNL(" Bye");
-					}
-				}));*/
 
 			// test for only one server
 			int guilds = api.getGuilds().size();
@@ -112,6 +98,16 @@ public class Bot extends ListenerAdapter {
 				a.errExit("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.");
 			}
 
+			String adminsRoleName = Config.get(Config.ADMINS_ROLE);
+			if(!adminsRoleName.isEmpty()) {
+				try {
+					adminRole = guild.getRolesByName(adminsRoleName, true).get(0); // true for Ignore Case
+				} catch(IndexOutOfBoundsException e) {
+					a.errExit("There is no '" + adminsRoleName + "' Role.");
+				}
+			}
+
+
 			// Init Player
 			PlayerThread.init();
 
@@ -136,6 +132,8 @@ public class Bot extends ListenerAdapter {
 		} catch (Exception e) {
 			a.errExit(e.getMessage());
 		}
+
+		controlChannel.sendMessage(Values.BOT_NAME + " " + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all of my commands.").queue();
 	}
 
 	static void shutdown() {
@@ -170,7 +168,7 @@ public class Bot extends ListenerAdapter {
 	}
 
 	private static boolean isAdmin(User user) {
-		return user.getId().equals(guild.getOwner().getUser().getId()) || admins.contains(Long.parseLong(user.getId()));
+		return user.getId().equals(guild.getOwner().getUser().getId()) || (adminRole != null && guild.getMember(user).getRoles().contains(adminRole));
 	}
 
 
@@ -194,22 +192,19 @@ public class Bot extends ListenerAdapter {
 			switch (cmd) {
 			case "help":
 				channel.sendMessage(author.getAsMention() + " **Commands:**\n"
-						+ "\n**Everyone:**"
-						+ "```\n"
-						+ "/list                           (Show the playlist)\n"
-						+ "/id                             (Send your (admin-)ID)"
 						+ "```"
-						+ "\n**Admins:**\n"
-						+ "```"
-						+ "/play <file or link>            (Play given track now)\n"
-						+ "/add <file, folder or link>     (Add given track to playlist)\n"
-						+ "/pause                          (Pause or resume the current track)\n"
-						+ "/skip (<how many songs>)        (Skip one or more songs from the playlist)\n"
-						+ "/jump (<how many seconds>)      (Jump forward in the current track)\n"
-						+ "/repeat (<how many times>)      (Repeat the current playlist)\n"
-						+ "/stop                           (Stop the playback and clear the playlist)\n"
-						+ "/version                        (Print versions)\n"
-						+ "/kill                           (Kill the bot)"
+						+ "!list                           (Show the playlist)\n"
+						+ "!play <file or link>            (Play given track now)\n"
+						+ "!add <file, folder or link>     (Add given track to playlist)\n"
+						+ "!save <name>                    (Save the current playlist)\n"
+						+ "!load <name>                    (Load a saved playlist)\n"
+						+ "!pause                          (Pause or resume the current track)\n"
+						+ "!skip (<how many songs>)        (Skip one or more songs from the playlist)\n"
+						+ "!jump (<how many seconds>)      (Jump forward in the current track)\n"
+						+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
+						+ "!stop                           (Stop the playback and clear the playlist)\n"
+						+ "!version                        (Print versions)\n"
+						+ "!kill                           (Kill the bot)"
 						+ "```"
 						+ (channel.getType() == ChannelType.PRIVATE ? ("\n**Guild:** " + guild.getName()) : "") ).queue();
 
@@ -358,7 +353,7 @@ public class Bot extends ListenerAdapter {
 					// clear the playlist
 					PlayerThread.getMusicManager().scheduler.clear();
 				} else {
-					channel.sendMessage(author + " ``Only admins can stop me.``").queue();
+					channel.sendMessage(author.getAsMention() + " ``Only admins can stop me.``").queue();
 				}
 
 				break;
@@ -384,7 +379,7 @@ public class Bot extends ListenerAdapter {
 				if(isAdmin(author)) {
 
 					if(arg == null) {
-						channel.sendMessage("Please specify what I should add to the playlist. Put it behind this command.").queue();
+						channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();
 						return;
 					}
 
@@ -395,14 +390,17 @@ public class Bot extends ListenerAdapter {
 						File inputFile = new File(arg);
 
 						if(inputFile.isDirectory()) {
-							channel.sendMessage("Adding all supported files from folder to queue: " + inputFile).queue();
+							channel.sendMessage("Adding all supported files from folder to queue ...").queue();;
 							File[] files = inputFile.listFiles();
 							Arrays.sort(files);
+							int addesFiles = 0;
 							for(File f : files) {
 								if(f.isFile()) {
 									PlayerThread.loadAndPlay(channel, f.getAbsolutePath(), false, true);
 								}
+								addesFiles++;
 							}
+							channel.sendMessage(author.getAsMention() + " ``Added " + addesFiles + " files.``").queue();
 						} else {
 							PlayerThread.loadAndPlay(channel, arg, false, false);
 						}
@@ -419,7 +417,7 @@ public class Bot extends ListenerAdapter {
 				if(isAdmin(author)) {
 
 					if(arg == null) {
-						channel.sendMessage("Please specify what I should play. Put it behind this command.").queue();
+						channel.sendMessage(author.getAsMention() + " ``Please specify what I should play. Put it behind this command.``").queue();
 						return;
 					}
 
@@ -431,6 +429,78 @@ public class Bot extends ListenerAdapter {
 
 				} else {
 					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can play something.``").queue();
+				}
+
+				break;
+
+
+			case "save":
+				// arg = playlist name
+				if(arg == null) {
+					channel.sendMessage(author.getAsMention() + " ``Please specify a playlist name. Put it behind this command.``").queue();
+					break;
+				}
+				if(!PlayerThread.isPlaying()) {
+					channel.sendMessage(author.getAsMention() + " ``The playlist is empty, nothing to save.``").queue();
+					break;
+				}
+				File playlistsFolder = new File("playlists");
+				if(!playlistsFolder.isDirectory()) {
+					if(!playlistsFolder.mkdir()) {
+						channel.sendMessage(author.getAsMention() + " ``Failed to create playlists folder.``").queue();
+						break;
+					}
+				}
+				try {
+					BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(new File(playlistsFolder, arg), Charset.forName("UTF-8"), false));
+					// Write currently playing track
+					writer.write(PlayerThread.getMusicManager().player.getPlayingTrack().getInfo().uri);
+					writer.newLine();
+					// Write upcoming tracks
+					ArrayList<AudioTrack> upcoming = PlayerThread.getMusicManager().scheduler.getList();
+					if(!upcoming.isEmpty()) {
+						for(int i = 0; i < upcoming.size(); i++) {
+							writer.write(upcoming.get(i).getInfo().uri);
+							writer.newLine();
+						}
+					}
+					// Save
+					writer.close();
+
+					channel.sendMessage(author.getAsMention() + " Playlist saved: " + arg).queue();
+				} catch (Exception e) {
+					channel.sendMessage(author.getAsMention() + " ``Failed to save playlist.``").queue();
+				}
+
+				break;
+
+
+			case "load":
+				// arg = playlist name
+				if(arg == null) {
+					channel.sendMessage(author.getAsMention() + " ``Please specify a playlist name. Put it behind this command.``").queue();
+					break;
+				}
+				// Load the playlist
+				try {
+					File playlistFile = new File(new File("playlists"), arg);
+					if(!playlistFile.exists()) {
+						channel.sendMessage(author.getAsMention() + " Playlist doesn't exist: " + arg).queue();
+						break;
+					}
+
+					join(); // try to join if not already
+
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playlistFile), "UTF-8"));
+					String line;
+					while((line = bufferedReader.readLine()) != null) {
+						PlayerThread.loadAndPlay(channel, line, false, true);
+					}
+					bufferedReader.close();
+
+					channel.sendMessage(author.getAsMention() + " Playlist loaded: " + arg).queue();
+				} catch (Exception e) {
+					channel.sendMessage(author.getAsMention() + " Failed to load playlist: " + arg).queue();
 				}
 
 				break;

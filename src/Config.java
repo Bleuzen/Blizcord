@@ -15,19 +15,19 @@ public class Config {
 	static final String CONTROL_CHANNEL = "CONTROL_CHANNEL";
 	static final String VOICE_CHANNEL = "VOICE_CHANNEL";
 	static final String BOT_TOKEN = "BOT_TOKEN";
-	static final String ADMIN_IDS = "ADMIN_IDS";
 	static final String COMMAND_PREFIX = "COMMAND_PREFIX";
 	static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
 	static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
+	static final String ADMINS_ROLE = "ADMINS_ROLE";
 
 	private static Properties properties;
 
 	static boolean init(File configFile) {
 		Properties defaults = new Properties();
-		defaults.setProperty(ADMIN_IDS, "#uncomment this (remove \"#\") and put admin IDs here splitted with \":\"");
-		defaults.setProperty(BOT_TOKEN, "#uncomment this and put bot token here. You can create your app / bot and get your token here: https://discordapp.com/developers/applications/me");
+		defaults.setProperty(ADMINS_ROLE, "Admins #comment out or delete everything behind \"=\" to disable");
+		defaults.setProperty(BOT_TOKEN, "#uncomment this (remove \"#\") and put bot token here. You can create your app / bot and get your token here: https://discordapp.com/developers/applications/me");
 		defaults.setProperty(CONTROL_CHANNEL, "bot");
-		defaults.setProperty(COMMAND_PREFIX, "/");
+		defaults.setProperty(COMMAND_PREFIX, "!");
 		defaults.setProperty(VOICE_CHANNEL, "Music");
 		defaults.setProperty(DISPLAY_SONG_AS_GAME, "true");
 		defaults.setProperty(UPDATE_CHECK_INTERVAL_HOURS, "24 #set to 0 to disable");
@@ -79,10 +79,11 @@ public class Config {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(configFile, Charset.forName("UTF-8"), true));
 			if(needNewLine(configFile)) {
-				writer.write(System.lineSeparator());
+				writer.newLine();
 			}
 			for(String s : toAdd) {
-				writer.write(s + System.lineSeparator());
+				writer.write(s);
+				writer.newLine();
 			}
 			writer.close();
 			return true;
