@@ -8,7 +8,6 @@ import java.util.TimerTask;
 public class UpdateChecker extends TimerTask {
 
 	private String json;
-	private String tagName;
 
 	private boolean updateAvailable = false;
 	private boolean alreadyNotified = false;
@@ -19,12 +18,14 @@ public class UpdateChecker extends TimerTask {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 			json = bufferedReader.readLine();
 
-			tagName = getJsonValue("tag_name");
+			String tagName = getJsonValue("tag_name");
 
-			int online = toVersionNumber(tagName);
-			int local = toVersionNumber(Values.BOT_VERSION);
+			String online = toVersionString(tagName);
+			String local = toVersionString(Values.BOT_VERSION);
 
-			if(online > local) {
+			int t = online.compareTo(local);
+
+			if(t > 0) {
 				updateAvailable = true;
 			}
 		} catch (Exception e) {
@@ -40,8 +41,12 @@ public class UpdateChecker extends TimerTask {
 		return json.substring(i + key.length() + 3).split("\"")[0];
 	}
 
-	private int toVersionNumber(String version) {
-		return Integer.parseInt(version.replaceAll("[^0-9]", ""));
+	private String toVersionString(String version) {
+		return version.replaceAll("[^0-9]", "");
+	}
+
+	boolean isUpdateAvailable() {
+		return updateAvailable;
 	}
 
 	@Override
@@ -49,8 +54,7 @@ public class UpdateChecker extends TimerTask {
 		if(!alreadyNotified) {
 			checkForUpdate();
 			if(updateAvailable) {
-				Bot.getControlChannel().sendMessage("A new version is available!\n"
-						+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/tag/" + tagName).queue();
+				Bot.sendUpdateMessage();
 				alreadyNotified = true;
 			}
 		}

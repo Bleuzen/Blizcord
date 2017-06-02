@@ -83,7 +83,12 @@ public class PlayerThread implements Runnable {
 			public void trackLoaded(AudioTrack track) {
 
 				if(direct) {
-					playDirect(track);
+					if(track.getSourceManager().getSourceName().equals("youtube")) {
+						playDirect(track, getYouTubeStartTimeMS(trackUrl));
+					} else {
+						playDirect(track, 0);
+					}
+
 					// quiet check not needed, since there will be never more than one track / message
 					channel.sendMessage("Now playing: " + Bot.getTrackName(track)).queue();
 				} else {
@@ -122,15 +127,47 @@ public class PlayerThread implements Runnable {
 		});
 	}
 
+
+	private static long getYouTubeStartTimeMS(String trackUrl) {
+		if (trackUrl.indexOf("&t=") == -1) {
+			return 0;
+		}
+
+		int ms = 0;
+		trackUrl = trackUrl.substring(trackUrl.indexOf("&t=") + 3);
+		int ti = 0;
+		for (int i = 0; i < trackUrl.length(); i++) {
+			String sub = trackUrl.substring(i, i+1);
+			if (sub.equalsIgnoreCase("h")) {
+				ms += ti * 360000;
+				ti = 0;
+			} else if (sub.equalsIgnoreCase("m")) {
+				ms += ti * 60000;
+				ti = 0;
+			} else if (sub.equalsIgnoreCase("s")) {
+				ms += ti * 1000;
+				ti = 0;
+			} else {
+				ti *= 10;
+				ti += Integer.parseInt(sub);
+			}
+		}
+		return ms;
+	}
+
 	static void play(AudioTrack track) {
 		//connectToFirstVoiceChannel(guild.getAudioManager());
 
 		musicManager.scheduler.queue(track);
 	}
 
-	static void playDirect(AudioTrack track) {
+	static void playDirect(AudioTrack track, long startingPositionMS) {
 		//connectToFirstVoiceChannel(guild.getAudioManager());
 		musicManager.player.startTrack(track, false);
+
+		if(startingPositionMS > 0) {
+			musicManager.player.getPlayingTrack().setPosition(startingPositionMS);
+		}
 	}
 
 	static void stop() {

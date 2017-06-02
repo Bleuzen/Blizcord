@@ -65,7 +65,6 @@ public class Config {
 
 	}
 
-
 	static String get(String key) {
 		String value = properties.getProperty(key);
 		if(value == null) {

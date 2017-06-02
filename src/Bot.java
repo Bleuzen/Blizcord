@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
@@ -35,6 +36,8 @@ public class Bot extends ListenerAdapter {
 	private static Guild guild;
 	private static Role adminRole;
 	private static TextChannel controlChannel;
+
+	private static UpdateChecker updateChecker;
 
 	static boolean joined;
 
@@ -119,13 +122,14 @@ public class Bot extends ListenerAdapter {
 			// Start checking for updates
 			int updateCheckInterval;
 			try {
-				updateCheckInterval= Integer.valueOf(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
+				updateCheckInterval= Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
 			} catch (NumberFormatException e) {
 				updateCheckInterval = 0;
 			}
 			if(updateCheckInterval > 0) {
 				// First update check delayed 5 seconds, then all updateCheckInterval hours
-				new Timer().schedule(new UpdateChecker(), 5000, (1000 * 3600 * updateCheckInterval));
+				updateChecker = new UpdateChecker();
+				new Timer().schedule(updateChecker, 5000, (1000 * 3600 * updateCheckInterval));
 			}
 
 			Log.print("Successfully started.");
@@ -176,8 +180,9 @@ public class Bot extends ListenerAdapter {
 	public void onMessageReceived(MessageReceivedEvent event) {
 		String message = event.getMessage().getContent();
 		MessageChannel channel = event.getChannel();
+		User author = event.getAuthor();
 
-		if ( (channel == controlChannel || channel.getType() == ChannelType.PRIVATE) && message.startsWith(Config.get(Config.COMMAND_PREFIX)) ) {
+		if ( (channel == controlChannel || channel.getType() == ChannelType.PRIVATE) && message.startsWith(Config.get(Config.COMMAND_PREFIX)) && (!author.getId().equals(api.getSelfUser().getId())) ) {
 
 			String[] cmdarg = message.substring(Config.get(Config.COMMAND_PREFIX).length()).split(" ", 2);
 			String cmd = cmdarg[0].toLowerCase();
@@ -187,7 +192,6 @@ public class Bot extends ListenerAdapter {
 			} catch (IndexOutOfBoundsException e) {
 				arg = null;
 			}
-			User author = event.getAuthor();
 
 			switch (cmd) {
 			case "help":
@@ -200,6 +204,7 @@ public class Bot extends ListenerAdapter {
 						+ "!load <name>                    (Load a saved playlist)\n"
 						+ "!pause                          (Pause or resume the current track)\n"
 						+ "!skip (<how many songs>)        (Skip one or more songs from the playlist)\n"
+						+ "!goto <hours:minutes:seconds>   (Go to a given time)\n"
 						+ "!jump (<how many seconds>)      (Jump forward in the current track)\n"
 						+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
 						+ "!stop                           (Stop the playback and clear the playlist)\n"
@@ -209,6 +214,7 @@ public class Bot extends ListenerAdapter {
 						+ (channel.getType() == ChannelType.PRIVATE ? ("\n**Guild:** " + guild.getName()) : "") ).queue();
 
 				break;
+
 
 			case "kill":
 				if(isAdmin(author)) {
@@ -220,127 +226,178 @@ public class Bot extends ListenerAdapter {
 
 				break;
 
+
 			case "skip":
-				if(PlayerThread.isPlaying()) {
-					if(isAdmin(author)) {
-
-						int skips;
-						if(arg == null) {
-							skips = 1;
-						} else {
-							try {
-								skips = Integer.valueOf(arg);
-								if(skips < 1) {
-									throw new NumberFormatException();
-								}
-							} catch(NumberFormatException e) {
-								channel.sendMessage(author.getAsMention() +  " Invalid number").queue();
-								return;
-							}
-						}
-
-						PlayerThread.getMusicManager().scheduler.nextTrack(skips);
-					} else {
-						channel.sendMessage(author.getAsMention() + " ``Only admins can skip.``").queue();
-					}
-
-				} else {
-					channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
+				if(!isAdmin(author)) {
+					channel.sendMessage(author.getAsMention() + " ``Only admins can skip.``").queue();
+					return;
 				}
 
+				if(!PlayerThread.isPlaying()) {
+					channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
+					return;
+				}
+
+				int skips;
+				if (arg == null) {
+					skips = 1;
+				} else {
+					try {
+						skips = Integer.parseInt(arg);
+						if (skips < 1) {
+							throw new NumberFormatException();
+						}
+					} catch (NumberFormatException e) {
+						channel.sendMessage(author.getAsMention() + " Invalid number").queue();
+						return;
+					}
+				}
+
+				PlayerThread.getMusicManager().scheduler.nextTrack(skips);
+
 				break;
+
+
+			case "goto":
+				if(!isAdmin(author)) {
+					channel.sendMessage(author.getAsMention() + " ``Only admins can use this command.``").queue();
+					return;
+				}
+
+				if(!PlayerThread.isPlaying()) {
+					channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
+					return;
+				}
+
+				if(arg == null) {
+					channel.sendMessage(author.getAsMention() + " ``Please specify a time. Put it behind this command. Split hours, minutes and seconds with ':'. Hours and minutes are optional.``").queue();
+					return;
+				}
+
+				long ms = -1; // invalid by default
+				try {
+					int c = arg.length() - arg.replace(":", "").length();
+					if(c == 2) {
+						// hours, minutes and seconds
+						String[] split = arg.split(":");
+						ms = timeToMS(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+					} else if(c == 1) {
+						// minutes and seconds
+						String[] split = arg.split(":");
+						ms = timeToMS(0, Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+					} else if(c == 0) {
+						// only seconds
+						ms = timeToMS(0, 0, Integer.parseInt(arg));
+					}
+
+					if(ms < 0) {
+						throw new NumberFormatException();
+					}
+				} catch(Exception e) {
+					channel.sendMessage(author.getAsMention() +  " Invalid time").queue();
+					return;
+				}
+
+				PlayerThread.getMusicManager().player.getPlayingTrack().setPosition(ms);
+
+				break;
+
 
 			case "jump":
-				if(isAdmin(author)) {
-					int seconds;
-					if(arg == null) {
-						seconds = 10;
-					} else {
-						try {
-							seconds = Integer.valueOf(arg);
-							if(seconds < 1) {
-								throw new NumberFormatException();
-							}
-						} catch(NumberFormatException e) {
-							channel.sendMessage(author.getAsMention() +  " Invalid number").queue();
-							return;
-						}
-					}
-
-					AudioTrack track = PlayerThread.getMusicManager().player.getPlayingTrack();
-					track.setPosition(track.getPosition() + (1000*seconds)); // starts next track when jumping over end
-
-				} else {
+				if(!isAdmin(author)) {
 					channel.sendMessage(author.getAsMention() + " ``Only admins can jump.``").queue();
+					return;
 				}
 
+				int seconds;
+				if(arg == null) {
+					seconds = 10;
+				} else {
+					try {
+						seconds = Integer.parseInt(arg);
+						if(seconds == 0) {
+							throw new NumberFormatException();
+						}
+					} catch(NumberFormatException e) {
+						channel.sendMessage(author.getAsMention() +  " Invalid number").queue();
+						return;
+					}
+				}
+
+				AudioTrack track = PlayerThread.getMusicManager().player.getPlayingTrack();
+				track.setPosition(track.getPosition() + (1000*seconds)); // Lavaplayer handles values < 0 or > track length
+
 				break;
+
 
 			case "repeat":
-				if(isAdmin(author)) {
-
-					int repeats;
-					if(arg == null) {
-						repeats = 1;
-					} else {
-						try {
-							repeats = Integer.valueOf(arg);
-							if(repeats < 1) {
-								throw new NumberFormatException();
-							}
-						} catch(NumberFormatException e) {
-							channel.sendMessage(author.getAsMention() +  " Invalid number").queue();
-							return;
-						}
-					}
-
-					if(PlayerThread.isPlaying()) {
-
-						ArrayList<AudioTrack> songs = new ArrayList<>();
-						songs.add(PlayerThread.getMusicManager().player.getPlayingTrack());
-						ArrayList<AudioTrack> upcoming = PlayerThread.getMusicManager().scheduler.getList();
-						if(!upcoming.isEmpty()) {
-							for(int i = 0; i < upcoming.size(); i++) {
-								songs.add(upcoming.get(i));
-							}
-						}
-
-						for(int i = 0; i < repeats; i++) {
-							for(int j = 0; j < songs.size(); j++) {
-								PlayerThread.play(songs.get(j).makeClone());
-							}
-						}
-
-						channel.sendMessage( "``Repeated the playlist" + (repeats == 1 ? ".``" : (" " + repeats + " times.``") )).queue();
-					} else {
-						channel.sendMessage(author.getAsMention() +  " ``The playlist is empty. There is nothing to repeat.``").queue();
-					}
-
-				} else {
+				if(!isAdmin(author)) {
 					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can use the repeat command.``").queue();
+					return;
+				}
+
+				int repeats;
+				if(arg == null) {
+					repeats = 1;
+				} else {
+					try {
+						repeats = Integer.parseInt(arg);
+						if(repeats < 1) {
+							throw new NumberFormatException();
+						}
+					} catch(NumberFormatException e) {
+						channel.sendMessage(author.getAsMention() +  " Invalid number").queue();
+						return;
+					}
+				}
+
+				if(PlayerThread.isPlaying()) {
+
+					ArrayList<AudioTrack> songs = new ArrayList<>();
+					songs.add(PlayerThread.getMusicManager().player.getPlayingTrack());
+					ArrayList<AudioTrack> upcoming = PlayerThread.getMusicManager().scheduler.getList();
+					if(!upcoming.isEmpty()) {
+						for(int i = 0; i < upcoming.size(); i++) {
+							songs.add(upcoming.get(i));
+						}
+					}
+
+					for(int i = 0; i < repeats; i++) {
+						for(int j = 0; j < songs.size(); j++) {
+							PlayerThread.play(songs.get(j).makeClone());
+						}
+					}
+
+					channel.sendMessage( "``Repeated the playlist" + (repeats == 1 ? ".``" : (" " + repeats + " times.``") )).queue();
+				} else {
+					channel.sendMessage(author.getAsMention() +  " ``The playlist is empty. There is nothing to repeat.``").queue();
 				}
 
 				break;
+
 
 			case "list":
 				PlayerThread.sendPlaylist(author, channel);
 
 				break;
 
+
 			case "pause":
-				if(isAdmin(author)) {
-					if(PlayerThread.isPaused()) {
-						channel.sendMessage("Continue playback ...").queue();
-						PlayerThread.setPaused(false);
-					} else {
-						PlayerThread.setPaused(true);
-						channel.sendMessage("Paused").queue();
-					}
-				} else {
+				if(!isAdmin(author)) {
 					channel.sendMessage(author.getAsMention() + " ``Only admins can pause me.``").queue();
+					return;
+				}
+
+				if(PlayerThread.isPaused()) {
+					channel.sendMessage("Continue playback ...").queue();
+					PlayerThread.setPaused(false);
+				} else {
+					PlayerThread.setPaused(true);
+					channel.sendMessage("Paused").queue();
 				}
 
 				break;
+
 
 			case "stop":
 				if(isAdmin(author)) {
@@ -358,10 +415,6 @@ public class Bot extends ListenerAdapter {
 
 				break;
 
-			case "id":
-				author.openPrivateChannel().complete().sendMessage("Your (admin-)ID: " + author.getId()).queue();
-
-				break;
 
 			case "version":
 				channel.sendMessage(author.getAsMention() + "\n"
@@ -373,62 +426,66 @@ public class Bot extends ListenerAdapter {
 						+ "Lavaplayer: " + PlayerLibrary.VERSION
 						+ "``").queue();
 
-				break;
-
-			case "add":
-				if(isAdmin(author)) {
-
-					if(arg == null) {
-						channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();
-						return;
-					}
-
-					join(); // try to join if not already
-
-					if(joined) { // if successfully joined
-
-						File inputFile = new File(arg);
-
-						if(inputFile.isDirectory()) {
-							channel.sendMessage("Adding all supported files from folder to queue ...").queue();;
-							File[] files = inputFile.listFiles();
-							Arrays.sort(files);
-							int addesFiles = 0;
-							for(File f : files) {
-								if(f.isFile()) {
-									PlayerThread.loadAndPlay(channel, f.getAbsolutePath(), false, true);
-								}
-								addesFiles++;
-							}
-							channel.sendMessage(author.getAsMention() + " ``Added " + addesFiles + " files.``").queue();
-						} else {
-							PlayerThread.loadAndPlay(channel, arg, false, false);
-						}
-
-					}
-
-				} else {
-					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can add something.``").queue();
+				if(updateChecker != null && updateChecker.isUpdateAvailable()) {
+					sendUpdateMessage();
 				}
 
 				break;
 
+
+			case "add":
+				if(!isAdmin(author)) {
+					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can add something.``").queue();
+					return;
+				}
+
+				if(arg == null) {
+					channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();
+					return;
+				}
+
+				join(); // try to join if not already
+
+				if(joined) { // if successfully joined
+
+					File inputFile = new File(arg);
+
+					if(inputFile.isDirectory()) {
+						channel.sendMessage("Adding all supported files from folder to queue ...").queue();;
+						File[] files = inputFile.listFiles();
+						Arrays.sort(files);
+						int addesFiles = 0;
+						for(File f : files) {
+							if(f.isFile()) {
+								PlayerThread.loadAndPlay(channel, f.getAbsolutePath(), false, true);
+							}
+							addesFiles++;
+						}
+						channel.sendMessage(author.getAsMention() + " ``Added " + addesFiles + " files.``").queue();
+					} else {
+						PlayerThread.loadAndPlay(channel, arg, false, false);
+					}
+
+				}
+
+				break;
+
+
 			case "play":
-				if(isAdmin(author)) {
-
-					if(arg == null) {
-						channel.sendMessage(author.getAsMention() + " ``Please specify what I should play. Put it behind this command.``").queue();
-						return;
-					}
-
-					join(); // try to join if not already
-
-					if(joined) { // if successfully joined
-						PlayerThread.loadAndPlay(channel, arg, true, false);
-					}
-
-				} else {
+				if(!isAdmin(author)) {
 					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can play something.``").queue();
+					return;
+				}
+
+				if(arg == null) {
+					channel.sendMessage(author.getAsMention() + " ``Please specify what I should play. Put it behind this command.``").queue();
+					return;
+				}
+
+				join(); // try to join if not already
+
+				if(joined) { // if successfully joined
+					PlayerThread.loadAndPlay(channel, arg, true, false);
 				}
 
 				break;
@@ -514,9 +571,26 @@ public class Bot extends ListenerAdapter {
 		}
 	}
 
+	static long timeToMS(int hours, int minutes, int seconds) {
+		if(seconds > 59 || seconds < 0) {
+			return -1;
+		}
+		if(minutes > 59 || minutes < 0) {
+			return -1;
+		}
+
+		long s = (seconds + (60 * (minutes + (hours * 60))));
+		return TimeUnit.SECONDS.toMillis(s);
+	}
+
 	static void setGame(Game game) {
 		api.getPresence().setGame(game);
 		//System.out.println("GAME UPDATE: " + game);
+	}
+
+	static void sendUpdateMessage() {
+		controlChannel.sendMessage("A new version is available!\n"
+				+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases").queue();
 	}
 
 	static String getTrackName(AudioTrack track) {
