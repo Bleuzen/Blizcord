@@ -26,6 +26,7 @@ public class GUI extends JFrame {
 
 	private static final File DEFAULT_CONFIG_FILE = new File(Values.DEFAULT_CONFIG);
 
+	private static GUI gui_Main;
 	private static GUI_Config gui_Config;
 
 	private final JPanel contentPane;
@@ -39,6 +40,8 @@ public class GUI extends JFrame {
 	private final JLabel lblCurrstatus;
 
 	public GUI() {
+		gui_Main = this;
+
 		setTitle(Values.BOT_NAME + " v" + Values.BOT_VERSION);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -216,6 +219,10 @@ public class GUI extends JFrame {
 
 	private static void showErrMsgBox(String msg) {
 		JOptionPane.showMessageDialog(null, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
+	}
+
+	static void mvToFront() {
+		gui_Main.toFront();
 	}
 
 }

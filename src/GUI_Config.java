@@ -103,7 +103,7 @@ public class GUI_Config extends JFrame {
 				update_check_interval_hours_spinner.setEnabled(update_check_box.isSelected());
 			}
 		});
-		update_check_box.setBounds(10, 176, 140, 26);
+		update_check_box.setBounds(10, 176, 130, 26);
 		panel.add(update_check_box);
 
 		update_check_interval_hours_spinner = new JSpinner();
@@ -157,6 +157,8 @@ public class GUI_Config extends JFrame {
 					JOptionPane.showMessageDialog(null, "Failed to save config.", Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 				}
 				dispose();
+
+				GUI.mvToFront();
 			}
 		});
 		btnApply.setBounds(258, 254, 90, 26);
