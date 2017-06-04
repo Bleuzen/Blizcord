@@ -127,8 +127,9 @@ public class PlayerThread implements Runnable {
 		});
 	}
 
-
 	private static long getYouTubeStartTimeMS(String trackUrl) {
+		trackUrl = trackUrl.replace("?t=", "&t="); // ? used in youtu.be links
+
 		if (trackUrl.indexOf("&t=") == -1) {
 			return 0;
 		}
@@ -223,20 +224,20 @@ public class PlayerThread implements Runnable {
 						Bot.setGame(game);
 						lastGame = game;
 						updateDelay = updatesDelay;
-						//System.out.println("UPDATE GAME LGN: " + game.getName());
+						//Log.print("UPDATE GAME LGN: " + game.getName());
 					}
 				} else {
 					if(game == null) {
 						Bot.setGame(null);
 						lastGame = null;
 						updateDelay = updatesDelay;
-						//System.out.println("UPDATE GAME NULL");
+						//Log.print("UPDATE GAME NULL");
 					} else {
 						if(!lastGame.getName().equals(game.getName())) {
 							Bot.setGame(game);
 							lastGame = game;
 							updateDelay = updatesDelay;
-							//System.out.println("UPDATE GAME NE: " + game.getName());
+							//Log.print("UPDATE GAME NE: " + game.getName());
 						}
 					}
 				}

@@ -110,7 +110,6 @@ public class Bot extends ListenerAdapter {
 				}
 			}
 
-
 			// Init Player
 			PlayerThread.init();
 
@@ -137,7 +136,7 @@ public class Bot extends ListenerAdapter {
 			a.errExit(e.getMessage());
 		}
 
-		controlChannel.sendMessage(Values.BOT_NAME + " " + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all of my commands.").queue();
+		controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all commands.").queue();
 	}
 
 	static void shutdown() {
@@ -166,7 +165,6 @@ public class Bot extends ListenerAdapter {
 	}
 
 	static void leave() {
-		// only defined guild, for one server
 		guild.getAudioManager().closeAudioConnection();
 		joined = false;
 	}
@@ -208,7 +206,7 @@ public class Bot extends ListenerAdapter {
 						+ "!jump (<how many seconds>)      (Jump forward in the current track)\n"
 						+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
 						+ "!stop                           (Stop the playback and clear the playlist)\n"
-						+ "!version                        (Print versions)\n"
+						+ "!about                          (Print about message)\n"
 						+ "!kill                           (Kill the bot)"
 						+ "```"
 						+ (channel.getType() == ChannelType.PRIVATE ? ("\n**Guild:** " + guild.getName()) : "") ).queue();
@@ -346,7 +344,7 @@ public class Bot extends ListenerAdapter {
 							throw new NumberFormatException();
 						}
 					} catch(NumberFormatException e) {
-						channel.sendMessage(author.getAsMention() +  " Invalid number").queue();
+						channel.sendMessage(author.getAsMention() + " Invalid number").queue();
 						return;
 					}
 				}
@@ -370,7 +368,7 @@ public class Bot extends ListenerAdapter {
 
 					channel.sendMessage( "``Repeated the playlist" + (repeats == 1 ? ".``" : (" " + repeats + " times.``") )).queue();
 				} else {
-					channel.sendMessage(author.getAsMention() +  " ``The playlist is empty. There is nothing to repeat.``").queue();
+					channel.sendMessage(author.getAsMention() + " ``The playlist is empty. There is nothing to repeat.``").queue();
 				}
 
 				break;
@@ -393,7 +391,8 @@ public class Bot extends ListenerAdapter {
 					PlayerThread.setPaused(false);
 				} else {
 					PlayerThread.setPaused(true);
-					channel.sendMessage("Paused").queue();
+					channel.sendMessage("Paused.\n"
+							+ "Type this command again to resume.").queue();
 				}
 
 				break;
@@ -416,15 +415,20 @@ public class Bot extends ListenerAdapter {
 				break;
 
 
-			case "version":
-				channel.sendMessage(author.getAsMention() + "\n"
-						+ "``"
-						+ Values.BOT_NAME + ": " + Values.BOT_VERSION
-						+ "\n"
-						+ "JDA: " + JDAInfo.VERSION
-						+ "\n"
-						+ "Lavaplayer: " + PlayerLibrary.VERSION
-						+ "``").queue();
+			case "about":
+				channel.sendMessage("__**" + Values.BOT_NAME + "**__\n\n"
+						+ "Version: " + Values.BOT_VERSION + "\n"
+						+ "Author: " + Values.BOT_DEVELOPER + "\n"
+						+ "GitHub: https://github.com/" + Values.BOT_GITHUB_REPO
+						+ "\n\n"
+						+ "__**Dependencies**__\n\n"
+						+ "__JDA__\n"
+						+ "Version: " + JDAInfo.VERSION + "\n"
+						+ "GitHub: https://github.com/DV8FromTheWorld/JDA\n"
+						+ "__Lavaplayer__\n"
+						+ "Version: " + PlayerLibrary.VERSION + "\n"
+						+ "GitHub: https://github.com/sedmelluq/lavaplayer").queue();
+
 
 				if(updateChecker != null && updateChecker.isUpdateAvailable()) {
 					sendUpdateMessage();
@@ -585,11 +589,11 @@ public class Bot extends ListenerAdapter {
 
 	static void setGame(Game game) {
 		api.getPresence().setGame(game);
-		//System.out.println("GAME UPDATE: " + game);
+		//Log.print("GAME UPDATE: " + game);
 	}
 
 	static void sendUpdateMessage() {
-		controlChannel.sendMessage("A new version is available!\n"
+		guild.getOwner().getUser().openPrivateChannel().complete().sendMessage("A new version is available!\n"
 				+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases").queue();
 	}
 

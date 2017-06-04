@@ -6,4 +6,4 @@ if [ -z "$1" ]
     exit
 fi
 
-$1 /opt/Blizcord/config.txt
+$1 /opt/Blizcord/config.json

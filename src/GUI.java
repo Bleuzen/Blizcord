@@ -1,6 +1,7 @@
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,6 +26,8 @@ public class GUI extends JFrame {
 
 	private static final File DEFAULT_CONFIG_FILE = new File(Values.DEFAULT_CONFIG);
 
+	private static GUI_Config gui_Config;
+
 	private final JPanel contentPane;
 	private final JLabel lblConfig;
 	private final JCheckBox chckbxUseCustomConfig;
@@ -36,7 +39,7 @@ public class GUI extends JFrame {
 	private final JLabel lblCurrstatus;
 
 	public GUI() {
-		setTitle(Values.BOT_NAME + " " + Values.BOT_VERSION);
+		setTitle(Values.BOT_NAME + " v" + Values.BOT_VERSION);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 210);
@@ -44,6 +47,15 @@ public class GUI extends JFrame {
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+		addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(gui_Config != null && gui_Config.isVisible()) {
+					gui_Config.toFront();
+				}
+			}
+		});
 
 		lblConfig = new JLabel("Config:");
 		lblConfig.setBounds(12, 12, 70, 26);
@@ -69,25 +81,31 @@ public class GUI extends JFrame {
 		btnEdit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					if(chckbxUseCustomConfig.isSelected()) {
-						Desktop.getDesktop().open(new File(txtCustomconfig.getText()));
-					} else {
-						Desktop.getDesktop().open(DEFAULT_CONFIG_FILE);
-					}
-				} catch (Exception e1) {
-					showErrMsgBox("Failed to open config with default editor.");
+				// disable some controls (because config gets already initialized, cannot get changed anymore)
+				btnBrowse.setEnabled(false);
+				txtCustomconfig.setEnabled(false);
+				chckbxUseCustomConfig.setEnabled(false);
+				btnEdit.setEnabled(false); // disable to prevent double clicking
+
+				File file;
+				if (chckbxUseCustomConfig.isSelected()) {
+					file = new File(txtCustomconfig.getText());
+				} else {
+					file = DEFAULT_CONFIG_FILE;
 				}
+
+				gui_Config = new GUI_Config(file);
+				gui_Config.setVisible(true);
 			}
 		});
 		btnEdit.setFocusable(false);
-		btnEdit.setBounds(370, 12, 117, 28);
+		btnEdit.setBounds(370, 12, 117, 26);
 		contentPane.add(btnEdit);
 
 		txtCustomconfig = new JTextField();
 		txtCustomconfig.setEnabled(false);
 		txtCustomconfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
-		txtCustomconfig.setBounds(12, 52, 346, 28);
+		txtCustomconfig.setBounds(12, 52, 346, 26);
 		contentPane.add(txtCustomconfig);
 
 		btnBrowse = new JButton("Browse");
@@ -105,7 +123,7 @@ public class GUI extends JFrame {
 		});
 		btnBrowse.setEnabled(false);
 		btnBrowse.setFocusable(false);
-		btnBrowse.setBounds(370, 52, 117, 28);
+		btnBrowse.setBounds(370, 52, 117, 26);
 		contentPane.add(btnBrowse);
 
 		btnStart = new JButton("Start");
@@ -138,15 +156,15 @@ public class GUI extends JFrame {
 			}
 		});
 		btnStart.setFocusable(false);
-		btnStart.setBounds(12, 103, 476, 28);
+		btnStart.setBounds(12, 103, 476, 26);
 		contentPane.add(btnStart);
 
 		lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(12, 143, 70, 28);
+		lblStatus.setBounds(12, 143, 70, 26);
 		contentPane.add(lblStatus);
 
 		lblCurrstatus = new JLabel("Stopped");
-		lblCurrstatus.setBounds(95, 143, 392, 28);
+		lblCurrstatus.setBounds(95, 143, 392, 26);
 		contentPane.add(lblCurrstatus);
 
 		// Load the GUI Config
