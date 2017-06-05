@@ -25,6 +25,9 @@ If you use the zip version, type: ```./Blizcord.sh```
 ### Windows
 Double click the .exe file.
 
+## Setup
+The first time you start the bot, it will crash. It generated the config file. You can edit it with every text editor, or use the GUI as explained here: https://github.com/Bleuzen/Blizcord/wiki/Setup
+
 ## Dependencies
 JDA: https://github.com/DV8FromTheWorld/JDA
 
