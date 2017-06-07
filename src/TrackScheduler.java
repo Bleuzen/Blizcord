@@ -6,6 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
@@ -87,10 +88,12 @@ public class TrackScheduler extends AudioEventAdapter {
 		}
 	}
 
-	/*@Override
+	@Override
 	public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-	  // An already playing track threw an exception (track end event will still be received separately)
-	}*/
+		// An already playing track threw an exception (track end event will still be received separately)
+		Bot.getControlChannel().sendMessage("Failed to play track: " + Bot.getTrackName(track) + "\nError message: " + exception.getMessage()).queue();
+		//exception.printStackTrace();
+	}
 
 	public ArrayList<AudioTrack> getList() {
 		Iterator<AudioTrack> i = queue.iterator();

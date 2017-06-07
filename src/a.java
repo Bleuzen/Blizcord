@@ -9,6 +9,10 @@ public class a {
 
 	private static boolean gui;
 
+	static boolean isGui() {
+		return gui;
+	}
+
 	public static void main(String[] args) {
 		if(args.length > 0 && args[0].equalsIgnoreCase("--gui")) {
 			gui = true;
@@ -73,10 +77,10 @@ public class a {
 		System.exit(1);
 	}
 
-	//TODO: maybe find a better way
+	//TODO: maybe find a better way (move to GUI class?)
 	static void addToServerMessage(String link) {
 		if(gui) {
-			int r = JOptionPane.showConfirmDialog(null, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
+			int r = JOptionPane.showConfirmDialog(null, "Do you want to add the bot to your server now?" + System.lineSeparator() + "This will open:" + System.lineSeparator() + link, Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
 			if(r == JOptionPane.YES_OPTION) {
 				try {
 					Desktop.getDesktop().browse(new URI(link));

@@ -28,6 +28,12 @@ public class PlayerThread implements Runnable {
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		AudioSourceManagers.registerLocalSource(playerManager);
 
+		// Set custom OutputFormat
+		//playerManager.getConfiguration().setOutputFormat(new AudioDataFormat(2, 48000, 960, AudioDataFormat.Codec.OPUS));
+		// Default:
+		//playerManager.getConfiguration().setOutputFormat(StandardAudioDataFormats.DISCORD_OPUS);
+		// Currently lavaplayer doesn't play anything with another bitrate than 960. Maybe this is a bug. I asked the developer. Waiting for an answer ...
+
 		initGuildAudioPlayer(Bot.getGuild());
 	}
 
@@ -41,6 +47,13 @@ public class PlayerThread implements Runnable {
 		}
 
 		guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
+
+		// try to set volume
+		try {
+			musicManager.player.setVolume(Integer.parseInt(Config.get(Config.VOLUME)));
+		} catch (NumberFormatException e) {
+			a.errExit("Invalid volume");
+		}
 	}
 
 	static void sendPlaylist(User user, MessageChannel channel) {
@@ -128,7 +141,9 @@ public class PlayerThread implements Runnable {
 	}
 
 	private static long getYouTubeStartTimeMS(String trackUrl) {
-		trackUrl = trackUrl.replace("?t=", "&t="); // ? used in youtu.be links
+		if(trackUrl.contains("youtu.be")) {
+			trackUrl = trackUrl.replace("?t=", "&t="); // "?" used in youtu.be links
+		}
 
 		if (trackUrl.indexOf("&t=") == -1) {
 			return 0;

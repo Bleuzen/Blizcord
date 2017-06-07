@@ -217,6 +217,10 @@ public class GUI extends JFrame {
 		showErrMsgBox("Bot crashed." + (msg == null ? "" : (" Reason:" + System.lineSeparator() + msg)));
 	}
 
+	static void showMsgBox(String msg) {
+		JOptionPane.showMessageDialog(null, msg, Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
+	}
+
 	private static void showErrMsgBox(String msg) {
 		JOptionPane.showMessageDialog(null, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 	}

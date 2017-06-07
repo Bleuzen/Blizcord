@@ -32,19 +32,22 @@ public class GUI_Config extends JFrame {
 	private final JSpinner update_check_interval_hours_spinner;
 	private final JLabel lblIntervalInHours;
 	private final JButton btnGet;
+	private final JCheckBox chckbxAdminsRole;
+	private final JCheckBox chckbxCustomVolume;
+	private final JSpinner spinnerVolume;
 
 	public GUI_Config(File config) {
 		configFile = config;
 
 		setTitle(configFile.getName());
 		setResizable(false);
-		setSize(360, 320);
+		setSize(360, 330);
 		setLocationRelativeTo(null);
 
 		getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 4, 348, 228);
+		panel.setBounds(0, 4, 348, 244);
 		getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -84,10 +87,6 @@ public class GUI_Config extends JFrame {
 		voicechannel.setBounds(140, 92, 206, 26);
 		panel.add(voicechannel);
 
-		JLabel adminsrolelable = new JLabel("Admins role:");
-		adminsrolelable.setBounds(10, 120, 120, 26);
-		panel.add(adminsrolelable);
-
 		adminsrole = new JTextField();
 		adminsrole.setBounds(140, 120, 206, 26);
 		panel.add(adminsrole);
@@ -109,7 +108,7 @@ public class GUI_Config extends JFrame {
 		update_check_interval_hours_spinner = new JSpinner();
 		update_check_interval_hours_spinner.setEnabled(false);
 		update_check_interval_hours_spinner.setModel(new SpinnerNumberModel(24, 1, null, 1));
-		update_check_interval_hours_spinner.setBounds(274, 176, 66, 26);
+		update_check_interval_hours_spinner.setBounds(276, 176, 64, 26);
 		panel.add(update_check_interval_hours_spinner);
 
 		lblIntervalInHours = new JLabel("Interval in hours:");
@@ -121,6 +120,7 @@ public class GUI_Config extends JFrame {
 		panel.add(controlchannel);
 
 		btnGet = new JButton("Get");
+		btnGet.setToolTipText(Values.DISCORD_GET_TOKEN);
 		btnGet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -137,6 +137,37 @@ public class GUI_Config extends JFrame {
 		btnGet.setBounds(266, 8, 80, 26);
 		panel.add(btnGet);
 
+		chckbxAdminsRole = new JCheckBox("Admins role");
+		chckbxAdminsRole.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(chckbxAdminsRole.isSelected()) {
+					adminsrole.setEnabled(true);
+				} else {
+					adminsrole.setEnabled(false);
+					adminsrole.setText("");
+				}
+			}
+		});
+		chckbxAdminsRole.setBounds(10, 120, 120, 26);
+		panel.add(chckbxAdminsRole);
+
+		chckbxCustomVolume = new JCheckBox("Custom Volume");
+		chckbxCustomVolume.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				spinnerVolume.setEnabled(chckbxCustomVolume.isSelected());
+			}
+		});
+		chckbxCustomVolume.setBounds(10, 204, 240, 26);
+		panel.add(chckbxCustomVolume);
+
+		spinnerVolume = new JSpinner();
+		spinnerVolume.setEnabled(false);
+		spinnerVolume.setModel(new SpinnerNumberModel(100, 5, 100, 5));
+		spinnerVolume.setBounds(276, 204, 64, 26);
+		panel.add(spinnerVolume);
+
 		JButton btnApply = new JButton("Apply");
 		btnApply.addActionListener(new ActionListener() {
 			@Override
@@ -150,6 +181,7 @@ public class GUI_Config extends JFrame {
 				Config.set(Config.ADMINS_ROLE, adminsrole.getText());
 				Config.set(Config.DISPLAY_SONG_AS_GAME, String.valueOf(display_song_as_game.isSelected()));
 				Config.set(Config.UPDATE_CHECK_INTERVAL_HOURS, (update_check_box.isSelected() ? update_check_interval_hours_spinner.getValue().toString() : "0"));
+				Config.set(Config.VOLUME, (chckbxCustomVolume.isSelected() ? spinnerVolume.getValue().toString() : "100"));
 
 				if(Config.save()) {
 					JOptionPane.showMessageDialog(null, "Config saved.", Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
@@ -161,7 +193,7 @@ public class GUI_Config extends JFrame {
 				GUI.mvToFront();
 			}
 		});
-		btnApply.setBounds(258, 254, 90, 26);
+		btnApply.setBounds(250, 258, 90, 26);
 		getContentPane().add(btnApply);
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -173,19 +205,25 @@ public class GUI_Config extends JFrame {
 	}
 
 	private void read() {
-		Config.init(configFile);
+		Config.init(configFile, true);
 
-		adminsrole.setText(Config.get(Config.ADMINS_ROLE));
 		commandprefix.setText(Config.get(Config.COMMAND_PREFIX));
 		controlchannel.setText(Config.get(Config.CONTROL_CHANNEL));
 		display_song_as_game.setSelected(Boolean.parseBoolean(Config.get(Config.DISPLAY_SONG_AS_GAME)));
 		voicechannel.setText(Config.get(Config.VOICE_CHANNEL));
 
-		int h = Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
-		if (h != 0) {
+		int updateH = Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
+		if (updateH != 0) {
 			update_check_box.setSelected(true);
 			update_check_interval_hours_spinner.setEnabled(true);
-			update_check_interval_hours_spinner.setValue(h);
+			update_check_interval_hours_spinner.setValue(updateH);
+		}
+
+		int vol = Integer.parseInt(Config.get(Config.VOLUME));
+		if (vol != 100) {
+			chckbxCustomVolume.setSelected(true);
+			spinnerVolume.setEnabled(true);
+			spinnerVolume.setValue(vol);
 		}
 
 		String token = Config.get(Config.BOT_TOKEN);
@@ -194,6 +232,14 @@ public class GUI_Config extends JFrame {
 			btnGet.setVisible(true);
 		} else {
 			bottoken.setText(token);
+		}
+
+		String adminsRoleStr = Config.get(Config.ADMINS_ROLE);
+		if(adminsRoleStr.isEmpty()) {
+			adminsrole.setEnabled(false);
+		} else {
+			adminsrole.setText(adminsRoleStr);
+			chckbxAdminsRole.setSelected(true);
 		}
 
 	}

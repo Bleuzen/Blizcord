@@ -16,6 +16,7 @@ public class Config {
 	static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
 	static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
 	static final String ADMINS_ROLE = "ADMINS_ROLE";
+	static final String VOLUME = "VOLUME";
 
 	private static JSONObject defaults;
 	private static boolean initialized;
@@ -24,6 +25,10 @@ public class Config {
 	private static JSONObject json;
 
 	static boolean init(File configFile) {
+		return init(configFile, false);
+	}
+
+	static boolean init(File configFile, boolean fromConfigGUI) { // don't crash after generation if fromConfigGUI
 		if(initialized) {
 			return true;
 		}
@@ -38,6 +43,7 @@ public class Config {
 		defaults.put(VOICE_CHANNEL, "Music");
 		defaults.put(DISPLAY_SONG_AS_GAME, "true");
 		defaults.put(UPDATE_CHECK_INTERVAL_HOURS, "24 #set to 0 to disable");
+		defaults.put(VOLUME, "100");
 
 		JSONObject read;
 		try {
@@ -60,19 +66,25 @@ public class Config {
 			}
 		}
 
+		json = read;
+
 		if(toAdd == null) {
-			json = read;
 			initialized = true;
-			return true;
 		} else {
-			json = new JSONObject();
 			if(generate(toAdd)) {
-				a.errExit("Config file got generated or updated. Please edit it now.");
+				String gotGeneratedOrUpdatedMSG = "Config file got generated or updated.";
+				if(fromConfigGUI) {
+					GUI.showMsgBox(gotGeneratedOrUpdatedMSG);
+					initialized = true;
+				} else {
+					a.errExit(gotGeneratedOrUpdatedMSG + " Please edit it now.");
+				}
 			} else {
 				a.errExit("Failed to generate config. (Do you have write access here?)");
 			}
-			return false; // will never get called, but Eclipse wants it
 		}
+
+		return initialized;
 	}
 
 	static String get(String key) {
@@ -83,9 +95,13 @@ public class Config {
 		json.put(key, toValue(value));
 	}
 
+	private static void setRaw(String key, String value) {
+		json.put(key, value);
+	}
+
 	private static boolean generate(ArrayList<String> toAdd) {
 		for(String key : toAdd) {
-			set(key, defaults.getString(key));
+			setRaw(key, defaults.getString(key));
 		}
 
 		//TODO: save in other order if possible (BOT_TOKEN at the top)

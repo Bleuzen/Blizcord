@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.PermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildController;
 
@@ -88,7 +89,7 @@ public class Bot extends ListenerAdapter {
 					Log.print("Created control channel.");
 				}
 				if(guild.getVoiceChannelsByName(Config.get(Config.VOICE_CHANNEL), true).isEmpty()) {
-					controller.createVoiceChannel(Config.get(Config.VOICE_CHANNEL)).setBitrate(Values.DISCORD_MAX_BITRATE).complete();
+					controller.createVoiceChannel(Config.get(Config.VOICE_CHANNEL)).complete();
 					Log.print("Created music channel.");
 				}
 			} catch(Exception e) {
@@ -136,7 +137,11 @@ public class Bot extends ListenerAdapter {
 			a.errExit(e.getMessage());
 		}
 
-		controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all commands.").queue();
+		try {
+			controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all commands.").queue();
+		} catch (PermissionException e) {
+			sendToOwner("Please give me the permision to read and write in your control channel: " + controlChannel.getName());
+		}
 	}
 
 	static void shutdown() {
@@ -153,10 +158,6 @@ public class Bot extends ListenerAdapter {
 				// for multi server: GuildMessageReceivedEvent#event.getGuild()
 				guild.getAudioManager().openAudioConnection(channel);
 				joined = true;
-
-				if(channel.getBitrate() != Values.DISCORD_MAX_BITRATE) {
-					controlChannel.sendMessage(guild.getOwner().getAsMention() + " Hint: You should set your channel's bitrate to " + (Values.DISCORD_MAX_BITRATE / 1000) + "kbps (highest) if you want to listen to music.").queue();
-				}
 			} catch(Exception e) {
 				controlChannel.sendMessage("Failed to join voice channel: " + cName + "\n"
 						+ "Please check your config and give me the permission to join it.").queue();
@@ -202,7 +203,7 @@ public class Bot extends ListenerAdapter {
 						+ "!load <name>                    (Load a saved playlist)\n"
 						+ "!pause                          (Pause or resume the current track)\n"
 						+ "!skip (<how many songs>)        (Skip one or more songs from the playlist)\n"
-						+ "!goto <hours:minutes:seconds>   (Go to a given time)\n"
+						+ "!seek <hours:minutes:seconds>   (Seek to the specified position)\n"
 						+ "!jump (<how many seconds>)      (Jump forward in the current track)\n"
 						+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
 						+ "!stop                           (Stop the playback and clear the playlist)\n"
@@ -256,7 +257,7 @@ public class Bot extends ListenerAdapter {
 				break;
 
 
-			case "goto":
+			case "seek":
 				if(!isAdmin(author)) {
 					channel.sendMessage(author.getAsMention() + " ``Only admins can use this command.``").queue();
 					return;
@@ -304,6 +305,11 @@ public class Bot extends ListenerAdapter {
 			case "jump":
 				if(!isAdmin(author)) {
 					channel.sendMessage(author.getAsMention() + " ``Only admins can jump.``").queue();
+					return;
+				}
+
+				if(!PlayerThread.isPlaying()) {
+					channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
 					return;
 				}
 
@@ -593,8 +599,12 @@ public class Bot extends ListenerAdapter {
 	}
 
 	static void sendUpdateMessage() {
-		guild.getOwner().getUser().openPrivateChannel().complete().sendMessage("A new version is available!\n"
-				+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases").queue();
+		sendToOwner("A new version is available!\n"
+				+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases");
+	}
+
+	private static void sendToOwner(String msg) {
+		guild.getOwner().getUser().openPrivateChannel().complete().sendMessage(msg).queue();
 	}
 
 	static String getTrackName(AudioTrack track) {
