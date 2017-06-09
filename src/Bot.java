@@ -55,9 +55,6 @@ public class Bot extends ListenerAdapter {
 	}
 
 	public static void start() {
-
-		// config got loaded in a
-
 		if(Config.get(Config.BOT_TOKEN).isEmpty()) {
 			a.errExit("You must specify a Token in the config file!");
 		}
@@ -199,6 +196,7 @@ public class Bot extends ListenerAdapter {
 						+ "!list                           (Show the playlist)\n"
 						+ "!play <file or link>            (Play given track now)\n"
 						+ "!add <file, folder or link>     (Add given track to playlist)\n"
+						+ "!search <youtube video title>   (Plays the first video that was found)\n"
 						+ "!save <name>                    (Save the current playlist)\n"
 						+ "!load <name>                    (Load a saved playlist)\n"
 						+ "!pause                          (Pause or resume the current track)\n"
@@ -496,6 +494,26 @@ public class Bot extends ListenerAdapter {
 
 				if(joined) { // if successfully joined
 					PlayerThread.loadAndPlay(channel, arg, true, false);
+				}
+
+				break;
+
+
+			case "search":
+				if(!isAdmin(author)) {
+					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can use this command.``").queue();
+					return;
+				}
+
+				if(arg == null) {
+					channel.sendMessage(author.getAsMention() + " ``Please specify a video title. Put it behind this command.``").queue();
+					return;
+				}
+
+				join(); // try to join if not already
+
+				if(joined) { // if successfully joined
+					PlayerThread.loadAndPlay(channel, ("ytsearch:" + arg), true, false); // use "ytsearch:" prefix of lavaplayer
 				}
 
 				break;

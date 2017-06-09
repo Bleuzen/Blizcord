@@ -77,7 +77,7 @@ public class GUI extends JFrame {
 			}
 		});
 		chckbxUseCustomConfig.setFocusable(false);
-		chckbxUseCustomConfig.setBounds(96, 12, 166, 26);
+		chckbxUseCustomConfig.setBounds(96, 12, 264, 26);
 		contentPane.add(chckbxUseCustomConfig);
 
 		btnEdit = new JButton("Edit");
@@ -90,19 +90,14 @@ public class GUI extends JFrame {
 				chckbxUseCustomConfig.setEnabled(false);
 				btnEdit.setEnabled(false); // disable to prevent double clicking
 
-				File file;
-				if (chckbxUseCustomConfig.isSelected()) {
-					file = new File(txtCustomconfig.getText());
-				} else {
-					file = DEFAULT_CONFIG_FILE;
-				}
+				File cfgFile = getConfig();
 
-				gui_Config = new GUI_Config(file);
+				gui_Config = new GUI_Config(cfgFile);
 				gui_Config.setVisible(true);
 			}
 		});
 		btnEdit.setFocusable(false);
-		btnEdit.setBounds(370, 12, 117, 26);
+		btnEdit.setBounds(370, 12, 116, 26);
 		contentPane.add(btnEdit);
 
 		txtCustomconfig = new JTextField();
@@ -126,13 +121,20 @@ public class GUI extends JFrame {
 		});
 		btnBrowse.setEnabled(false);
 		btnBrowse.setFocusable(false);
-		btnBrowse.setBounds(370, 52, 117, 26);
+		btnBrowse.setBounds(370, 52, 116, 26);
 		contentPane.add(btnBrowse);
 
 		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				File cfgFile = getConfig();
+
+				if(!cfgFile.exists()) {
+					showMsgBox("The config file doesn't exist already. Please use the 'Edit' button first.");
+					return;
+				}
+
 				// disable controls
 				btnStart.setEnabled(false);
 				btnBrowse.setEnabled(false);
@@ -148,7 +150,7 @@ public class GUI extends JFrame {
 
 						// start bot
 						if(chckbxUseCustomConfig.isSelected()) {
-							a.launch(new String[]{"--config", new File(txtCustomconfig.getText()).getAbsolutePath()});
+							a.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
 						} else {
 							a.launch(new String[]{});
 						}
@@ -159,7 +161,7 @@ public class GUI extends JFrame {
 			}
 		});
 		btnStart.setFocusable(false);
-		btnStart.setBounds(12, 103, 476, 26);
+		btnStart.setBounds(12, 103, 474, 26);
 		contentPane.add(btnStart);
 
 		lblStatus = new JLabel("Status:");
@@ -167,7 +169,7 @@ public class GUI extends JFrame {
 		contentPane.add(lblStatus);
 
 		lblCurrstatus = new JLabel("Stopped");
-		lblCurrstatus.setBounds(95, 143, 392, 26);
+		lblCurrstatus.setBounds(95, 143, 390, 26);
 		contentPane.add(lblCurrstatus);
 
 		// Load the GUI Config
@@ -214,7 +216,7 @@ public class GUI extends JFrame {
 	}
 
 	static void onErrExit(String msg) {
-		showErrMsgBox("Bot crashed." + (msg == null ? "" : (" Reason:" + System.lineSeparator() + msg)));
+		showErrMsgBox("Crash!" + (msg == null ? "" : (" Reason:" + System.lineSeparator() + msg)));
 	}
 
 	static void showMsgBox(String msg) {
@@ -229,4 +231,11 @@ public class GUI extends JFrame {
 		gui_Main.toFront();
 	}
 
+	private File getConfig() {
+		if (chckbxUseCustomConfig.isSelected()) {
+			return new File(txtCustomconfig.getText());
+		} else {
+			return DEFAULT_CONFIG_FILE;
+		}
+	}
 }

@@ -17,12 +17,24 @@ public class a {
 		if(args.length > 0 && args[0].equalsIgnoreCase("--gui")) {
 			gui = true;
 			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				try {
+					if(System.getProperty("os.name").toLowerCase().equals("linux") && System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
+						// KDE theme fix
+						UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+					} else {
+						// Use the systems theme
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					}
+				} catch (Exception e) {
+					Log.print("Failed to set look and feel.");
+				}
+
+				// Launch GUI
 				GUI frame = new GUI();
 				frame.setVisible(true);
 			} catch (Exception e) {
-				System.out.print("Failed to start GUI: " + e.getMessage());
-				errExit();
+				gui = false; // to print error message to System.out
+				errExit("Failed to start GUI: " + e.getMessage());
 			}
 		} else {
 			launch(args);
@@ -38,7 +50,7 @@ public class a {
 		// init config
 		File configFile;
 		if(Values.TESTING) {
-			configFile = new File("testingConfig.json");
+			configFile = new File(Values.TESTING_CONFIG);
 		} else {
 			if(args.length > 1 && args[0].equalsIgnoreCase("--config")) {
 				configFile = new File(args[1]);

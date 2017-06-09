@@ -92,7 +92,7 @@ public class Config {
 	}
 
 	static void set(String key, String value) {
-		json.put(key, toValue(value));
+		setRaw(key, toValue(value));
 	}
 
 	private static void setRaw(String key, String value) {
