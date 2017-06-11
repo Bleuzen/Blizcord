@@ -1,7 +1,7 @@
 # 1. Place Blizcord in opt/Blizcord
 
 # 2. Change the version
-VERSION="0.3.2"
+VERSION="0.3.2.1"
 
 sudo sh -c "echo \"Package: blizcord
 Version: $VERSION
@@ -15,8 +15,6 @@ Description: Blizcord
  A Discord Bot
  .
  https://github.com/Bleuzen/Blizcord\" > blizcord/DEBIAN/control"
-
-sudo rm blizcord/opt/Blizcord/Blizcord.bat
 
 sudo chown -R root:root blizcord/
 sudo dpkg-deb --build blizcord/

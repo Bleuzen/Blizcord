@@ -41,26 +41,26 @@ public class GUI_Config extends JFrame {
 
 		setTitle(configFile.getName());
 		setResizable(false);
-		setSize(360, 330);
+		setSize(360, 350);
 		setLocationRelativeTo(null);
 
 		getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 4, 348, 244);
+		panel.setBounds(0, 4, 348, 266);
 		getContentPane().add(panel);
 		panel.setLayout(null);
 
 		JLabel bottokenlable = new JLabel("Bot token:");
-		bottokenlable.setBounds(12, 8, 120, 26);
+		bottokenlable.setBounds(12, 8, 120, 28);
 		panel.add(bottokenlable);
 
 		JLabel controlchannellable = new JLabel("Control channel:");
-		controlchannellable.setBounds(12, 36, 120, 26);
+		controlchannellable.setBounds(12, 38, 120, 28);
 		panel.add(controlchannellable);
 
 		JLabel commandprefixlable = new JLabel("Command prefix:");
-		commandprefixlable.setBounds(10, 64, 120, 26);
+		commandprefixlable.setBounds(10, 68, 120, 28);
 		panel.add(commandprefixlable);
 
 		bottoken = new JTextField();
@@ -72,27 +72,27 @@ public class GUI_Config extends JFrame {
 				}
 			}
 		});
-		bottoken.setBounds(140, 8, 206, 26);
+		bottoken.setBounds(140, 8, 206, 28);
 		panel.add(bottoken);
 
 		commandprefix = new JTextField();
-		commandprefix.setBounds(140, 64, 206, 26);
+		commandprefix.setBounds(140, 68, 206, 28);
 		panel.add(commandprefix);
 
 		JLabel voicechannellable = new JLabel("Voice channel:");
-		voicechannellable.setBounds(10, 92, 120, 26);
+		voicechannellable.setBounds(10, 98, 120, 28);
 		panel.add(voicechannellable);
 
 		voicechannel = new JTextField();
-		voicechannel.setBounds(140, 92, 206, 26);
+		voicechannel.setBounds(140, 98, 206, 28);
 		panel.add(voicechannel);
 
 		adminsrole = new JTextField();
-		adminsrole.setBounds(140, 120, 206, 26);
+		adminsrole.setBounds(140, 128, 206, 28);
 		panel.add(adminsrole);
 
 		display_song_as_game = new JCheckBox("Display song as game");
-		display_song_as_game.setBounds(10, 148, 330, 26);
+		display_song_as_game.setBounds(10, 158, 330, 28);
 		panel.add(display_song_as_game);
 
 		update_check_box = new JCheckBox("Update check");
@@ -102,21 +102,21 @@ public class GUI_Config extends JFrame {
 				update_check_interval_hours_spinner.setEnabled(update_check_box.isSelected());
 			}
 		});
-		update_check_box.setBounds(10, 176, 130, 26);
+		update_check_box.setBounds(10, 188, 130, 28);
 		panel.add(update_check_box);
 
 		update_check_interval_hours_spinner = new JSpinner();
 		update_check_interval_hours_spinner.setEnabled(false);
 		update_check_interval_hours_spinner.setModel(new SpinnerNumberModel(24, 1, null, 1));
-		update_check_interval_hours_spinner.setBounds(276, 176, 64, 26);
+		update_check_interval_hours_spinner.setBounds(276, 188, 64, 28);
 		panel.add(update_check_interval_hours_spinner);
 
 		lblIntervalInHours = new JLabel("Interval in hours:");
-		lblIntervalInHours.setBounds(148, 176, 124, 26);
+		lblIntervalInHours.setBounds(148, 188, 124, 28);
 		panel.add(lblIntervalInHours);
 
 		controlchannel = new JTextField();
-		controlchannel.setBounds(140, 36, 206, 26);
+		controlchannel.setBounds(140, 38, 206, 28);
 		panel.add(controlchannel);
 
 		btnGet = new JButton("Get");
@@ -134,7 +134,7 @@ public class GUI_Config extends JFrame {
 			}
 		});
 		btnGet.setVisible(false);
-		btnGet.setBounds(266, 8, 80, 26);
+		btnGet.setBounds(266, 8, 80, 28);
 		panel.add(btnGet);
 
 		chckbxAdminsRole = new JCheckBox("Admins role");
@@ -149,7 +149,7 @@ public class GUI_Config extends JFrame {
 				}
 			}
 		});
-		chckbxAdminsRole.setBounds(10, 120, 120, 26);
+		chckbxAdminsRole.setBounds(10, 128, 120, 28);
 		panel.add(chckbxAdminsRole);
 
 		chckbxCustomVolume = new JCheckBox("Custom Volume");
@@ -159,13 +159,13 @@ public class GUI_Config extends JFrame {
 				spinnerVolume.setEnabled(chckbxCustomVolume.isSelected());
 			}
 		});
-		chckbxCustomVolume.setBounds(10, 204, 240, 26);
+		chckbxCustomVolume.setBounds(10, 218, 240, 28);
 		panel.add(chckbxCustomVolume);
 
 		spinnerVolume = new JSpinner();
 		spinnerVolume.setEnabled(false);
 		spinnerVolume.setModel(new SpinnerNumberModel(100, 5, 100, 5));
-		spinnerVolume.setBounds(276, 204, 64, 26);
+		spinnerVolume.setBounds(276, 218, 64, 28);
 		panel.add(spinnerVolume);
 
 		JButton btnApply = new JButton("Apply");
@@ -193,15 +193,12 @@ public class GUI_Config extends JFrame {
 				GUI.mvToFront();
 			}
 		});
-		btnApply.setBounds(250, 258, 90, 26);
+		btnApply.setBounds(258, 283, 90, 28);
 		getContentPane().add(btnApply);
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		read();
-
-		setVisible(true);
-
 	}
 
 	private void read() {

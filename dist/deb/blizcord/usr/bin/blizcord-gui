@@ -1,8 +1,6 @@
 #!/bin/bash
 cd /opt/Blizcord
 
-false
-until [ $? -eq 0 ]
-do
-  ./Blizcord.sh --gui
+until ./Blizcord.sh --gui; do
+    echo "Crashed with exit code $?. Restarting..." >&2
 done

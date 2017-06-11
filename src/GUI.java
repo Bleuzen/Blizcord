@@ -45,7 +45,7 @@ public class GUI extends JFrame {
 		setTitle(Values.BOT_NAME + " v" + Values.BOT_VERSION);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 210);
+		setSize(500, 208);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
@@ -61,7 +61,7 @@ public class GUI extends JFrame {
 		});
 
 		lblConfig = new JLabel("Config:");
-		lblConfig.setBounds(12, 12, 70, 26);
+		lblConfig.setBounds(12, 12, 70, 28);
 		contentPane.add(lblConfig);
 
 		chckbxUseCustomConfig = new JCheckBox("Use custom config");
@@ -77,7 +77,7 @@ public class GUI extends JFrame {
 			}
 		});
 		chckbxUseCustomConfig.setFocusable(false);
-		chckbxUseCustomConfig.setBounds(96, 12, 264, 26);
+		chckbxUseCustomConfig.setBounds(96, 12, 264, 28);
 		contentPane.add(chckbxUseCustomConfig);
 
 		btnEdit = new JButton("Edit");
@@ -97,13 +97,13 @@ public class GUI extends JFrame {
 			}
 		});
 		btnEdit.setFocusable(false);
-		btnEdit.setBounds(370, 12, 116, 26);
+		btnEdit.setBounds(370, 12, 116, 28);
 		contentPane.add(btnEdit);
 
 		txtCustomconfig = new JTextField();
 		txtCustomconfig.setEnabled(false);
 		txtCustomconfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
-		txtCustomconfig.setBounds(12, 52, 346, 26);
+		txtCustomconfig.setBounds(12, 52, 346, 28);
 		contentPane.add(txtCustomconfig);
 
 		btnBrowse = new JButton("Browse");
@@ -121,7 +121,7 @@ public class GUI extends JFrame {
 		});
 		btnBrowse.setEnabled(false);
 		btnBrowse.setFocusable(false);
-		btnBrowse.setBounds(370, 52, 116, 26);
+		btnBrowse.setBounds(370, 52, 116, 28);
 		contentPane.add(btnBrowse);
 
 		btnStart = new JButton("Start");
@@ -161,15 +161,15 @@ public class GUI extends JFrame {
 			}
 		});
 		btnStart.setFocusable(false);
-		btnStart.setBounds(12, 103, 474, 26);
+		btnStart.setBounds(12, 102, 474, 28);
 		contentPane.add(btnStart);
 
 		lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(12, 143, 70, 26);
+		lblStatus.setBounds(12, 138, 70, 28);
 		contentPane.add(lblStatus);
 
 		lblCurrstatus = new JLabel("Stopped");
-		lblCurrstatus.setBounds(95, 143, 390, 26);
+		lblCurrstatus.setBounds(95, 138, 388, 28);
 		contentPane.add(lblCurrstatus);
 
 		// Load the GUI Config
