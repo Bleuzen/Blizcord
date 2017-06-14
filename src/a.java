@@ -5,17 +5,27 @@ import java.net.URI;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import net.dv8tion.jda.core.utils.SimpleLog;
+import net.dv8tion.jda.core.utils.SimpleLog.Level;
+
 public class a {
 
 	private static boolean gui;
+	private static boolean debug;
 
 	static boolean isGui() {
 		return gui;
 	}
 
+	static boolean isDebug() {
+		return debug;
+	}
+
 	public static void main(String[] args) {
-		if(args.length > 0 && args[0].equalsIgnoreCase("--gui")) {
-			gui = true;
+		gui = containsArg(args, "--gui");
+		debug = containsArg(args, "--debug") || Values.DEV;
+
+		if(gui) {
 			try {
 				try {
 					if(System.getProperty("os.name").toLowerCase().equals("linux") && System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
@@ -26,17 +36,29 @@ public class a {
 						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					}
 				} catch (Exception e) {
-					Log.print("Failed to set look and feel.");
+					Log.debug("Failed to set look and feel.");
 				}
+
+				Log.debug("Launching GUI ...");
 
 				// Launch GUI
 				GUI frame = new GUI();
 				frame.setVisible(true);
+
+				// disable logging
+				SimpleLog.LEVEL = Level.OFF;
 			} catch (Exception e) {
-				gui = false; // to print error message to System.out
 				errExit("Failed to start GUI: " + e.getMessage());
 			}
 		} else {
+			// find and set first error level (to only print errors of JDA)
+			for(Level logLevel : Level.values()) {
+				if(logLevel.isError()) {
+					SimpleLog.LEVEL = logLevel;
+					break;
+				}
+			}
+
 			launch(args);
 		}
 	}
@@ -47,13 +69,19 @@ public class a {
 
 		Log.print("Starting ...");
 
+		// override log level if debug
+		if(debug) {
+			SimpleLog.LEVEL = Level.ALL;
+		}
+
 		// init config
 		File configFile;
-		if(Values.TESTING) {
-			configFile = new File(Values.TESTING_CONFIG);
+		if(Values.DEV) {
+			configFile = new File(Values.DEV_CONFIG);
 		} else {
-			if(args.length > 1 && args[0].equalsIgnoreCase("--config")) {
-				configFile = new File(args[1]);
+			String configArg = getArg(args, "--config");
+			if(configArg != null) {
+				configFile = new File(configArg);
 			} else {
 				configFile = new File(Values.DEFAULT_CONFIG);
 			}
@@ -87,6 +115,31 @@ public class a {
 			}
 		}
 		System.exit(1);
+	}
+
+	private static int getArgIndex(String[] args, String arg) {
+		//TODO: if null?
+		int ir = -1; // return -1 if args does not contain the argument
+		for(int in = 0; in < args.length; in++) {
+			if(args[in].equalsIgnoreCase(arg)) {
+				ir = in;
+				break;
+			}
+		}
+		return ir;
+	}
+
+	private static boolean containsArg(String[] args, String arg) {
+		return getArgIndex(args, arg) != -1; //TODO: Test
+	}
+
+	private static String getArg(String[] args, String arg) {
+		String result = null; // return null if argument is not given
+		int i = getArgIndex(args, arg);
+		if(i != -1) {
+			result = args[i + 1];
+		}
+		return result;
 	}
 
 	//TODO: maybe find a better way (move to GUI class?)

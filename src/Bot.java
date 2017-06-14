@@ -137,7 +137,7 @@ public class Bot extends ListenerAdapter {
 		try {
 			controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all commands.").queue();
 		} catch (PermissionException e) {
-			sendToOwner("Please give me the permision to read and write in your control channel: " + controlChannel.getName());
+			sendMessage(guild.getOwner().getUser(), "Please give me the permision to read and write in your control channel: " + controlChannel.getName());
 		}
 	}
 
@@ -613,16 +613,20 @@ public class Bot extends ListenerAdapter {
 
 	static void setGame(Game game) {
 		api.getPresence().setGame(game);
-		//Log.print("GAME UPDATE: " + game);
+
+		Log.debug("Set game to: " + game);
 	}
 
 	static void sendUpdateMessage() {
-		sendToOwner("A new version is available!\n"
-				+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases");
+		sendMessage(guild.getOwner().getUser(),
+				"A new version is available!\n"
+						+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases");
 	}
 
-	private static void sendToOwner(String msg) {
-		guild.getOwner().getUser().openPrivateChannel().complete().sendMessage(msg).queue();
+	private static void sendMessage(User user, String msg) {
+		user.openPrivateChannel().queue(privateChannel -> {
+			privateChannel.sendMessage(msg).queue();
+		});
 	}
 
 	static String getTrackName(AudioTrack track) {

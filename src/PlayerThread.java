@@ -222,7 +222,9 @@ public class PlayerThread implements Runnable {
 			do { // sleep at least one time
 				try {
 					Thread.sleep(sleepTime);
-					updateDelay -= sleepTime;
+					if(updateDelay > 0) {
+						updateDelay -= sleepTime;
+					}
 				} catch (InterruptedException e) {
 					//e.printStackTrace();
 				}

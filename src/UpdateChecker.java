@@ -13,6 +13,8 @@ public class UpdateChecker extends TimerTask {
 	private boolean alreadyNotified = false;
 
 	private void checkForUpdate() {
+		Log.debug("[Updater] Checking for updates ...");
+
 		try {
 			InputStream inputStream = new URL("https://api.github.com/repos/" + Values.BOT_GITHUB_REPO + "/releases/latest").openStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
@@ -23,7 +25,12 @@ public class UpdateChecker extends TimerTask {
 			String online = toVersionString(tagName);
 			String local = toVersionString(Values.BOT_VERSION);
 
+			Log.debug("[Updater] Online version: " + online);
+			Log.debug("[Updater] Local version: " + local);
+
 			int t = online.compareTo(local);
+
+			Log.debug("[Updater] Compare result: " + t);
 
 			if(t > 0) {
 				updateAvailable = true;
