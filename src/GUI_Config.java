@@ -129,7 +129,7 @@ public class GUI_Config extends JFrame {
 				try {
 					Desktop.getDesktop().browse(new URI(Values.DISCORD_GET_TOKEN));
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					GUI.showErrMsgBox(e1.getMessage());
 				}
 			}
 		});

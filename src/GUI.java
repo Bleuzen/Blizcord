@@ -223,7 +223,7 @@ public class GUI extends JFrame {
 		JOptionPane.showMessageDialog(null, msg, Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	private static void showErrMsgBox(String msg) {
+	static void showErrMsgBox(String msg) {
 		JOptionPane.showMessageDialog(null, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 	}
 

@@ -35,6 +35,8 @@ public class PlayerThread implements Runnable {
 		// Currently lavaplayer doesn't play anything with another bitrate than 960. Maybe this is a bug. I asked the developer. Waiting for an answer ...
 
 		initGuildAudioPlayer(Bot.getGuild());
+
+		Log.debug("Initialized audio player.");
 	}
 
 	static GuildMusicManager getMusicManager() {
@@ -51,6 +53,7 @@ public class PlayerThread implements Runnable {
 		// try to set volume
 		try {
 			musicManager.player.setVolume(Integer.parseInt(Config.get(Config.VOLUME)));
+			Log.debug("Volume set to: " + musicManager.player.getVolume());
 		} catch (NumberFormatException e) {
 			a.errExit("Invalid volume");
 		}
@@ -91,6 +94,8 @@ public class PlayerThread implements Runnable {
 	}
 
 	static void loadAndPlay(final MessageChannel channel, final String trackUrl, boolean direct, boolean quiet) {
+		Log.debug("Loading ..." + System.lineSeparator() + "Track: " + trackUrl + System.lineSeparator() + "Direct: " + direct);
+
 		playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {

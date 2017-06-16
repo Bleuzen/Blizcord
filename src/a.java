@@ -118,7 +118,6 @@ public class a {
 	}
 
 	private static int getArgIndex(String[] args, String arg) {
-		//TODO: if null?
 		int ir = -1; // return -1 if args does not contain the argument
 		for(int in = 0; in < args.length; in++) {
 			if(args[in].equalsIgnoreCase(arg)) {
@@ -130,9 +129,10 @@ public class a {
 	}
 
 	private static boolean containsArg(String[] args, String arg) {
-		return getArgIndex(args, arg) != -1; //TODO: Test
+		return getArgIndex(args, arg) != -1;
 	}
 
+	// returns what is behind an argument
 	private static String getArg(String[] args, String arg) {
 		String result = null; // return null if argument is not given
 		int i = getArgIndex(args, arg);
@@ -150,7 +150,7 @@ public class a {
 				try {
 					Desktop.getDesktop().browse(new URI(link));
 				} catch (Exception e) {
-					e.printStackTrace();
+					GUI.showErrMsgBox(e.getMessage());
 				}
 			}
 			System.exit(1); // exit / restart after invite

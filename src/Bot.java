@@ -180,6 +180,8 @@ public class Bot extends ListenerAdapter {
 
 		if ( (channel == controlChannel || channel.getType() == ChannelType.PRIVATE) && message.startsWith(Config.get(Config.COMMAND_PREFIX)) && (!author.getId().equals(api.getSelfUser().getId())) ) {
 
+			Log.debug("Got command from " + author.getName() + ":" + System.lineSeparator() + message);
+
 			String[] cmdarg = message.substring(Config.get(Config.COMMAND_PREFIX).length()).split(" ", 2);
 			String cmd = cmdarg[0].toLowerCase();
 			String arg;
