@@ -22,21 +22,13 @@ public class UpdateChecker extends TimerTask {
 
 			String tagName = getJsonValue("tag_name");
 
-			String online = toVersionString(tagName);
-			String local = toVersionString(Values.BOT_VERSION);
+			String online = tagName;
+			String local = Values.BOT_VERSION;
 
-			Log.debug("[Updater] Online version: " + online);
-			Log.debug("[Updater] Local version: " + local);
-
-			int t = online.compareTo(local);
-
-			Log.debug("[Updater] Compare result: " + t);
-
-			if(t > 0) {
-				updateAvailable = true;
-			}
+			updateAvailable = compare(local, online);
 		} catch (Exception e) {
 			Log.print("Failed to check for updates.");
+			e.printStackTrace();
 		}
 	}
 
@@ -49,7 +41,37 @@ public class UpdateChecker extends TimerTask {
 	}
 
 	private String toVersionString(String version) {
-		return version.replaceAll("[^0-9]", "");
+		return version.replaceAll("[^0-9.]", "");
+	}
+
+	private boolean compare(String local, String online) {
+		local = toVersionString(local);
+		online = toVersionString(online);
+
+		Log.debug("[Updater] Local version: " + local);
+		Log.debug("[Updater] Online version: " + online);
+
+		String[] valsLocal = local.split("\\.");
+		String[] valsOnline = online.split("\\.");
+
+		// find the first non-equal number
+		int i = 0;
+		while(i < valsLocal.length && i < valsOnline.length && valsLocal[i].equals(valsOnline[i])) {
+			i++;
+		}
+
+		boolean newer;
+		if(i < valsLocal.length && i < valsOnline.length) {
+			int numLocal = Integer.parseInt(valsLocal[i]);
+			int numOnline = Integer.parseInt(valsOnline[i]);
+			newer = numOnline > numLocal;
+		} else {
+			newer = valsOnline.length > valsLocal.length;
+		}
+
+		Log.debug("[Updater] Newer: " + newer);
+
+		return newer;
 	}
 
 	boolean isUpdateAvailable() {
