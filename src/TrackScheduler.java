@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -106,5 +107,18 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	public void clear() {
 		queue.clear();
+	}
+
+	//TODO
+	public void shuffle() {
+		ArrayList<AudioTrack> list = getList();
+		Collections.shuffle(list);
+
+		// clear the queue
+		queue.clear();
+		// readd all tracks
+		for(AudioTrack track : list) {
+			queue.offer(track);
+		}
 	}
 }

@@ -206,6 +206,7 @@ public class Bot extends ListenerAdapter {
 						+ "!seek <hours:minutes:seconds>   (Seek to the specified position)\n"
 						+ "!jump (<how many seconds>)      (Jump forward in the current track)\n"
 						+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
+						+ "!shuffle                        (Randomize the track order)\n"
 						+ "!stop                           (Stop the playback and clear the playlist)\n"
 						+ "!about                          (Print about message)\n"
 						+ "!kill                           (Kill the bot)"
@@ -376,6 +377,14 @@ public class Bot extends ListenerAdapter {
 				} else {
 					channel.sendMessage(author.getAsMention() + " ``The playlist is empty. There is nothing to repeat.``").queue();
 				}
+
+				break;
+
+
+			case "shuffle":
+				PlayerThread.getMusicManager().scheduler.shuffle();
+
+				channel.sendMessage(author.getAsMention() + " ``The playlist got shuffeled.``").queue();
 
 				break;
 

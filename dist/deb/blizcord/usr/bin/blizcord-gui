@@ -1,6 +1,10 @@
 #!/bin/bash
 cd /opt/Blizcord
 
-until ./Blizcord.sh --gui; do
-    echo "Crashed with exit code $?. Restarting..." >&2
+RC=1
+
+while [ $RC -eq 1 ]
+do
+  ./Blizcord.sh --gui
+  RC=$?
 done

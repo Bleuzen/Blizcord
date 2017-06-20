@@ -1,4 +1,5 @@
 import java.awt.Desktop;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.net.URI;
 
@@ -26,6 +27,11 @@ public class a {
 		debug = containsArg(args, "--debug") || Values.DEV;
 
 		if(gui) {
+			if(GraphicsEnvironment.isHeadless()) {
+				// no gui supported
+				gui = false; // disable gui mode
+				errExit("GUI is not supported on your system.", Values.EXIT_CODE_GUI_NOT_SUPPORTED);
+			}
 			try {
 				try {
 					if(System.getProperty("os.name").toLowerCase().equals("linux") && System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
@@ -103,6 +109,11 @@ public class a {
 	}
 
 	static void errExit(String msg) {
+		errExit(msg, 1);
+	}
+
+
+	static void errExit(String msg, int exitCode) {
 		if(gui) {
 			GUI.onErrExit(msg);
 		} else {
@@ -114,7 +125,12 @@ public class a {
 				//e.printStackTrace();
 			}
 		}
-		System.exit(1);
+
+		if(exitCode >= 1 && exitCode <= 127) {
+			System.exit(exitCode);
+		} else {
+			System.exit(0);
+		}
 	}
 
 	private static int getArgIndex(String[] args, String arg) {
