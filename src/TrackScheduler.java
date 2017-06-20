@@ -109,7 +109,6 @@ public class TrackScheduler extends AudioEventAdapter {
 		queue.clear();
 	}
 
-	//TODO
 	public void shuffle() {
 		ArrayList<AudioTrack> list = getList();
 		Collections.shuffle(list);
