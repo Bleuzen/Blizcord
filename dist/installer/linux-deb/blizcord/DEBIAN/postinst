@@ -8,10 +8,9 @@ CHECKSUM_TEMP_FILE=$(mktemp)
 echo "$CHECKSUM  Blizcord.exe" > $CHECKSUM_TEMP_FILE
 if md5sum --status -c $CHECKSUM_TEMP_FILE; then
     chmod +x /usr/bin/blizcord
-    chmod +x /usr/bin/blizcord-config
     chmod +x /usr/bin/blizcord-gui
     chmod o+rwx /opt/Blizcord/
 else
     # The MD5 sum didn't match
-    exit
+    exit 1
 fi

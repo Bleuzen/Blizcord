@@ -15,14 +15,21 @@ Description: Blizcord
  https://github.com/Bleuzen/Blizcord\" > blizcord/DEBIAN/control"
 
 # Replace version in postinst
-sed -i -e 's/var_pkgver/$VERSION/g' blizcord/DEBIAN/postinst
-sed -i -e 's/var_md5sum/$CHECKSUM/g' blizcord/DEBIAN/postinst
-
+sed -i -e "s/var_pkgver/$VERSION/g" blizcord/DEBIAN/postinst
+sed -i -e "s/var_md5sum/$CHECKSUM/g" blizcord/DEBIAN/postinst
 
 # Generate md5sums
+cd blizcord/
 find . -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN/md5sums
+cd ..
 
 # Build
 sudo chown -R root:root blizcord/
+
+# Make scripts executable
+chmod +x blizcord/opt/Blizcord/Blizcord.sh
+chmod +x blizcord/usr/bin/blizcord
+chmod +x blizcord/usr/bin/blizcord-gui
+
 sudo dpkg-deb --build blizcord/
-sudo mv blizcord.deb blizcord-$VERSION.deb
+sudo mv blizcord.deb blizcord-$VERSION-installer.deb

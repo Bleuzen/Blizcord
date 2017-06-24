@@ -1,7 +1,6 @@
 post_install() {
     chmod +x /opt/Blizcord/Blizcord.sh
     chmod +x /usr/bin/blizcord
-    chmod +x /usr/bin/blizcord-config
     chmod +x /usr/bin/blizcord-gui
 }
 
