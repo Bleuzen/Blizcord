@@ -1,0 +1,33 @@
+# Maintainer: Bleuzen <supgesu at gmail dot com>
+
+pkgname=blizcord
+pkgver=0.3.7
+pkgrel=1
+pkgdesc="A simple Discord bot which can play music from YouTube or local files"
+arch=('any')
+url="https://github.com/Bleuzen/Blizcord/"
+license=('mit')
+depends=('jre8-openjdk')
+install=$pkgname.install
+source=("Blizcord.exe::https://github.com/Bleuzen/Blizcord/releases/download/${pkgver}/Blizcord.exe"
+        "Blizcord.sh"
+        "blizcord"
+        "blizcord-gui"
+        "blizcord.desktop")
+md5sums=('4b5211e209b400b1335f91049210741d'
+         'SKIP'
+         'SKIP'
+         'SKIP'
+         'SKIP')
+
+package() {
+  mkdir -p "$pkgdir"/opt/Blizcord/
+
+  mv Blizcord.exe "$pkgdir"/opt/Blizcord/
+  mv Blizcord.sh "$pkgdir"/opt/Blizcord/
+  mv blizcord "$pkgdir"/usr/bin/
+  mv blizcord-gui "$pkgdir"/usr/bin/
+  mv blizcord.desktop "$pkgdir"/usr/share/applications/
+
+  chmod o+rwx "$pkgdir"/opt/Blizcord/
+}
