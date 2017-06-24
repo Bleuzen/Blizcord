@@ -1,3 +1,6 @@
+echo "Sorry, disabled for now. I will try to fix the deb package builds soon."
+exit
+
 VERSION="0.3.7"
 CHECKSUM="4b5211e209b400b1335f91049210741d"
 
