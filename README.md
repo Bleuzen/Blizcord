@@ -14,13 +14,13 @@ All other distributions:
  - Run ```chmod +x Blizcord.sh```
 
 ### Windows
-Nothing to install, download the latest zip and extract it where you want.
+Nothing to install, download the latest exe and execute it.
 
 ## Run
 ### Linux
 If you installed the .deb or aur package, open a terminal and type: ```blizcord``` or ```blizcord-gui``` (for the graphical version)
 
-If you use the zip version, type: ```./Blizcord.sh```
+If you use the universal-java version, type: ```./blizcord-java-launcher.sh```
 
 ### Windows
 Double click the .exe file for the GUI. If you want to use the command line version, double click the .bat file.
