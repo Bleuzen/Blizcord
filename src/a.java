@@ -13,6 +13,7 @@ public class a {
 
 	private static boolean gui;
 	private static boolean debug;
+	private static boolean disableUpdateChecker; // for AUR users (currently only disabled in GUI)
 
 	static boolean isGui() {
 		return gui;
@@ -22,9 +23,14 @@ public class a {
 		return debug;
 	}
 
+	static boolean isDisableUpdateChecker() {
+		return disableUpdateChecker;
+	}
+
 	public static void main(String[] args) {
 		gui = containsArg(args, "--gui");
 		debug = containsArg(args, "--debug") || Values.DEV;
+		disableUpdateChecker = containsArg(args, "--disable-update-checker");
 
 		if(gui) {
 			if(GraphicsEnvironment.isHeadless()) {

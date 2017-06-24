@@ -209,11 +209,15 @@ public class GUI_Config extends JFrame {
 		display_song_as_game.setSelected(Boolean.parseBoolean(Config.get(Config.DISPLAY_SONG_AS_GAME)));
 		voicechannel.setText(Config.get(Config.VOICE_CHANNEL));
 
-		int updateH = Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
-		if (updateH != 0) {
-			update_check_box.setSelected(true);
-			update_check_interval_hours_spinner.setEnabled(true);
-			update_check_interval_hours_spinner.setValue(updateH);
+		if(a.isDisableUpdateChecker()) {
+			update_check_box.setEnabled(false);
+		} else {
+			int updateH = Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
+			if (updateH != 0) {
+				update_check_box.setSelected(true);
+				update_check_interval_hours_spinner.setEnabled(true);
+				update_check_interval_hours_spinner.setValue(updateH);
+			}
 		}
 
 		int vol = Integer.parseInt(Config.get(Config.VOLUME));

@@ -4,7 +4,7 @@ public class Values {
 	static final boolean DEV = false;
 	static final String DEV_CONFIG = "devConfig.json";
 
-	static final String BOT_VERSION = "0.3.6" 	+ (DEV ? "-dev" : "");
+	static final String BOT_VERSION = "0.3.7" 	+ (DEV ? "-dev" : "");
 	static final String BOT_NAME = "Blizcord";
 	static final String BOT_DEVELOPER = "Bleuzen <supgesu@gmail.com>";
 	static final String BOT_GITHUB_REPO = "Bleuzen/Blizcord";
