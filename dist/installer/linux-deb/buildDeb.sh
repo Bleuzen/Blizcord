@@ -32,4 +32,4 @@ chmod +x blizcord/usr/bin/blizcord
 chmod +x blizcord/usr/bin/blizcord-gui
 
 sudo dpkg-deb --build blizcord/
-sudo mv blizcord.deb blizcord-$VERSION-installer.deb
+sudo mv blizcord.deb blizcord-$VERSION-installer-online.deb

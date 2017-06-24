@@ -19,15 +19,18 @@ md5sums=('4b5211e209b400b1335f91049210741d'
          'SKIP'
          'SKIP'
          'SKIP')
+noextract=("Blizcord.exe")
 
 package() {
   mkdir -p "$pkgdir"/opt/Blizcord/
+  mkdir -p "$pkgdir"/usr/bin/
+  mkdir -p "$pkgdir"/usr/share/applications/
 
-  mv Blizcord.exe "$pkgdir"/opt/Blizcord/
-  mv Blizcord.sh "$pkgdir"/opt/Blizcord/
-  mv blizcord "$pkgdir"/usr/bin/
-  mv blizcord-gui "$pkgdir"/usr/bin/
-  mv blizcord.desktop "$pkgdir"/usr/share/applications/
+  install -D Blizcord.exe "$pkgdir"/opt/Blizcord/
+  install -D Blizcord.sh "$pkgdir"/opt/Blizcord/
+  install -D blizcord "$pkgdir"/usr/bin/
+  install -D blizcord-gui "$pkgdir"/usr/bin/
+  install -D blizcord.desktop "$pkgdir"/usr/share/applications/
 
   chmod o+rwx "$pkgdir"/opt/Blizcord/
 }
