@@ -131,8 +131,7 @@ public class Config {
 		String os = System.getProperty("os.name").toLowerCase();
 		if(os.equals("linux")) {
 			DEFAULT_CONFIG = new File(System.getProperty("user.home"), ("." + Values.BOT_NAME.toLowerCase() + ".json"));
-		} else if(os.startsWith("windows")) { //TODO: Test
-			//TODO: Test
+		} else if(os.startsWith("windows")) {
 			DEFAULT_CONFIG = new File(System.getenv("APPDATA"), (Values.BOT_NAME.toLowerCase() + ".json"));
 		} else {
 			DEFAULT_CONFIG = new File("config.json");

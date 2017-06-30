@@ -1,3 +1,4 @@
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -7,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
@@ -18,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
@@ -38,11 +41,12 @@ public class GUI extends JFrame {
 	private final JButton btnStart;
 	private final JLabel lblStatus;
 	private final JLabel lblCurrstatus;
+	private JLabel lblVersion;
 
 	public GUI() {
 		gui_Main = this;
 
-		setTitle(Values.BOT_NAME + " v" + Values.BOT_VERSION);
+		setTitle(Values.BOT_NAME);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 208);
@@ -150,7 +154,7 @@ public class GUI extends JFrame {
 
 						// start bot
 						if(chckbxUseCustomConfig.isSelected()) {
-							setTitle(getTitle() + " - " + cfgFile.getName()); //TODO: Test
+							setTitle(getTitle() + " - " + cfgFile.getName());
 							a.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
 						} else {
 							a.launch(new String[]{});
@@ -166,12 +170,17 @@ public class GUI extends JFrame {
 		contentPane.add(btnStart);
 
 		lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(12, 138, 70, 28);
+		lblStatus.setBounds(14, 138, 68, 28);
 		contentPane.add(lblStatus);
 
 		lblCurrstatus = new JLabel("Stopped");
-		lblCurrstatus.setBounds(95, 138, 388, 28);
+		lblCurrstatus.setBounds(92, 138, 134, 28);
 		contentPane.add(lblCurrstatus);
+
+		lblVersion = new JLabel("Version: " + Values.BOT_VERSION);
+		lblVersion.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblVersion.setBounds(360, 138, 118, 28);
+		contentPane.add(lblVersion);
 
 		// Load the GUI Config
 		File guiConfigFileCustomConfig = new File(System.getProperty("java.io.tmpdir"), "blizcordguicustomconfig");
@@ -237,6 +246,20 @@ public class GUI extends JFrame {
 			return new File(txtCustomconfig.getText());
 		} else {
 			return DEFAULT_CONFIG_FILE;
+		}
+	}
+
+	static void addToSever(String link) {
+		int r = JOptionPane.showConfirmDialog(null, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
+		if(r == JOptionPane.YES_OPTION) {
+			try {
+				Desktop.getDesktop().browse(new URI(link));
+			} catch (Exception e) {
+				showErrMsgBox(e.getMessage());
+				a.errExit();
+			}
+		} else if(r == JOptionPane.NO_OPTION) {
+			System.exit(0);
 		}
 	}
 }

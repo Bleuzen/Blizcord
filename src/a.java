@@ -1,9 +1,6 @@
-import java.awt.Desktop;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
-import java.net.URI;
 
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import net.dv8tion.jda.core.utils.SimpleLog;
@@ -162,23 +159,6 @@ public class a {
 			result = args[i + 1];
 		}
 		return result;
-	}
-
-	//TODO: maybe find a better way (move to GUI class?)
-	static void addToServerMessage(String link) {
-		if(gui) {
-			int r = JOptionPane.showConfirmDialog(null, "Do you want to add the bot to your server now?" + System.lineSeparator() + "This will open:" + System.lineSeparator() + link, Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
-			if(r == JOptionPane.YES_OPTION) {
-				try {
-					Desktop.getDesktop().browse(new URI(link));
-				} catch (Exception e) {
-					GUI.showErrMsgBox(e.getMessage());
-				}
-			}
-			System.exit(1); // exit / restart after invite
-		} else {
-			errExit("To add the bot to your server visit: " + link);
-		}
 	}
 
 }

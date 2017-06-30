@@ -18,6 +18,7 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.JDAInfo;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
@@ -26,6 +27,7 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -71,7 +73,20 @@ public class Bot extends ListenerAdapter {
 			int guilds = api.getGuilds().size();
 
 			if(guilds == 0) {
-				a.addToServerMessage(api.asBot().getInviteUrl());
+
+				// https://discordapi.com/permissions.html#3402768
+				String inviteUrl = api.asBot().getInviteUrl(Permission.getPermissions(3402768));
+
+				if(a.isGui()) {
+					GUI.addToSever(inviteUrl);
+				} else {
+					Log.print("To add me to your server visit:" + System.lineSeparator() + inviteUrl);
+				}
+
+				// wait until the bot get added to a server
+				while(api.getGuilds().size() == 0) {
+					Thread.sleep(200);
+				}
 
 			} else if(guilds > 1) {
 				a.errExit("The bot is on more than 1 server. This is currently not supported.");
@@ -631,6 +646,11 @@ public class Bot extends ListenerAdapter {
 			}
 
 		}
+	}
+
+	@Override
+	public void onGuildLeave(GuildLeaveEvent event) {
+		a.errExit("I got kicked.");
 	}
 
 	static long timeToMS(int hours, int minutes, int seconds) {

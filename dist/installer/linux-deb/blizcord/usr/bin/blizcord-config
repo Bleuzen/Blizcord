@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ -z "$1" ]
+  then
+    echo "Please name an editor as argument"
+    echo "Example: blizcord-config nano"
+    exit
+fi
+
+$1 /opt/Blizcord/config.json
