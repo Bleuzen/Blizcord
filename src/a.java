@@ -95,7 +95,7 @@ public class a {
 			if(configArg != null) {
 				configFile = new File(configArg);
 			} else {
-				configFile = new File(Values.DEFAULT_CONFIG);
+				configFile = Config.getDefaultConfig();
 			}
 		}
 

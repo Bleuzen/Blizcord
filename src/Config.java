@@ -18,6 +18,8 @@ public class Config {
 	static final String ADMINS_ROLE = "ADMINS_ROLE";
 	static final String VOLUME = "VOLUME";
 
+	private static File DEFAULT_CONFIG = null;
+
 	private static JSONObject defaults;
 	private static boolean initialized;
 
@@ -104,8 +106,6 @@ public class Config {
 			setRaw(key, defaults.getString(key));
 		}
 
-		//TODO: save in other order if possible (BOT_TOKEN at the top)
-
 		return save();
 	}
 
@@ -121,6 +121,24 @@ public class Config {
 
 	private static String toValue(String v) {
 		return v.split("#")[0].trim();
+	}
+
+	static File getDefaultConfig() {
+		if(DEFAULT_CONFIG != null) {
+			return DEFAULT_CONFIG;
+		}
+
+		String os = System.getProperty("os.name").toLowerCase();
+		if(os.equals("linux")) {
+			DEFAULT_CONFIG = new File(System.getProperty("user.home"), ("." + Values.BOT_NAME.toLowerCase() + ".json"));
+		} else if(os.startsWith("windows")) { //TODO: Test
+			//TODO: Test
+			DEFAULT_CONFIG = new File(System.getenv("APPDATA"), (Values.BOT_NAME.toLowerCase() + ".json"));
+		} else {
+			DEFAULT_CONFIG = new File("config.json");
+		}
+
+		return DEFAULT_CONFIG;
 	}
 
 }

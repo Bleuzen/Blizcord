@@ -24,7 +24,7 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
 
-	private static final File DEFAULT_CONFIG_FILE = new File(Values.DEFAULT_CONFIG);
+	private static final File DEFAULT_CONFIG_FILE = Config.getDefaultConfig();
 
 	private static GUI gui_Main;
 	private static GUI_Config gui_Config;
@@ -150,6 +150,7 @@ public class GUI extends JFrame {
 
 						// start bot
 						if(chckbxUseCustomConfig.isSelected()) {
+							setTitle(getTitle() + " - " + cfgFile.getName()); //TODO: Test
 							a.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
 						} else {
 							a.launch(new String[]{});

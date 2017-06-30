@@ -11,8 +11,6 @@ public class Values {
 
 	static final String DISCORD_GET_TOKEN = "https://discordapp.com/developers/applications/me";
 
-	static final String DEFAULT_CONFIG = "config.json";
-
 	static final int EXIT_CODE_GUI_NOT_SUPPORTED = 2;
 
 }
