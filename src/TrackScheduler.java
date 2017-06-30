@@ -82,10 +82,23 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+		// loop
+		boolean loop = PlayerThread.loop && (endReason == AudioTrackEndReason.FINISHED);
+		// save old track
+		AudioTrack loopTrack = null;
+		if(loop) {
+			loopTrack = track.makeClone();
+		}
+
 		// Only start the next track if the end reason is suitable for it
 		// (FINISHED or LOAD_FAILED)
 		if (endReason.mayStartNext) {
 			nextTrack();
+		}
+
+		// re add track if loop is enabled
+		if (loop) {
+			queue(loopTrack);
 		}
 	}
 

@@ -207,6 +207,7 @@ public class Bot extends ListenerAdapter {
 						+ "!jump (<how many seconds>)      (Jump forward in the current track)\n"
 						+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
 						+ "!shuffle                        (Randomize the track order)\n"
+						+ "!loop                           (Re add played track to the end of the playlist)\n"
 						+ "!stop                           (Stop the playback and clear the playlist)\n"
 						+ "!about                          (Print about message)\n"
 						+ "!kill                           (Kill the bot)"
@@ -382,9 +383,31 @@ public class Bot extends ListenerAdapter {
 
 
 			case "shuffle":
+				if(!isAdmin(author)) {
+					channel.sendMessage(author.getAsMention() + " ``Only admins can shuffle the playlist.``").queue();
+					return;
+				}
+
 				PlayerThread.getMusicManager().scheduler.shuffle();
 
 				channel.sendMessage(author.getAsMention() + " ``The playlist got shuffeled.``").queue();
+
+				break;
+
+
+			case "loop":
+				if(!isAdmin(author)) {
+					channel.sendMessage(author.getAsMention() + " ``Only admins can enable loop.``").queue();
+					return;
+				}
+
+				if(PlayerThread.loop) {
+					PlayerThread.loop = false;
+					channel.sendMessage(author.getAsMention() + " ``Looping disabled.``").queue();
+				} else {
+					PlayerThread.loop = true;
+					channel.sendMessage(author.getAsMention() + " ``Looping enabled.``").queue();
+				}
 
 				break;
 

@@ -19,6 +19,8 @@ public class PlayerThread implements Runnable {
 
 	static boolean skipping;
 
+	static boolean loop;
+
 	private static AudioPlayerManager playerManager;
 
 	private static GuildMusicManager musicManager;
