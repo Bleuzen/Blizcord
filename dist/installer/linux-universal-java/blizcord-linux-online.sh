@@ -1,12 +1,7 @@
 #!/bin/bash
-VERSION="0.3.7"
-CHECKSUM="4b5211e209b400b1335f91049210741d"
+VERSION="0.4.0"
+CHECKSUM="161f5888947c064cca8b4f14f40af6d0"
 BLIZCORD_INSTALL_DIR="$HOME/Blizcord/$VERSION"
-
-if [ $(pidof -x "$0"| wc -w) -gt 2 ]; then 
-    echo "Another instance is already running"
-    exit
-fi
 
 BLIZCORD_BIN_FILE="$BLIZCORD_INSTALL_DIR/Blizcord.exe"
 if [ ! -e "$BLIZCORD_BIN_FILE" ]; then
