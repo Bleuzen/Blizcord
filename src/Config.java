@@ -17,6 +17,7 @@ public class Config {
 	static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
 	static final String ADMINS_ROLE = "ADMINS_ROLE";
 	static final String VOLUME = "VOLUME";
+	static final String ENABLE_MEDIA_CONTROL_KEYS = "ENABLE_MEDIA_CONTROL_KEYS";
 
 	private static File DEFAULT_CONFIG = null;
 
@@ -46,6 +47,7 @@ public class Config {
 		defaults.put(DISPLAY_SONG_AS_GAME, "true");
 		defaults.put(UPDATE_CHECK_INTERVAL_HOURS, "24 #set to 0 to disable");
 		defaults.put(VOLUME, "100");
+		defaults.put(ENABLE_MEDIA_CONTROL_KEYS, "true");
 
 		JSONObject read;
 		try {

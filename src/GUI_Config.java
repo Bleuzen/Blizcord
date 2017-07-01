@@ -35,19 +35,20 @@ public class GUI_Config extends JFrame {
 	private final JCheckBox chckbxAdminsRole;
 	private final JCheckBox chckbxCustomVolume;
 	private final JSpinner spinnerVolume;
+	private final JCheckBox chckbxEnableMediaControl;
 
 	public GUI_Config(File config) {
 		configFile = config;
 
 		setTitle(configFile.getName());
 		setResizable(false);
-		setSize(360, 350);
+		setSize(360, 362);
 		setLocationRelativeTo(null);
 
 		getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 4, 348, 266);
+		panel.setBounds(0, 4, 348, 322);
 		getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -56,6 +57,7 @@ public class GUI_Config extends JFrame {
 		panel.add(bottokenlable);
 
 		JLabel controlchannellable = new JLabel("Control channel:");
+		controlchannellable.setToolTipText("The channel where you can send commands to the bot");
 		controlchannellable.setBounds(12, 38, 120, 28);
 		panel.add(controlchannellable);
 
@@ -80,6 +82,7 @@ public class GUI_Config extends JFrame {
 		panel.add(commandprefix);
 
 		JLabel voicechannellable = new JLabel("Voice channel:");
+		voicechannellable.setToolTipText("The voice channel which the bot will join");
 		voicechannellable.setBounds(10, 98, 120, 28);
 		panel.add(voicechannellable);
 
@@ -92,6 +95,7 @@ public class GUI_Config extends JFrame {
 		panel.add(adminsrole);
 
 		display_song_as_game = new JCheckBox("Display song as game");
+		display_song_as_game.setToolTipText("Displays the name of the current song as game on Discord");
 		display_song_as_game.setBounds(10, 158, 330, 28);
 		panel.add(display_song_as_game);
 
@@ -138,6 +142,7 @@ public class GUI_Config extends JFrame {
 		panel.add(btnGet);
 
 		chckbxAdminsRole = new JCheckBox("Admins role");
+		chckbxAdminsRole.setToolTipText("Users in this role can control the bot");
 		chckbxAdminsRole.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -153,6 +158,7 @@ public class GUI_Config extends JFrame {
 		panel.add(chckbxAdminsRole);
 
 		chckbxCustomVolume = new JCheckBox("Custom Volume");
+		chckbxCustomVolume.setToolTipText("Change the volume (other than 100% requires more CPU)");
 		chckbxCustomVolume.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -168,7 +174,14 @@ public class GUI_Config extends JFrame {
 		spinnerVolume.setBounds(276, 218, 64, 28);
 		panel.add(spinnerVolume);
 
+		chckbxEnableMediaControl = new JCheckBox("Enable media control keys");
+		chckbxEnableMediaControl.setToolTipText("If enabled you can use the media control keys on your keyboard to control the bot");
+		chckbxEnableMediaControl.setBounds(10, 248, 262, 28);
+		panel.add(chckbxEnableMediaControl);
+
 		JButton btnApply = new JButton("Apply");
+		btnApply.setBounds(248, 282, 90, 28);
+		panel.add(btnApply);
 		btnApply.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -182,6 +195,7 @@ public class GUI_Config extends JFrame {
 				Config.set(Config.DISPLAY_SONG_AS_GAME, String.valueOf(display_song_as_game.isSelected()));
 				Config.set(Config.UPDATE_CHECK_INTERVAL_HOURS, (update_check_box.isSelected() ? update_check_interval_hours_spinner.getValue().toString() : "0"));
 				Config.set(Config.VOLUME, (chckbxCustomVolume.isSelected() ? spinnerVolume.getValue().toString() : "100"));
+				Config.set(Config.ENABLE_MEDIA_CONTROL_KEYS, String.valueOf(chckbxEnableMediaControl.isSelected()));
 
 				if(Config.save()) {
 					JOptionPane.showMessageDialog(null, "Config saved.", Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
@@ -193,8 +207,6 @@ public class GUI_Config extends JFrame {
 				GUI.mvToFront();
 			}
 		});
-		btnApply.setBounds(258, 283, 90, 28);
-		getContentPane().add(btnApply);
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -207,6 +219,7 @@ public class GUI_Config extends JFrame {
 		commandprefix.setText(Config.get(Config.COMMAND_PREFIX));
 		controlchannel.setText(Config.get(Config.CONTROL_CHANNEL));
 		display_song_as_game.setSelected(Boolean.parseBoolean(Config.get(Config.DISPLAY_SONG_AS_GAME)));
+		chckbxEnableMediaControl.setSelected(Boolean.parseBoolean(Config.get(Config.ENABLE_MEDIA_CONTROL_KEYS)));
 		voicechannel.setText(Config.get(Config.VOICE_CHANNEL));
 
 		if(a.isDisableUpdateChecker()) {
