@@ -25,6 +25,12 @@ Double click the .exe file for the GUI.
 The first time you start the bot, it will crash. It generated the config file. You can edit it with every text editor, or use the GUI as explained here: https://github.com/Bleuzen/Blizcord/wiki/Setup
 
 ## Dependencies
-JDA: https://github.com/DV8FromTheWorld/JDA
+This program makes use of the following librarys:
 
-lavaplayer: https://github.com/sedmelluq/lavaplayer
+[JDA](https://github.com/DV8FromTheWorld/JDA)
+
+[lavaplayer](https://github.com/sedmelluq/lavaplayer)
+
+[JNativeHook](https://github.com/kwhat/jnativehook)
+
+View their repository for further information, credits, and licensing.
