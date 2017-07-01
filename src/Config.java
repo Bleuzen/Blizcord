@@ -47,7 +47,7 @@ public class Config {
 		defaults.put(DISPLAY_SONG_AS_GAME, "true");
 		defaults.put(UPDATE_CHECK_INTERVAL_HOURS, "24 #set to 0 to disable");
 		defaults.put(VOLUME, "100");
-		defaults.put(ENABLE_MEDIA_CONTROL_KEYS, "true");
+		defaults.put(ENABLE_MEDIA_CONTROL_KEYS, "false");
 
 		JSONObject read;
 		try {

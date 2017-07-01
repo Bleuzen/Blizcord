@@ -175,7 +175,8 @@ public class GUI_Config extends JFrame {
 		panel.add(spinnerVolume);
 
 		chckbxEnableMediaControl = new JCheckBox("Enable media control keys");
-		chckbxEnableMediaControl.setToolTipText("If enabled you can use the media control keys on your keyboard to control the bot");
+		//TODO: Update ToolTipText, when JNativeHook got a fix
+		chckbxEnableMediaControl.setToolTipText("<html>If enabled you can use the media control keys on your keyboard to control the bot.<br>This will increase your CPU and RAM usage. Currently this does not work on all systems.</html>");
 		chckbxEnableMediaControl.setBounds(10, 248, 262, 28);
 		panel.add(chckbxEnableMediaControl);
 

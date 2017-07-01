@@ -131,6 +131,11 @@ public class Bot extends ListenerAdapter {
 				new Thread(new PlayerThread()).start();
 			}
 
+			// Start NativeKeyListener
+			if(Boolean.valueOf(Config.get(Config.ENABLE_MEDIA_CONTROL_KEYS))) {
+				NativeKeyListener.init();
+			}
+
 			// Start checking for updates
 			int updateCheckInterval;
 			try {
