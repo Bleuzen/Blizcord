@@ -85,15 +85,11 @@ public class a {
 
 		// init config
 		File configFile;
-		if(Values.DEV) {
-			configFile = new File(Values.DEV_CONFIG);
+		String configArg = getArg(args, "--config");
+		if(configArg != null) {
+			configFile = new File(configArg);
 		} else {
-			String configArg = getArg(args, "--config");
-			if(configArg != null) {
-				configFile = new File(configArg);
-			} else {
-				configFile = Config.getDefaultConfig();
-			}
+			configFile = Config.getDefaultConfig();
 		}
 
 		Log.print("Config: " + configFile.getAbsolutePath());

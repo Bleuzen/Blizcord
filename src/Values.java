@@ -1,8 +1,7 @@
 
 public class Values {
 
-	static final boolean DEV = true;
-	static final String DEV_CONFIG = "devConfig.json";
+	static final boolean DEV = false;
 
 	static final String BOT_VERSION = "0.4.1" 	+ (DEV ? "-dev" : "");
 	static final String BOT_NAME = "Blizcord";

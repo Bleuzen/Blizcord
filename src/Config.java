@@ -19,6 +19,7 @@ public class Config {
 	static final String VOLUME = "VOLUME";
 	static final String ENABLE_MEDIA_CONTROL_KEYS = "ENABLE_MEDIA_CONTROL_KEYS";
 
+	private static File APP_DIR = null;
 	private static File DEFAULT_CONFIG = null;
 
 	private static JSONObject defaults;
@@ -125,19 +126,35 @@ public class Config {
 		return v.split("#")[0].trim();
 	}
 
+	static File getAppDir() {
+		if(APP_DIR != null) {
+			return APP_DIR;
+		}
+
+		String os = System.getProperty("os.name").toLowerCase();
+		if(os.equals("linux")) {
+			APP_DIR = new File(System.getProperty("user.home"), ("." + Values.BOT_NAME.toLowerCase()));
+		} else if(os.startsWith("windows")) {
+			APP_DIR = new File(System.getenv("APPDATA"), Values.BOT_NAME);
+		} else {
+			APP_DIR = new File(System.getProperty("user.dir"), Values.BOT_NAME.toLowerCase());
+		}
+
+		if(!APP_DIR.exists()) {
+			if(!APP_DIR.mkdir()) {
+				a.errExit("Failed to create config directory:" + System.lineSeparator() + APP_DIR.getAbsolutePath());
+			}
+		}
+
+		return APP_DIR;
+	}
+
 	static File getDefaultConfig() {
 		if(DEFAULT_CONFIG != null) {
 			return DEFAULT_CONFIG;
 		}
 
-		String os = System.getProperty("os.name").toLowerCase();
-		if(os.equals("linux")) {
-			DEFAULT_CONFIG = new File(System.getProperty("user.home"), ("." + Values.BOT_NAME.toLowerCase() + ".json"));
-		} else if(os.startsWith("windows")) {
-			DEFAULT_CONFIG = new File(System.getenv("APPDATA"), (Values.BOT_NAME.toLowerCase() + ".json"));
-		} else {
-			DEFAULT_CONFIG = new File("config.json");
-		}
+		DEFAULT_CONFIG = new File(getAppDir(), "config.json");
 
 		return DEFAULT_CONFIG;
 	}

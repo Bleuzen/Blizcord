@@ -12,19 +12,29 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 		int keyCode = nativeEvent.getKeyCode();
 		switch (keyCode) {
 		case NativeKeyEvent.VC_MEDIA_PLAY:
-			Log.debug("VC_MEDIA_PLAY");
+			Log.debug("NativeKeyEvent: VC_MEDIA_PLAY");
+			if(PlayerThread.isPaused()) {
+				PlayerThread.setPaused(false);
+			} else {
+				PlayerThread.setPaused(true);
+			}
 			break;
 
 		case NativeKeyEvent.VC_MEDIA_STOP:
-			Log.debug("VC_MEDIA_STOP");
+			Log.debug("NativeKeyEvent: VC_MEDIA_STOP");
+			Bot.stopPlayer();
 			break;
 
 		case NativeKeyEvent.VC_MEDIA_PREVIOUS:
-			Log.debug("VC_MEDIA_PREVIOUS");
+			Log.debug("NativeKeyEvent: VC_MEDIA_PREVIOUS");
+			if(PlayerThread.isPlaying()) {
+				PlayerThread.getMusicManager().player.getPlayingTrack().setPosition(0);
+			}
 			break;
 
 		case NativeKeyEvent.VC_MEDIA_NEXT:
-			Log.debug("VC_MEDIA_NEXT");
+			Log.debug("NativeKeyEvent: VC_MEDIA_NEXT");
+			PlayerThread.getMusicManager().scheduler.nextTrack(1);
 			break;
 
 		default:
@@ -40,9 +50,6 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 
 	static void init() {
 		try {
-			GlobalScreen.registerNativeHook();
-			GlobalScreen.addNativeKeyListener(new NativeKeyListener());
-
 			// Setup logger
 			Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 			if(a.isDebug()) {
@@ -53,6 +60,10 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 				logger.setLevel(Level.OFF);
 			}
 			logger.setUseParentHandlers(false);
+
+			// Init JNativeHook
+			GlobalScreen.registerNativeHook();
+			GlobalScreen.addNativeKeyListener(new NativeKeyListener());
 
 			Log.debug("JNativeHook initialized.");
 		} catch (NativeHookException e) {

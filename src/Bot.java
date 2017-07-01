@@ -458,14 +458,7 @@ public class Bot extends ListenerAdapter {
 
 			case "stop":
 				if(isAdmin(author)) {
-					// stop the music
-					PlayerThread.stop();
-					// leave the channel
-					leave();
-					// cancel skipping
-					PlayerThread.skipping = false;
-					// clear the playlist
-					PlayerThread.getMusicManager().scheduler.clear();
+					stopPlayer();
 				} else {
 					channel.sendMessage(author.getAsMention() + " ``Only admins can stop me.``").queue();
 				}
@@ -583,8 +576,8 @@ public class Bot extends ListenerAdapter {
 					channel.sendMessage(author.getAsMention() + " ``The playlist is empty, nothing to save.``").queue();
 					break;
 				}
-				File playlistsFolder = new File("playlists");
-				if(!playlistsFolder.isDirectory()) {
+				File playlistsFolder = new File(Config.getAppDir(), "playlists");
+				if(!playlistsFolder.exists()) {
 					if(!playlistsFolder.mkdir()) {
 						channel.sendMessage(author.getAsMention() + " ``Failed to create playlists folder.``").queue();
 						break;
@@ -622,7 +615,7 @@ public class Bot extends ListenerAdapter {
 				}
 				// Load the playlist
 				try {
-					File playlistFile = new File(new File("playlists"), arg);
+					File playlistFile = new File(new File(Config.getAppDir(), "playlists"), arg);
 					if(!playlistFile.exists()) {
 						channel.sendMessage(author.getAsMention() + " Playlist doesn't exist: " + arg).queue();
 						break;
@@ -656,6 +649,17 @@ public class Bot extends ListenerAdapter {
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
 		a.errExit("I got kicked.");
+	}
+
+	static void stopPlayer() {
+		// stop the music
+		PlayerThread.stop();
+		// leave the channel
+		leave();
+		// cancel skipping
+		PlayerThread.skipping = false;
+		// clear the playlist
+		PlayerThread.getMusicManager().scheduler.clear();
 	}
 
 	static long timeToMS(int hours, int minutes, int seconds) {
