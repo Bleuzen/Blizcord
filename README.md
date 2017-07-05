@@ -33,4 +33,6 @@ This program makes use of the following librarys:
 
 [JNativeHook](https://github.com/kwhat/jnativehook)
 
+[Logback](https://github.com/qos-ch/logback)
+
 View their repository for further information, credits, and licensing.
