@@ -27,7 +27,7 @@ public class UpdateChecker extends TimerTask {
 
 			updateAvailable = compare(local, online);
 		} catch (Exception e) {
-			Log.print("Failed to check for updates.");
+			Log.warn("Failed to check for updates.");
 			e.printStackTrace();
 		}
 	}
@@ -48,8 +48,8 @@ public class UpdateChecker extends TimerTask {
 		local = toVersionString(local);
 		online = toVersionString(online);
 
-		Log.debug("[Updater] Local version: " + local);
-		Log.debug("[Updater] Online version: " + online);
+		Log.debug("[Updater] Local version: {}", local);
+		Log.debug("[Updater] Online version: {}", online);
 
 		String[] valsLocal = local.split("\\.");
 		String[] valsOnline = online.split("\\.");
@@ -69,7 +69,7 @@ public class UpdateChecker extends TimerTask {
 			newer = valsOnline.length > valsLocal.length;
 		}
 
-		Log.debug("[Updater] Newer: " + newer);
+		Log.debug("[Updater] Newer: {}", newer);
 
 		return newer;
 	}

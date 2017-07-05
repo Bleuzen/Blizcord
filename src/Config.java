@@ -59,6 +59,8 @@ public class Config {
 			read = new JSONObject();
 		}
 
+		json = read;
+
 		ArrayList<String> toAdd = null;
 		Iterator<String> keys = defaults.keys();
 		while(keys.hasNext()) {
@@ -70,8 +72,6 @@ public class Config {
 				toAdd.add(key);
 			}
 		}
-
-		json = read;
 
 		if(toAdd == null) {
 			initialized = true;

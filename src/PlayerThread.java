@@ -55,7 +55,7 @@ public class PlayerThread implements Runnable {
 		// try to set volume
 		try {
 			musicManager.player.setVolume(Integer.parseInt(Config.get(Config.VOLUME)));
-			Log.debug("Volume set to: " + musicManager.player.getVolume());
+			Log.debug("Volume set to: {}", musicManager.player.getVolume());
 		} catch (NumberFormatException e) {
 			a.errExit("Invalid volume");
 		}
@@ -96,7 +96,7 @@ public class PlayerThread implements Runnable {
 	}
 
 	static void loadAndPlay(final MessageChannel channel, final String trackUrl, boolean direct, boolean quiet) {
-		Log.debug("Loading ..." + System.lineSeparator() + "Track: " + trackUrl + System.lineSeparator() + "Direct: " + direct);
+		Log.debug("Loading track ... play direct: {}; URL: {}", direct, trackUrl);
 
 		playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 			@Override

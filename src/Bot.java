@@ -61,7 +61,7 @@ public class Bot extends ListenerAdapter {
 			a.errExit("You must specify a Token in the config file!");
 		}
 
-		Log.print("Starting JDA ...");
+		Log.info("Starting JDA ...");
 
 		try {
 			api = new JDABuilder(AccountType.BOT).setToken(Config.get(Config.BOT_TOKEN))
@@ -80,7 +80,7 @@ public class Bot extends ListenerAdapter {
 				if(a.isGui()) {
 					GUI.addToSever(inviteUrl);
 				} else {
-					Log.print("To add me to your server visit:" + System.lineSeparator() + inviteUrl);
+					Log.info("To add me to your server visit:" + System.lineSeparator() + inviteUrl);
 				}
 
 				// wait until the bot get added to a server
@@ -98,14 +98,14 @@ public class Bot extends ListenerAdapter {
 				GuildController controller = guild.getController();
 				if(guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).isEmpty()) { // create channel if not exists
 					controller.createTextChannel(Config.get(Config.CONTROL_CHANNEL)).complete();
-					Log.print("Created control channel.");
+					Log.info("Created control channel.");
 				}
 				if(guild.getVoiceChannelsByName(Config.get(Config.VOICE_CHANNEL), true).isEmpty()) {
 					controller.createVoiceChannel(Config.get(Config.VOICE_CHANNEL)).complete();
-					Log.print("Created music channel.");
+					Log.info("Created music channel.");
 				}
 			} catch(Exception e) {
-				Log.print("Failed to create channels. Give me the permission to manage channels or create them yourself.");
+				Log.debug("Failed to create channels.");
 			}
 
 			try {
@@ -149,7 +149,7 @@ public class Bot extends ListenerAdapter {
 				new Timer().schedule(updateChecker, 5000, (1000 * 3600 * updateCheckInterval));
 			}
 
-			Log.print("Successfully started.");
+			Log.info("Successfully started.");
 		} catch (Exception e) {
 			a.errExit(e.getMessage());
 		}
@@ -162,7 +162,7 @@ public class Bot extends ListenerAdapter {
 	}
 
 	static void shutdown() {
-		Log.print("Shutting down ...");
+		Log.info("Shutting down ...");
 		//api.shutdown(); // done by shutdown hook of JDA
 		System.exit(0);
 	}
@@ -200,7 +200,7 @@ public class Bot extends ListenerAdapter {
 
 		if ( (channel == controlChannel || channel.getType() == ChannelType.PRIVATE) && message.startsWith(Config.get(Config.COMMAND_PREFIX)) && (!author.getId().equals(api.getSelfUser().getId())) ) {
 
-			Log.debug("Got command from " + author.getName() + ":" + System.lineSeparator() + message);
+			Log.debug("Got command from {}: {}", author.getName(), message);
 
 			String[] cmdarg = message.substring(Config.get(Config.COMMAND_PREFIX).length()).split(" ", 2);
 			String cmd = cmdarg[0].toLowerCase();
@@ -677,7 +677,7 @@ public class Bot extends ListenerAdapter {
 	static void setGame(Game game) {
 		api.getPresence().setGame(game);
 
-		Log.debug("Set game to: " + game);
+		Log.debug("Set game to: {}", game);
 	}
 
 	static void sendUpdateMessage() {

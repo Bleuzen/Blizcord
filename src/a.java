@@ -3,6 +3,10 @@ import java.io.File;
 
 import javax.swing.UIManager;
 
+import org.jnativehook.GlobalScreen;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import net.dv8tion.jda.core.utils.SimpleLog;
 import net.dv8tion.jda.core.utils.SimpleLog.Level;
 
@@ -11,13 +15,11 @@ public class a {
 	private static boolean gui;
 	private static boolean debug;
 	private static boolean disableUpdateChecker; // for AUR users (currently only disabled in GUI)
+	private static boolean editConfigInConsole;
+	private static File configFile;
 
 	static boolean isGui() {
 		return gui;
-	}
-
-	static boolean isDebug() {
-		return debug;
 	}
 
 	static boolean isDisableUpdateChecker() {
@@ -28,6 +30,9 @@ public class a {
 		gui = containsArg(args, "--gui");
 		debug = containsArg(args, "--debug") || Values.DEV;
 		disableUpdateChecker = containsArg(args, "--disable-update-checker");
+		editConfigInConsole = containsArg(args, "--edit");
+
+		setupLogging();
 
 		if(gui) {
 			if(GraphicsEnvironment.isHeadless()) {
@@ -53,46 +58,30 @@ public class a {
 				// Launch GUI
 				GUI frame = new GUI();
 				frame.setVisible(true);
-
-				// disable logging
-				SimpleLog.LEVEL = Level.OFF;
 			} catch (Exception e) {
 				errExit("Failed to start GUI: " + e.getMessage());
 			}
 		} else {
-			// find and set first error level (to only print errors of JDA)
-			for(Level logLevel : Level.values()) {
-				if(logLevel.isError()) {
-					SimpleLog.LEVEL = logLevel;
-					break;
-				}
+			if(editConfigInConsole) {
+				initConfigFile(args);
+				CLI_Config cli_Config = new CLI_Config(configFile);
+				cli_Config.startSetup();
+				System.exit(0);
+			} else {
+				launch(args);
 			}
-
-			launch(args);
 		}
 	}
 
 	static void launch(String[] args) {
-		Log.print("Version: " + Values.BOT_VERSION);
-		Log.print("Developer: " + Values.BOT_DEVELOPER);
+		Log.info("Version: " + Values.BOT_VERSION);
+		Log.info("Developer: " + Values.BOT_DEVELOPER);
 
-		Log.print("Starting ...");
+		Log.info("Starting bot ...");
 
-		// override log level if debug
-		if(debug) {
-			SimpleLog.LEVEL = Level.ALL;
-		}
+		initConfigFile(args);
 
-		// init config
-		File configFile;
-		String configArg = getArg(args, "--config");
-		if(configArg != null) {
-			configFile = new File(configArg);
-		} else {
-			configFile = Config.getDefaultConfig();
-		}
-
-		Log.print("Config: " + configFile.getAbsolutePath());
+		Log.info("Config: " + configFile.getAbsolutePath());
 
 		// load the config file
 		if(!Config.init(configFile)) {
@@ -116,7 +105,7 @@ public class a {
 		if(gui) {
 			GUI.onErrExit(msg);
 		} else {
-			Log.print("Crash! Reason:");
+			Log.error("Crash! Reason:");
 			System.err.println(msg == null ? "Unknown" : msg);
 			try {
 				Thread.sleep(5000);
@@ -155,6 +144,52 @@ public class a {
 			result = args[i + 1];
 		}
 		return result;
+	}
+
+	private static void initConfigFile(String[] args) {
+		String configArg = getArg(args, "--config");
+		if(configArg != null) {
+			configFile = new File(configArg);
+		} else {
+			configFile = Config.getDefaultConfig();
+		}
+	}
+
+	private static void setupLogging() {
+		Logger lavaplayerLogger = (Logger) LoggerFactory.getLogger("com.sedmelluq.discord.lavaplayer");
+		java.util.logging.Logger jNativeHookLogger = java.util.logging.Logger.getLogger(GlobalScreen.class.getPackage().getName());
+
+		if(debug) {
+			// set JDA logging to DEBUG
+			SimpleLog.LEVEL = Level.DEBUG;
+			// set lavaplayer logging to DEBUG
+			lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.DEBUG);
+			// set JNativeHook logging to WARNING
+			jNativeHookLogger.setLevel(java.util.logging.Level.WARNING);
+		} else {
+			if(gui) {
+				// disable JDA logging
+				SimpleLog.LEVEL = Level.OFF;
+				// disable lavaplayer logging
+				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.OFF);
+				// disable JNativeHook logging
+				jNativeHookLogger.setLevel(java.util.logging.Level.OFF);
+			} else {
+				// set JDA logging to WARNING
+				SimpleLog.LEVEL = Level.WARNING;
+				// set lavaplayer logging to WARN
+				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.WARN);
+				// set JNativeHook logging to WARNING
+				jNativeHookLogger.setLevel(java.util.logging.Level.WARNING);
+			}
+		}
+
+
+		// init own Logger
+		Log.init(debug);
+
+		// Print first log message
+		Log.info("Logger initialized.");
 	}
 
 }
