@@ -15,7 +15,6 @@ public class a {
 	private static boolean gui;
 	private static boolean debug;
 	private static boolean disableUpdateChecker; // for AUR users (currently only disabled in GUI)
-	private static boolean editConfigInConsole;
 	private static File configFile;
 
 	static boolean isGui() {
@@ -30,7 +29,6 @@ public class a {
 		gui = containsArg(args, "--gui");
 		debug = containsArg(args, "--debug") || Values.DEV;
 		disableUpdateChecker = containsArg(args, "--disable-update-checker");
-		editConfigInConsole = containsArg(args, "--edit");
 
 		setupLogging();
 
@@ -62,14 +60,7 @@ public class a {
 				errExit("Failed to start GUI: " + e.getMessage());
 			}
 		} else {
-			if(editConfigInConsole) {
-				initConfigFile(args);
-				CLI_Config cli_Config = new CLI_Config(configFile);
-				cli_Config.startSetup();
-				System.exit(0);
-			} else {
-				launch(args);
-			}
+			launch(args);
 		}
 	}
 
@@ -79,11 +70,16 @@ public class a {
 
 		Log.info("Starting bot ...");
 
-		initConfigFile(args);
+		// init config
+		String configArg = getArg(args, "--config");
+		if(configArg != null) {
+			configFile = new File(configArg);
+		} else {
+			configFile = Config.getDefaultConfig();
+		}
 
 		Log.info("Config: " + configFile.getAbsolutePath());
 
-		// load the config file
 		if(!Config.init(configFile)) {
 			errExit("Failed to load config.");
 		}
@@ -146,15 +142,6 @@ public class a {
 		return result;
 	}
 
-	private static void initConfigFile(String[] args) {
-		String configArg = getArg(args, "--config");
-		if(configArg != null) {
-			configFile = new File(configArg);
-		} else {
-			configFile = Config.getDefaultConfig();
-		}
-	}
-
 	private static void setupLogging() {
 		Logger lavaplayerLogger = (Logger) LoggerFactory.getLogger("com.sedmelluq.discord.lavaplayer");
 		java.util.logging.Logger jNativeHookLogger = java.util.logging.Logger.getLogger(GlobalScreen.class.getPackage().getName());
@@ -189,7 +176,7 @@ public class a {
 		Log.init(debug);
 
 		// Print first log message
-		Log.info("Logger initialized.");
+		Log.debug("Logger initialized.");
 	}
 
 }

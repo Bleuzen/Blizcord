@@ -45,7 +45,7 @@ public class Log {
 		LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<>();
 
 		PatternLayout layout = new PatternLayout();
-		layout.setPattern("[%d{HH:mm:ss}] [%logger] [%level] %msg%n");
+		layout.setPattern("[%d{HH:mm:ss}] [%level] [%logger]: %msg%n");
 		layout.setContext(lc);
 		layout.start();
 		encoder.setLayout(layout);

@@ -40,6 +40,8 @@ public class Bot extends ListenerAdapter {
 	private static Role adminRole;
 	private static TextChannel controlChannel;
 
+	private static long startTime;
+
 	private static UpdateChecker updateChecker;
 
 	static boolean joined;
@@ -149,6 +151,8 @@ public class Bot extends ListenerAdapter {
 				new Timer().schedule(updateChecker, 5000, (1000 * 3600 * updateCheckInterval));
 			}
 
+			startTime = System.currentTimeMillis();
+
 			Log.info("Successfully started.");
 		} catch (Exception e) {
 			a.errExit(e.getMessage());
@@ -229,6 +233,7 @@ public class Bot extends ListenerAdapter {
 						+ "!shuffle                        (Randomize the track order)\n"
 						+ "!loop                           (Re add played track to the end of the playlist)\n"
 						+ "!stop                           (Stop the playback and clear the playlist)\n"
+						+ "!uptime                         (See how long the bot is already online)"
 						+ "!about                          (Print about message)\n"
 						+ "!kill                           (Kill the bot)"
 						+ "```"
@@ -445,12 +450,12 @@ public class Bot extends ListenerAdapter {
 				}
 
 				if(PlayerThread.isPaused()) {
-					channel.sendMessage("Continue playback ...").queue();
+					channel.sendMessage("``Continue playback ...``").queue();
 					PlayerThread.setPaused(false);
 				} else {
 					PlayerThread.setPaused(true);
-					channel.sendMessage("Paused.\n"
-							+ "Type this command again to resume.").queue();
+					channel.sendMessage("``Paused.\n"
+							+ "Type this command again to resume.``").queue();
 				}
 
 				break;
@@ -462,6 +467,13 @@ public class Bot extends ListenerAdapter {
 				} else {
 					channel.sendMessage(author.getAsMention() + " ``Only admins can stop me.``").queue();
 				}
+
+				break;
+
+
+			case "uptime":
+				long duration = System.currentTimeMillis() - startTime;
+				channel.sendMessage(author.getAsMention() + " ``Uptime: " + durationToTimeString(duration) + "``").queue();
 
 				break;
 
@@ -672,6 +684,18 @@ public class Bot extends ListenerAdapter {
 
 		long s = (seconds + (60 * (minutes + (hours * 60))));
 		return TimeUnit.SECONDS.toMillis(s);
+	}
+
+	private static String durationToTimeString(long duration) {
+		TimeUnit scale = TimeUnit.MILLISECONDS;
+		long days = scale.toDays(duration);
+		duration -= TimeUnit.DAYS.toMillis(days);
+		long hours = scale.toHours(duration);
+		duration -= TimeUnit.HOURS.toMillis(hours);
+		long minutes = scale.toMinutes(duration);
+		duration -= TimeUnit.MINUTES.toMillis(minutes);
+		long seconds = scale.toSeconds(duration);
+		return String.format("%d days, %d hours, %d minutes, %d seconds", days, hours, minutes, seconds);
 	}
 
 	static void setGame(Game game) {
