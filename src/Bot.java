@@ -60,7 +60,7 @@ public class Bot extends ListenerAdapter {
 
 	public static void start() {
 		if(Config.get(Config.BOT_TOKEN).isEmpty()) {
-			a.errExit("You must specify a Token in the config file!");
+			a.errExit("You must specify a Token in the config file!", Values.EXIT_CODE_RESTART_GUI);
 		}
 
 		Log.info("Starting JDA ...");
@@ -91,7 +91,7 @@ public class Bot extends ListenerAdapter {
 				}
 
 			} else if(guilds > 1) {
-				a.errExit("The bot is on more than 1 server. This is currently not supported.");
+				a.errExit("The bot is on more than 1 server. This is currently not supported.", Values.EXIT_CODE_RESTART_GUI);
 			}
 
 			guild = api.getGuilds().get(0);
@@ -113,7 +113,7 @@ public class Bot extends ListenerAdapter {
 			try {
 				controlChannel = guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).get(0); // true for Ignore Case
 			} catch(IndexOutOfBoundsException e) {
-				a.errExit("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.");
+				a.errExit("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.", Values.EXIT_CODE_RESTART_GUI);
 			}
 
 			String adminsRoleName = Config.get(Config.ADMINS_ROLE);
@@ -121,7 +121,7 @@ public class Bot extends ListenerAdapter {
 				try {
 					adminRole = guild.getRolesByName(adminsRoleName, true).get(0); // true for Ignore Case
 				} catch(IndexOutOfBoundsException e) {
-					a.errExit("There is no '" + adminsRoleName + "' Role.");
+					a.errExit("There is no '" + adminsRoleName + "' Role.", Values.EXIT_CODE_RESTART_GUI);
 				}
 			}
 
@@ -155,7 +155,7 @@ public class Bot extends ListenerAdapter {
 
 			Log.info("Successfully started.");
 		} catch (Exception e) {
-			a.errExit(e.getMessage());
+			a.errExit(e.getMessage(), Values.EXIT_CODE_RESTART_GUI);
 		}
 
 		try {

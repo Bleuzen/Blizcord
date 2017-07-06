@@ -1,8 +1,13 @@
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
 public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyListener {
+
+	private static Level loggingLevel;
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
@@ -45,8 +50,19 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent nativeEvent) {}
 
+	static void setLevel(Level l) {
+		loggingLevel = l;
+	}
+
 	static void init() {
 		try {
+			// Get the logger for "org.jnativehook" and set the level
+			Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+			logger.setLevel(loggingLevel);
+
+			// disable the parent handlers
+			logger.setUseParentHandlers(false);
+
 			// Init JNativeHook
 			GlobalScreen.registerNativeHook();
 			GlobalScreen.addNativeKeyListener(new NativeKeyListener());

@@ -3,7 +3,6 @@ import java.io.File;
 
 import javax.swing.UIManager;
 
-import org.jnativehook.GlobalScreen;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
@@ -21,6 +20,10 @@ public class a {
 		return gui;
 	}
 
+	static boolean isDebug() {
+		return debug;
+	}
+
 	static boolean isDisableUpdateChecker() {
 		return disableUpdateChecker;
 	}
@@ -36,7 +39,7 @@ public class a {
 			if(GraphicsEnvironment.isHeadless()) {
 				// no gui supported
 				gui = false; // disable gui mode
-				errExit("GUI is not supported on your system.", Values.EXIT_CODE_GUI_NOT_SUPPORTED);
+				errExit("GUI is not supported on your system.");
 			}
 			try {
 				try {
@@ -81,7 +84,7 @@ public class a {
 		Log.info("Config: " + configFile.getAbsolutePath());
 
 		if(!Config.init(configFile)) {
-			errExit("Failed to load config.");
+			errExit("Failed to load config.", Values.EXIT_CODE_RESTART_GUI);
 		}
 
 		// Start the bot
@@ -144,30 +147,29 @@ public class a {
 
 	private static void setupLogging() {
 		Logger lavaplayerLogger = (Logger) LoggerFactory.getLogger("com.sedmelluq.discord.lavaplayer");
-		java.util.logging.Logger jNativeHookLogger = java.util.logging.Logger.getLogger(GlobalScreen.class.getPackage().getName());
 
 		if(debug) {
 			// set JDA logging to DEBUG
 			SimpleLog.LEVEL = Level.DEBUG;
 			// set lavaplayer logging to DEBUG
 			lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.DEBUG);
-			// set JNativeHook logging to WARNING
-			jNativeHookLogger.setLevel(java.util.logging.Level.WARNING);
+			// set JNativeHook logging level to WARNING
+			NativeKeyListener.setLevel(java.util.logging.Level.WARNING);
 		} else {
 			if(gui) {
 				// disable JDA logging
 				SimpleLog.LEVEL = Level.OFF;
 				// disable lavaplayer logging
 				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.OFF);
-				// disable JNativeHook logging
-				jNativeHookLogger.setLevel(java.util.logging.Level.OFF);
+				// set JNativeHook logging level to OFF
+				NativeKeyListener.setLevel(java.util.logging.Level.OFF);
 			} else {
 				// set JDA logging to WARNING
 				SimpleLog.LEVEL = Level.WARNING;
 				// set lavaplayer logging to WARN
 				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.WARN);
-				// set JNativeHook logging to WARNING
-				jNativeHookLogger.setLevel(java.util.logging.Level.WARNING);
+				// set JNativeHook logging level to WARNING
+				NativeKeyListener.setLevel(java.util.logging.Level.WARNING);
 			}
 		}
 

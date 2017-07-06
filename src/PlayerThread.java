@@ -57,7 +57,7 @@ public class PlayerThread implements Runnable {
 			musicManager.player.setVolume(Integer.parseInt(Config.get(Config.VOLUME)));
 			Log.debug("Volume set to: {}", musicManager.player.getVolume());
 		} catch (NumberFormatException e) {
-			a.errExit("Invalid volume");
+			a.errExit("Invalid volume", Values.EXIT_CODE_RESTART_GUI);
 		}
 	}
 

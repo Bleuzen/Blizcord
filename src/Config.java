@@ -85,7 +85,7 @@ public class Config {
 					a.errExit(gotGeneratedOrUpdatedMSG + " Please edit it now.");
 				}
 			} else {
-				a.errExit("Failed to generate config. (Do you have write access here?)");
+				a.errExit("Failed to generate config. (Do you have write access here?)", Values.EXIT_CODE_RESTART_GUI);
 			}
 		}
 
