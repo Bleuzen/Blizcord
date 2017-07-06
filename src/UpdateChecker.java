@@ -83,7 +83,7 @@ public class UpdateChecker extends TimerTask {
 		if(!alreadyNotified) {
 			checkForUpdate();
 			if(updateAvailable) {
-				Bot.sendUpdateMessage();
+				Bot.sendUpdateMessage(true);
 				alreadyNotified = true;
 			}
 		}

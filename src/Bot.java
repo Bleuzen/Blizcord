@@ -494,18 +494,13 @@ public class Bot extends ListenerAdapter {
 
 
 				if(updateChecker != null && updateChecker.isUpdateAvailable()) {
-					sendUpdateMessage();
+					sendUpdateMessage(false);
 				}
 
 				break;
 
 
 			case "add":
-				if(!isAdmin(author)) {
-					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can add something.``").queue();
-					return;
-				}
-
 				if(arg == null) {
 					channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();
 					return;
@@ -540,7 +535,7 @@ public class Bot extends ListenerAdapter {
 
 			case "play":
 				if(!isAdmin(author)) {
-					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can play something.``").queue();
+					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can play something direct.``").queue();
 					return;
 				}
 
@@ -559,11 +554,6 @@ public class Bot extends ListenerAdapter {
 
 
 			case "search":
-				if(!isAdmin(author)) {
-					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can use this command.``").queue();
-					return;
-				}
-
 				if(arg == null) {
 					channel.sendMessage(author.getAsMention() + " ``Please specify a video title. Put it behind this command.``").queue();
 					return;
@@ -579,6 +569,10 @@ public class Bot extends ListenerAdapter {
 
 
 			case "save":
+				if(!isAdmin(author)) {
+					channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can save playlists.``").queue();
+					return;
+				}
 				// arg = playlist name
 				if(arg == null) {
 					channel.sendMessage(author.getAsMention() + " ``Please specify a playlist name. Put it behind this command.``").queue();
@@ -704,10 +698,15 @@ public class Bot extends ListenerAdapter {
 		Log.debug("Set game to: {}", game);
 	}
 
-	static void sendUpdateMessage() {
-		sendMessage(guild.getOwner().getUser(),
-				"A new version is available!\n"
-						+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases");
+	static void sendUpdateMessage(boolean toOwner) {
+		String uMsg = "A new version is available!\n"
+				+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases";
+
+		if(toOwner) {
+			sendMessage(guild.getOwner().getUser(), uMsg);
+		} else {
+			controlChannel.sendMessage(uMsg).queue();
+		}
 	}
 
 	private static void sendMessage(User user, String msg) {
