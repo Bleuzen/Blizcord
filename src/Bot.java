@@ -490,7 +490,11 @@ public class Bot extends ListenerAdapter {
 						+ "GitHub: https://github.com/DV8FromTheWorld/JDA\n"
 						+ "__Lavaplayer__\n"
 						+ "Version: " + PlayerLibrary.VERSION + "\n"
-						+ "GitHub: https://github.com/sedmelluq/lavaplayer").queue();
+						+ "GitHub: https://github.com/sedmelluq/lavaplayer\n"
+						+ "__JNativeHook__\n"
+						+ "GitHub: https://github.com/kwhat/jnativehook\n"
+						+ "__Logback__\n"
+						+ "GitHub: https://github.com/qos-ch/logback").queue();
 
 
 				if(updateChecker != null && updateChecker.isUpdateAvailable()) {
