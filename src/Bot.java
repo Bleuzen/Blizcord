@@ -233,7 +233,7 @@ public class Bot extends ListenerAdapter {
 						+ "!shuffle                        (Randomize the track order)\n"
 						+ "!loop                           (Re add played track to the end of the playlist)\n"
 						+ "!stop                           (Stop the playback and clear the playlist)\n"
-						+ "!uptime                         (See how long the bot is already online)"
+						+ "!uptime                         (See how long the bot is already online)\n"
 						+ "!about                          (Print about message)\n"
 						+ "!kill                           (Kill the bot)"
 						+ "```"
