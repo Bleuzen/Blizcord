@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.TimerTask;
 
 public class UpdateChecker extends TimerTask {
@@ -17,7 +17,7 @@ public class UpdateChecker extends TimerTask {
 
 		try {
 			InputStream inputStream = new URL("https://api.github.com/repos/" + Values.BOT_GITHUB_REPO + "/releases/latest").openStream();
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			json = bufferedReader.readLine();
 
 			String tagName = getJsonValue("tag_name");

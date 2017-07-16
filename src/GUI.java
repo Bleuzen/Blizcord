@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import javax.swing.JButton;
@@ -187,12 +187,12 @@ public class GUI extends JFrame {
 		if(guiConfigFileCustomConfig.exists()) {
 			try {
 				// read
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(guiConfigFileCustomConfig), "UTF-8"));
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(guiConfigFileCustomConfig), StandardCharsets.UTF_8));
 				String readLine = bufferedReader.readLine(); // path to custom config in Base64
 				bufferedReader.close();
 
 				// decode and set
-				String decodedFileName = new String(Base64.getDecoder().decode(readLine), "UTF-8");
+				String decodedFileName = new String(Base64.getDecoder().decode(readLine), StandardCharsets.UTF_8);
 				File customConfig = new File(decodedFileName);
 				if(customConfig.isFile()) { // ignore if it got deleted or is invalid
 					txtCustomconfig.setText(customConfig.getAbsolutePath());
@@ -211,8 +211,8 @@ public class GUI extends JFrame {
 			public void run() {
 				if(chckbxUseCustomConfig.isSelected()) {
 					try {
-						BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(guiConfigFileCustomConfig, Charset.forName("UTF-8"), false));
-						writer.write(Base64.getEncoder().encodeToString(txtCustomconfig.getText().getBytes("UTF-8")));
+						BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(guiConfigFileCustomConfig, StandardCharsets.UTF_8, false));
+						writer.write(Base64.getEncoder().encodeToString(txtCustomconfig.getText().getBytes(StandardCharsets.UTF_8)));
 						writer.close();
 					} catch(Exception e) {
 						// Ignore

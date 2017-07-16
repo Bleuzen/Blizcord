@@ -3,7 +3,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
@@ -594,7 +594,7 @@ public class Bot extends ListenerAdapter {
 					}
 				}
 				try {
-					BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(new File(playlistsFolder, arg), Charset.forName("UTF-8"), false));
+					BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(new File(playlistsFolder, arg), StandardCharsets.UTF_8, false));
 					// Write currently playing track
 					writer.write(PlayerThread.getMusicManager().player.getPlayingTrack().getInfo().uri);
 					writer.newLine();
@@ -633,7 +633,7 @@ public class Bot extends ListenerAdapter {
 
 					join(); // try to join if not already
 
-					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playlistFile), "UTF-8"));
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playlistFile), StandardCharsets.UTF_8));
 					String line;
 					while((line = bufferedReader.readLine()) != null) {
 						PlayerThread.loadAndPlay(channel, line, false, true);
