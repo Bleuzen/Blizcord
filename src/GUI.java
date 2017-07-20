@@ -7,11 +7,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -54,6 +57,14 @@ public class GUI extends JFrame {
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+		try {
+			InputStream imgStream = GUI.class.getResourceAsStream("icon.png");
+			setIconImage(ImageIO.read(imgStream));
+			imgStream.close();
+		} catch(IOException e) {
+			Log.debug("Failed to set icon");
+		}
 
 		addFocusListener(new FocusAdapter() {
 			@Override
