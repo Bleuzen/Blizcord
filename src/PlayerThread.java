@@ -204,10 +204,18 @@ public class PlayerThread implements Runnable {
 
 	static void setPaused(boolean p) {
 		musicManager.player.setPaused(p);
+
+		if(a.isGui()) {
+			GUI.settglbtnPauseSelected(p);
+		}
 	}
 
 	static boolean isPaused() {
 		return musicManager.player.isPaused();
+	}
+
+	static void togglePause() {
+		setPaused(!isPaused());
 	}
 
 	static boolean isPlaying() {

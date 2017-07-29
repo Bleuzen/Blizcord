@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
@@ -45,6 +47,10 @@ public class GUI extends JFrame {
 	private final JLabel lblStatus;
 	private final JLabel lblCurrstatus;
 	private JLabel lblVersion;
+	private JPanel panelControls;
+	private JButton btnAdd;
+	private JToggleButton tglbtnPause;
+	private JButton btnStop;
 
 	public GUI() {
 		gui_Main = this;
@@ -52,7 +58,7 @@ public class GUI extends JFrame {
 		setTitle(Values.BOT_NAME);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 208);
+		setSize(500, 200);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
@@ -76,7 +82,7 @@ public class GUI extends JFrame {
 		});
 
 		lblConfig = new JLabel("Config:");
-		lblConfig.setBounds(12, 12, 70, 28);
+		lblConfig.setBounds(10, 12, 70, 28);
 		contentPane.add(lblConfig);
 
 		chckbxUseCustomConfig = new JCheckBox("Use custom config");
@@ -118,7 +124,7 @@ public class GUI extends JFrame {
 		txtCustomconfig = new JTextField();
 		txtCustomconfig.setEnabled(false);
 		txtCustomconfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
-		txtCustomconfig.setBounds(12, 52, 346, 28);
+		txtCustomconfig.setBounds(10, 52, 348, 28);
 		contentPane.add(txtCustomconfig);
 
 		btnBrowse = new JButton("Browse");
@@ -171,26 +177,65 @@ public class GUI extends JFrame {
 							a.launch(new String[]{});
 						}
 
+						btnStart.setVisible(false);
+						panelControls.setVisible(true);
+
 						lblCurrstatus.setText("Started");
 					}
 				}).start();
 			}
 		});
 		btnStart.setFocusable(false);
-		btnStart.setBounds(12, 102, 474, 28);
+		btnStart.setBounds(10, 98, 474, 28);
 		contentPane.add(btnStart);
 
+		panelControls = new JPanel();
+		panelControls.setBounds(10, 98, 474, 28);
+		panelControls.setVisible(false);
+		contentPane.add(panelControls);
+		panelControls.setLayout(new BorderLayout(0, 0));
+
+		btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//TODO
+			}
+		});
+		btnAdd.setFocusable(false);
+		panelControls.add(btnAdd, BorderLayout.WEST);
+
+		tglbtnPause = new JToggleButton("Pause");
+		tglbtnPause.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PlayerThread.togglePause();
+			}
+		});
+		tglbtnPause.setFocusable(false);
+		panelControls.add(tglbtnPause, BorderLayout.CENTER);
+
+		btnStop = new JButton("Stop");
+		btnStop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Bot.stopPlayer();
+			}
+		});
+		btnStop.setFocusable(false);
+		panelControls.add(btnStop, BorderLayout.EAST);
+
 		lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(14, 138, 68, 28);
+		lblStatus.setBounds(14, 134, 68, 26);
 		contentPane.add(lblStatus);
 
 		lblCurrstatus = new JLabel("Stopped");
-		lblCurrstatus.setBounds(92, 138, 134, 28);
+		lblCurrstatus.setBounds(92, 134, 134, 26);
 		contentPane.add(lblCurrstatus);
 
 		lblVersion = new JLabel("Version: " + Values.BOT_VERSION);
 		lblVersion.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblVersion.setBounds(360, 138, 118, 28);
+		lblVersion.setBounds(344, 134, 134, 26);
 		contentPane.add(lblVersion);
 
 		// Load the GUI Config
@@ -272,5 +317,9 @@ public class GUI extends JFrame {
 		} else if(r == JOptionPane.NO_OPTION) {
 			System.exit(0);
 		}
+	}
+
+	static void settglbtnPauseSelected(boolean selected) {
+		gui_Main.tglbtnPause.setSelected(selected);
 	}
 }

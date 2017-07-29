@@ -44,6 +44,7 @@ public class GUI_Config extends JFrame {
 		setResizable(false);
 		setSize(360, 362);
 		setLocationRelativeTo(null);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		getContentPane().setLayout(null);
 
@@ -208,8 +209,6 @@ public class GUI_Config extends JFrame {
 				GUI.mvToFront();
 			}
 		});
-
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		read();
 	}

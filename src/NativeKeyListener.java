@@ -15,11 +15,7 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 		switch (keyCode) {
 		case NativeKeyEvent.VC_MEDIA_PLAY:
 			Log.debug("NativeKeyEvent: VC_MEDIA_PLAY");
-			if(PlayerThread.isPaused()) {
-				PlayerThread.setPaused(false);
-			} else {
-				PlayerThread.setPaused(true);
-			}
+			PlayerThread.togglePause();
 			break;
 
 		case NativeKeyEvent.VC_MEDIA_STOP:
