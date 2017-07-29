@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -34,8 +35,12 @@ public class GUI extends JFrame {
 
 	private static final File DEFAULT_CONFIG_FILE = Config.getDefaultConfig();
 
+	private static Image icon;
+	static Image getIcon() {
+		return icon;
+	}
+
 	private static GUI gui_Main;
-	private static GUI_Config gui_Config;
 
 	private final JPanel contentPane;
 	private final JLabel lblConfig;
@@ -66,7 +71,8 @@ public class GUI extends JFrame {
 
 		try {
 			InputStream imgStream = GUI.class.getResourceAsStream("icon.png");
-			setIconImage(ImageIO.read(imgStream));
+			icon = ImageIO.read(imgStream);
+			setIconImage(icon);
 			imgStream.close();
 		} catch(IOException e) {
 			Log.debug("Failed to set icon");
@@ -75,8 +81,8 @@ public class GUI extends JFrame {
 		addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if(gui_Config != null && gui_Config.isVisible()) {
-					gui_Config.toFront();
+				if(GUI_Config.instance != null && GUI_Config.instance.isVisible()) {
+					GUI_Config.instance.toFront();
 				}
 			}
 		});
@@ -113,8 +119,8 @@ public class GUI extends JFrame {
 
 				File cfgFile = getConfig();
 
-				gui_Config = new GUI_Config(cfgFile);
-				gui_Config.setVisible(true);
+				GUI_Config.instance = new GUI_Config(cfgFile);
+				GUI_Config.instance.setVisible(true);
 			}
 		});
 		btnEdit.setFocusable(false);
@@ -199,7 +205,18 @@ public class GUI extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO
+				JFileChooser fileChooser = new JFileChooser();
+
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				fileChooser.setMultiSelectionEnabled(true);
+
+				int r = fileChooser.showOpenDialog(gui_Main);
+				if(r == JFileChooser.APPROVE_OPTION) {
+					File[] selected = fileChooser.getSelectedFiles();
+					for(File f : selected) {
+						Bot.addToPlaylist(f.getAbsolutePath());
+					}
+				}
 			}
 		});
 		btnAdd.setFocusable(false);
@@ -286,11 +303,11 @@ public class GUI extends JFrame {
 	}
 
 	static void showMsgBox(String msg) {
-		JOptionPane.showMessageDialog(null, msg, Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(gui_Main, msg, Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	static void showErrMsgBox(String msg) {
-		JOptionPane.showMessageDialog(null, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(gui_Main, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 	}
 
 	static void mvToFront() {
@@ -306,7 +323,7 @@ public class GUI extends JFrame {
 	}
 
 	static void addToSever(String link) {
-		int r = JOptionPane.showConfirmDialog(null, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
+		int r = JOptionPane.showConfirmDialog(gui_Main, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
 		if(r == JOptionPane.YES_OPTION) {
 			try {
 				Desktop.getDesktop().browse(new URI(link));

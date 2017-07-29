@@ -20,6 +20,8 @@ import javax.swing.WindowConstants;
 @SuppressWarnings("serial")
 public class GUI_Config extends JFrame {
 
+	static GUI_Config instance;
+
 	private final File configFile;
 
 	private final JTextField bottoken;
@@ -38,13 +40,18 @@ public class GUI_Config extends JFrame {
 	private final JCheckBox chckbxEnableMediaControl;
 
 	public GUI_Config(File config) {
+		instance = this;
+
 		configFile = config;
 
+		setType(Type.UTILITY);
 		setTitle(configFile.getName());
 		setResizable(false);
-		setSize(360, 362);
+		setSize(360, 360);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+		setIconImage(GUI.getIcon());
 
 		getContentPane().setLayout(null);
 
@@ -200,9 +207,9 @@ public class GUI_Config extends JFrame {
 				Config.set(Config.ENABLE_MEDIA_CONTROL_KEYS, String.valueOf(chckbxEnableMediaControl.isSelected()));
 
 				if(Config.save()) {
-					JOptionPane.showMessageDialog(null, "Config saved.", Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(instance, "Config saved.", Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					JOptionPane.showMessageDialog(null, "Failed to save config.", Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(instance, "Failed to save config.", Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 				}
 				dispose();
 

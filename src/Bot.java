@@ -510,29 +510,7 @@ public class Bot extends ListenerAdapter {
 					return;
 				}
 
-				join(); // try to join if not already
-
-				if(joined) { // if successfully joined
-
-					File inputFile = new File(arg);
-
-					if(inputFile.isDirectory()) {
-						channel.sendMessage("Adding all supported files from folder to queue ...").queue();;
-						File[] files = inputFile.listFiles();
-						Arrays.sort(files);
-						int addesFiles = 0;
-						for(File f : files) {
-							if(f.isFile()) {
-								PlayerThread.loadAndPlay(channel, f.getAbsolutePath(), false, true);
-							}
-							addesFiles++;
-						}
-						channel.sendMessage(author.getAsMention() + " ``Added " + addesFiles + " files.``").queue();
-					} else {
-						PlayerThread.loadAndPlay(channel, arg, false, false);
-					}
-
-				}
+				addToPlaylist(arg);
 
 				break;
 
@@ -659,6 +637,32 @@ public class Bot extends ListenerAdapter {
 	@Override
 	public void onGuildLeave(GuildLeaveEvent event) {
 		a.errExit("I got kicked.");
+	}
+
+	static void addToPlaylist(String arg) {
+		join(); // try to join if not already
+
+		if(joined) { // if successfully joined
+
+			File inputFile = new File(arg);
+
+			if(inputFile.isDirectory()) {
+				controlChannel.sendMessage("Adding all supported files from folder to queue ...").queue();;
+				File[] files = inputFile.listFiles();
+				Arrays.sort(files);
+				int addesFiles = 0;
+				for(File f : files) {
+					if(f.isFile()) {
+						PlayerThread.loadAndPlay(controlChannel, f.getAbsolutePath(), false, true);
+						addesFiles++;
+					}
+				}
+				controlChannel.sendMessage("``Added " + addesFiles + " files.``").queue();
+			} else {
+				PlayerThread.loadAndPlay(controlChannel, arg, false, false);
+			}
+
+		}
 	}
 
 	static void stopPlayer() {

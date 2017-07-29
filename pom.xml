@@ -17,7 +17,6 @@
     </plugins>
   </build>
 
-  
   <repositories>
     <repository>
       <id>jcenter</id>
@@ -26,19 +25,18 @@
     </repository>
   </repositories>
 
-
   <dependencies>
-  
+
     <dependency>
       <groupId>com.sedmelluq</groupId>
       <artifactId>lavaplayer</artifactId>
       <version>1.2.42</version>
     </dependency>
-    
+
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>3.2.0_226</version>
+      <version>3.2.0_241</version>
     </dependency>
 
     <dependency>
@@ -46,13 +44,13 @@
       <artifactId>jnativehook</artifactId>
       <version>2.1.0</version>
     </dependency>
-    
+
 	<dependency>
     	<groupId>ch.qos.logback</groupId>
     	<artifactId>logback-classic</artifactId>
     	<version>1.2.3</version>
 	</dependency>
-  
+
   </dependencies>
-  
+
 </project>
