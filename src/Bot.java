@@ -226,7 +226,7 @@ public class Bot extends ListenerAdapter {
 						+ "!save <name>                    (Save the current playlist)\n"
 						+ "!load <name>                    (Load a saved playlist)\n"
 						+ "!pause                          (Pause or resume the current track)\n"
-						+ "!skip (<how many songs>)        (Skip one or more songs from the playlist)\n"
+						+ "!next (<how many songs>)        (Skip one or more songs from the playlist)\n"
 						+ "!seek <hours:minutes:seconds>   (Seek to the specified position)\n"
 						+ "!jump (<how many seconds>)      (Jump forward in the current track)\n"
 						+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
@@ -253,9 +253,9 @@ public class Bot extends ListenerAdapter {
 				break;
 
 
-			case "skip":
+			case "next":
 				if(!isAdmin(author)) {
-					channel.sendMessage(author.getAsMention() + " ``Only admins can skip.``").queue();
+					channel.sendMessage(author.getAsMention() + " ``You are not an admin of the bot.``").queue();
 					return;
 				}
 

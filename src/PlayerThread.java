@@ -30,12 +30,6 @@ public class PlayerThread implements Runnable {
 		AudioSourceManagers.registerRemoteSources(playerManager);
 		AudioSourceManagers.registerLocalSource(playerManager);
 
-		// Set custom OutputFormat
-		//playerManager.getConfiguration().setOutputFormat(new AudioDataFormat(2, 48000, 960, AudioDataFormat.Codec.OPUS));
-		// Default:
-		//playerManager.getConfiguration().setOutputFormat(StandardAudioDataFormats.DISCORD_OPUS);
-		// Currently lavaplayer doesn't play anything with another bitrate than 960. Maybe this is a bug. I asked the developer. Waiting for an answer ...
-
 		initGuildAudioPlayer(Bot.getGuild());
 
 		Log.debug("Initialized audio player.");

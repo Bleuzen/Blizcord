@@ -1,5 +1,5 @@
-import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,25 +40,26 @@ public class GUI extends JFrame {
 		return icon;
 	}
 
-	private static GUI gui_Main;
+	private static GUI instance;
 
-	private final JPanel contentPane;
-	private final JLabel lblConfig;
-	private final JCheckBox chckbxUseCustomConfig;
-	private final JButton btnEdit;
-	private final JTextField txtCustomconfig;
-	private final JButton btnBrowse;
-	private final JButton btnStart;
-	private final JLabel lblStatus;
-	private final JLabel lblCurrstatus;
+	private JPanel contentPane;
+	private JLabel lblConfig;
+	private JCheckBox chckbxUseCustomConfig;
+	private JButton btnEdit;
+	private JTextField txtCustomconfig;
+	private JButton btnBrowse;
+	private JButton btnStart;
+	private JLabel lblStatus;
+	private JLabel lblCurrstatus;
 	private JLabel lblVersion;
 	private JPanel panelControls;
 	private JButton btnAdd;
 	private JToggleButton tglbtnPause;
 	private JButton btnStop;
+	private JButton btnNext;
 
 	public GUI() {
-		gui_Main = this;
+		instance = this;
 
 		setTitle(Values.BOT_NAME);
 		setResizable(false);
@@ -199,7 +200,6 @@ public class GUI extends JFrame {
 		panelControls.setBounds(10, 98, 474, 28);
 		panelControls.setVisible(false);
 		contentPane.add(panelControls);
-		panelControls.setLayout(new BorderLayout(0, 0));
 
 		btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
@@ -210,7 +210,7 @@ public class GUI extends JFrame {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				fileChooser.setMultiSelectionEnabled(true);
 
-				int r = fileChooser.showOpenDialog(gui_Main);
+				int r = fileChooser.showOpenDialog(instance);
 				if(r == JFileChooser.APPROVE_OPTION) {
 					File[] selected = fileChooser.getSelectedFiles();
 					for(File f : selected) {
@@ -220,7 +220,6 @@ public class GUI extends JFrame {
 			}
 		});
 		btnAdd.setFocusable(false);
-		panelControls.add(btnAdd, BorderLayout.WEST);
 
 		tglbtnPause = new JToggleButton("Pause");
 		tglbtnPause.addActionListener(new ActionListener() {
@@ -230,7 +229,6 @@ public class GUI extends JFrame {
 			}
 		});
 		tglbtnPause.setFocusable(false);
-		panelControls.add(tglbtnPause, BorderLayout.CENTER);
 
 		btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
@@ -240,7 +238,20 @@ public class GUI extends JFrame {
 			}
 		});
 		btnStop.setFocusable(false);
-		panelControls.add(btnStop, BorderLayout.EAST);
+		panelControls.setLayout(new GridLayout(0, 4, 0, 0));
+		panelControls.add(btnAdd);
+
+		btnNext = new JButton("Next");
+		btnNext.setFocusable(false);
+		btnNext.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PlayerThread.getMusicManager().scheduler.nextTrack(1);
+			}
+		});
+		panelControls.add(btnNext);
+		panelControls.add(tglbtnPause);
+		panelControls.add(btnStop);
 
 		lblStatus = new JLabel("Status:");
 		lblStatus.setBounds(14, 134, 68, 26);
@@ -303,15 +314,15 @@ public class GUI extends JFrame {
 	}
 
 	static void showMsgBox(String msg) {
-		JOptionPane.showMessageDialog(gui_Main, msg, Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(instance, msg, Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	static void showErrMsgBox(String msg) {
-		JOptionPane.showMessageDialog(gui_Main, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(instance, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 	}
 
 	static void mvToFront() {
-		gui_Main.toFront();
+		instance.toFront();
 	}
 
 	private File getConfig() {
@@ -323,7 +334,7 @@ public class GUI extends JFrame {
 	}
 
 	static void addToSever(String link) {
-		int r = JOptionPane.showConfirmDialog(gui_Main, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
+		int r = JOptionPane.showConfirmDialog(instance, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
 		if(r == JOptionPane.YES_OPTION) {
 			try {
 				Desktop.getDesktop().browse(new URI(link));
@@ -337,6 +348,6 @@ public class GUI extends JFrame {
 	}
 
 	static void settglbtnPauseSelected(boolean selected) {
-		gui_Main.tglbtnPause.setSelected(selected);
+		instance.tglbtnPause.setSelected(selected);
 	}
 }
