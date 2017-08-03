@@ -1,3 +1,4 @@
+package me.bleuzen.blizcord;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,7 +52,9 @@ public class GUI_Config extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-		setIconImage(GUI.getIcon());
+		if(GUI.isIconSet()) {
+			setIconImage(GUI.getIcon());
+		}
 
 		getContentPane().setLayout(null);
 

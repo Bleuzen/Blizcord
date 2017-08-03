@@ -1,3 +1,4 @@
+package me.bleuzen.blizcord;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;

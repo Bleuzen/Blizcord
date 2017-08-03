@@ -1,3 +1,4 @@
+package me.bleuzen.blizcord;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 

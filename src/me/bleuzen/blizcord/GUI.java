@@ -1,3 +1,4 @@
+package me.bleuzen.blizcord;
 import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -9,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -38,6 +38,10 @@ public class GUI extends JFrame {
 	private static Image icon;
 	static Image getIcon() {
 		return icon;
+	}
+	private static boolean iconSet;
+	static boolean isIconSet() {
+		return iconSet;
 	}
 
 	private static GUI instance;
@@ -73,10 +77,11 @@ public class GUI extends JFrame {
 		try {
 			InputStream imgStream = GUI.class.getResourceAsStream("icon.png");
 			icon = ImageIO.read(imgStream);
+			iconSet = true;
 			setIconImage(icon);
 			imgStream.close();
-		} catch(IOException e) {
-			Log.debug("Failed to set icon");
+		} catch(Exception e) {
+			Log.debug("Failed to set icon.");
 		}
 
 		addFocusListener(new FocusAdapter() {

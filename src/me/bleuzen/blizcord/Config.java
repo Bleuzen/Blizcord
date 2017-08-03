@@ -1,3 +1,4 @@
+package me.bleuzen.blizcord;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -126,7 +127,7 @@ public class Config {
 		return v.split("#")[0].trim();
 	}
 
-	static File getAppDir() {
+	public static File getAppDir() {
 		if(APP_DIR != null) {
 			return APP_DIR;
 		}

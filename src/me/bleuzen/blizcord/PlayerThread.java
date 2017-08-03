@@ -1,3 +1,4 @@
+package me.bleuzen.blizcord;
 import java.util.ArrayList;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -19,7 +20,7 @@ public class PlayerThread implements Runnable {
 
 	static boolean skipping;
 
-	static boolean loop;
+	public static boolean loop;
 
 	private static AudioPlayerManager playerManager;
 
@@ -35,7 +36,7 @@ public class PlayerThread implements Runnable {
 		Log.debug("Initialized audio player.");
 	}
 
-	static GuildMusicManager getMusicManager() {
+	public static GuildMusicManager getMusicManager() {
 		return musicManager;
 	}
 
@@ -55,13 +56,13 @@ public class PlayerThread implements Runnable {
 		}
 	}
 
-	static void sendPlaylist(User user, MessageChannel channel) {
+	public static void sendPlaylist(User user, MessageChannel channel) {
 		if(isPlaying()) {
 			StringBuilder toSend = new StringBuilder(user.getAsMention() + ""
 					+ " Currently playing:"
 					+ "\n"
 					+ "```"
-					+ Bot.getTrackName(musicManager.player.getPlayingTrack())
+					+ Utils.getTrackName(musicManager.player.getPlayingTrack())
 					+ "```"
 					+ "\n");
 			if(musicManager.scheduler.getList().size() > 0) {
@@ -70,7 +71,7 @@ public class PlayerThread implements Runnable {
 						+ "```");
 				ArrayList<AudioTrack> list = musicManager.scheduler.getList();
 				for(int i = 0; i < list.size(); i++) {
-					toSend.append("\n" + Bot.getTrackName(list.get(i)));
+					toSend.append("\n" + Utils.getTrackName(list.get(i)));
 				}
 				toSend.append("```");
 			} else {
@@ -89,7 +90,7 @@ public class PlayerThread implements Runnable {
 		}
 	}
 
-	static void loadAndPlay(final MessageChannel channel, final String trackUrl, boolean direct, boolean quiet) {
+	public static void loadAndPlay(final MessageChannel channel, final String trackUrl, boolean direct, boolean quiet) {
 		Log.debug("Loading track ... play direct: {}; URL: {}", direct, trackUrl);
 
 		playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
@@ -104,11 +105,11 @@ public class PlayerThread implements Runnable {
 					}
 
 					// quiet check not needed, since there will be never more than one track / message
-					channel.sendMessage("Now playing: " + Bot.getTrackName(track)).queue();
+					channel.sendMessage("Now playing: " + Utils.getTrackName(track)).queue();
 				} else {
 					play(track);
 					if(!quiet) {
-						channel.sendMessage("Added track to queue: " + Bot.getTrackName(track)).queue();
+						channel.sendMessage("Added track to queue: " + Utils.getTrackName(track)).queue();
 					}
 				}
 
@@ -120,7 +121,7 @@ public class PlayerThread implements Runnable {
 				if(direct) {
 					AudioTrack directTrack = playlist.getTracks().get(0);
 					playDirect(directTrack, 0);
-					channel.sendMessage("Now playing: " + Bot.getTrackName(directTrack)).queue();
+					channel.sendMessage("Now playing: " + Utils.getTrackName(directTrack)).queue();
 				} else {
 					for (AudioTrack track : playlist.getTracks()) {
 						play(track);
@@ -177,7 +178,7 @@ public class PlayerThread implements Runnable {
 		return ms;
 	}
 
-	static void play(AudioTrack track) {
+	public static void play(AudioTrack track) {
 		//connectToFirstVoiceChannel(guild.getAudioManager());
 
 		musicManager.scheduler.queue(track);
@@ -196,7 +197,7 @@ public class PlayerThread implements Runnable {
 		musicManager.player.stopTrack();
 	}
 
-	static void setPaused(boolean p) {
+	public static void setPaused(boolean p) {
 		musicManager.player.setPaused(p);
 
 		if(a.isGui()) {
@@ -204,7 +205,7 @@ public class PlayerThread implements Runnable {
 		}
 	}
 
-	static boolean isPaused() {
+	public static boolean isPaused() {
 		return musicManager.player.isPaused();
 	}
 
@@ -212,7 +213,7 @@ public class PlayerThread implements Runnable {
 		setPaused(!isPaused());
 	}
 
-	static boolean isPlaying() {
+	public static boolean isPlaying() {
 		return musicManager.player.getPlayingTrack() != null;
 	}
 
@@ -247,7 +248,7 @@ public class PlayerThread implements Runnable {
 				if(currentTrack == null) {
 					game = null;
 				} else {
-					game = Game.of(Bot.getTrackName(currentTrack));
+					game = Game.of(Utils.getTrackName(currentTrack));
 				}
 
 				if(lastGame == null) {

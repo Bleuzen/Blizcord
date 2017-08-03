@@ -1,3 +1,4 @@
+package me.bleuzen.blizcord;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,7 +106,7 @@ public class TrackScheduler extends AudioEventAdapter {
 	@Override
 	public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
 		// An already playing track threw an exception (track end event will still be received separately)
-		Bot.getControlChannel().sendMessage("Failed to play track: " + Bot.getTrackName(track) + "\nError message: " + exception.getMessage()).queue();
+		Bot.getControlChannel().sendMessage("Failed to play track: " + Utils.getTrackName(track) + "\nError message: " + exception.getMessage()).queue();
 		//exception.printStackTrace();
 	}
 
