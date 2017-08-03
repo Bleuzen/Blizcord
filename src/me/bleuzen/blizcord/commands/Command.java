@@ -13,10 +13,24 @@ public abstract class Command {
 	public static void init() {
 		commands = new ArrayList<>();
 
+		commands.add(new About());
+		commands.add(new Add());
 		commands.add(new Help());
+		commands.add(new Jump());
 		commands.add(new Kill());
+		commands.add(new List());
+		commands.add(new Load());
+		commands.add(new Loop());
 		commands.add(new Next());
+		commands.add(new Pause());
+		commands.add(new Play());
+		commands.add(new Repeat());
+		commands.add(new Save());
+		commands.add(new Search());
 		commands.add(new Seek());
+		commands.add(new Shuffle());
+		commands.add(new Stop());
+		commands.add(new Uptime());
 	}
 
 	public boolean compare(String cmd) {
