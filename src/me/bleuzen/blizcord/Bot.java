@@ -204,7 +204,7 @@ public class Bot extends ListenerAdapter {
 			Log.debug("Got command from {}: {}", author.getName(), message);
 
 			String[] cmdarg = message.substring(Config.get(Config.COMMAND_PREFIX).length()).split(" ", 2);
-			String cmd = cmdarg[0].toLowerCase();
+			String cmd = cmdarg[0];
 			String arg;
 			try {
 				arg = cmdarg[1];
