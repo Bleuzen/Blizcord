@@ -62,6 +62,8 @@ public class GUI extends JFrame {
 	private JButton btnStop;
 	private JButton btnNext;
 
+	private File addFileChooserDir;
+
 	public GUI() {
 		instance = this;
 
@@ -215,12 +217,25 @@ public class GUI extends JFrame {
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				fileChooser.setMultiSelectionEnabled(true);
 
+				if(addFileChooserDir != null) {
+					// restore latest dir
+					fileChooser.setCurrentDirectory(addFileChooserDir);
+				}
+
 				int r = fileChooser.showOpenDialog(instance);
 				if(r == JFileChooser.APPROVE_OPTION) {
+					// add all selected files
 					File[] selected = fileChooser.getSelectedFiles();
 					for(File f : selected) {
 						Bot.addToPlaylist(f.getAbsolutePath());
 					}
+
+					// remember the latest dir
+					File singleSelectedFile = fileChooser.getSelectedFile();
+					if(singleSelectedFile.isFile()) {
+						singleSelectedFile = singleSelectedFile.getParentFile();
+					}
+					addFileChooserDir = singleSelectedFile;
 				}
 			}
 		});
@@ -259,11 +274,11 @@ public class GUI extends JFrame {
 		panelControls.add(btnStop);
 
 		lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(14, 134, 68, 26);
+		lblStatus.setBounds(14, 134, 66, 26);
 		contentPane.add(lblStatus);
 
 		lblCurrstatus = new JLabel("Stopped");
-		lblCurrstatus.setBounds(92, 134, 134, 26);
+		lblCurrstatus.setBounds(88, 134, 134, 26);
 		contentPane.add(lblCurrstatus);
 
 		lblVersion = new JLabel("Version: " + Values.BOT_VERSION);
