@@ -269,6 +269,8 @@ public class Bot extends ListenerAdapter {
 		PlayerThread.skipping = false;
 		// clear the playlist
 		PlayerThread.getMusicManager().scheduler.clear();
+		// reset pause state
+		PlayerThread.setPaused(false);
 	}
 
 	static void setGame(Game game) {
