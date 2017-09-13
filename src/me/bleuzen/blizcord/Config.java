@@ -19,6 +19,7 @@ public class Config {
 	static final String ADMINS_ROLE = "ADMINS_ROLE";
 	static final String VOLUME = "VOLUME";
 	static final String ENABLE_MEDIA_CONTROL_KEYS = "ENABLE_MEDIA_CONTROL_KEYS";
+	static final String AUTO_RECONNECT = "AUTO_RECONNECT";
 
 	private static File APP_DIR = null;
 	private static File DEFAULT_CONFIG = null;
@@ -50,6 +51,7 @@ public class Config {
 		defaults.put(UPDATE_CHECK_INTERVAL_HOURS, "24 #set to 0 to disable");
 		defaults.put(VOLUME, "100");
 		defaults.put(ENABLE_MEDIA_CONTROL_KEYS, "false");
+		defaults.put(AUTO_RECONNECT, "true");
 
 		JSONObject read;
 		try {
@@ -95,6 +97,10 @@ public class Config {
 
 	static String get(String key) {
 		return toValue(json.getString(key));
+	}
+
+	static boolean getBoolean(String key) {
+		return Boolean.valueOf(get(key));
 	}
 
 	static void set(String key, String value) {

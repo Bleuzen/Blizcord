@@ -64,9 +64,12 @@ public class Bot extends ListenerAdapter {
 
 		try {
 			api = new JDABuilder(AccountType.BOT).setToken(Config.get(Config.BOT_TOKEN))
+					.setAutoReconnect(Config.getBoolean(Config.AUTO_RECONNECT))
 					//.setEnableShutdownHook(false) // default: true
 					.buildBlocking();
 			api.addEventListener(new Bot());
+
+			Log.debug("Auto Reconnect: " + api.isAutoReconnect());
 
 			// test for only one server
 			int guilds = api.getGuilds().size();
@@ -126,12 +129,12 @@ public class Bot extends ListenerAdapter {
 			PlayerThread.init();
 
 			// Start game update thread
-			if(Boolean.valueOf(Config.get(Config.DISPLAY_SONG_AS_GAME))) {
+			if(Config.getBoolean(Config.DISPLAY_SONG_AS_GAME)) {
 				new Thread(new PlayerThread()).start();
 			}
 
 			// Start NativeKeyListener
-			if(Boolean.valueOf(Config.get(Config.ENABLE_MEDIA_CONTROL_KEYS))) {
+			if(Config.getBoolean(Config.ENABLE_MEDIA_CONTROL_KEYS)) {
 				NativeKeyListener.init();
 			}
 
