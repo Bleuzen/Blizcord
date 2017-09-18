@@ -77,9 +77,9 @@ public class PlayerThread implements Runnable {
 			} else {
 				toSend.append("There are no upcoming songs.");
 			}
-			if(toSend.length() > 2000) { // Discord's message length limit is 2000
+			if(toSend.length() > Values.MAX_MESSAGE_LENGHT) {
 				final String ending = "...```";
-				toSend.setLength((2000 - ending.length()));
+				toSend.setLength((Values.MAX_MESSAGE_LENGHT - ending.length()));
 				toSend.append(ending);
 			}
 			channel.sendMessage(toSend.toString()).queue();

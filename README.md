@@ -7,7 +7,7 @@ Arch: https://aur.archlinux.org/packages/blizcord/
 
 All other distributions:
  - Install Java and wget
- - Download the latest "blizcord-linux-online.sh" file from [Releases](https://github.com/Bleuzen/Blizcord/releases)
+ - Download the latest [blizcord-linux-online.sh](https://github.com/Bleuzen/Blizcord/raw/master/dist/installer/linux-universal-java/blizcord-linux-online.sh)
 
 ### Windows
 Nothing to install, download the latest exe and start it.

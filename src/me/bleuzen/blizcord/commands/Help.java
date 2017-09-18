@@ -17,6 +17,7 @@ class Help extends Command {
 		channel.sendMessage(author.getAsMention() + " **Commands:**\n"
 				+ "```"
 				+ "!list                           (Show the playlist)\n"
+				+ "!lists                          (List the saved playlists)\n"
 				+ "!play <file or link>            (Play given track now)\n"
 				+ "!add <file, folder or link>     (Add given track to playlist)\n"
 				+ "!search <youtube video title>   (Plays the first video that was found)\n"

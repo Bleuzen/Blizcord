@@ -11,6 +11,8 @@ public class Values {
 
 	static final String DISCORD_GET_TOKEN = "https://discordapp.com/developers/applications/me";
 
+	public static final int MAX_MESSAGE_LENGHT = 2000; // Discord's message length limit is 2000
+
 	static final int EXIT_CODE_RESTART_GUI = 2;
 
 }
