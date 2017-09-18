@@ -84,7 +84,7 @@ public class a {
 
 		Log.info("Config: " + configFile.getAbsolutePath());
 
-		if(!Config.init(configFile)) {
+		if(!Config.init(configFile, gui)) {
 			errExit("Failed to load config.", Values.EXIT_CODE_RESTART_GUI);
 		}
 

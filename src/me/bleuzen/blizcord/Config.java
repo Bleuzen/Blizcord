@@ -30,11 +30,7 @@ public class Config {
 	private static File file;
 	private static JSONObject json;
 
-	static boolean init(File configFile) {
-		return init(configFile, false);
-	}
-
-	static boolean init(File configFile, boolean fromConfigGUI) { // don't crash after generation if fromConfigGUI
+	static boolean init(File configFile, boolean fromGUI) { // don't crash after generation if fromGUI
 		if(initialized) {
 			return true;
 		}
@@ -81,7 +77,7 @@ public class Config {
 		} else {
 			if(generate(toAdd)) {
 				String gotGeneratedOrUpdatedMSG = "Config file got generated or updated.";
-				if(fromConfigGUI) {
+				if(fromGUI) {
 					GUI.showMsgBox(gotGeneratedOrUpdatedMSG);
 					initialized = true;
 				} else {
