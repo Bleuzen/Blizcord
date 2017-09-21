@@ -152,17 +152,7 @@ public class Bot extends ListenerAdapter {
 			}
 
 			// Start checking for updates
-			int updateCheckInterval;
-			try {
-				updateCheckInterval= Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
-			} catch (NumberFormatException e) {
-				updateCheckInterval = 0;
-			}
-			if(updateCheckInterval > 0) {
-				// First update check delayed 5 seconds, then all updateCheckInterval hours
-				updateChecker = new UpdateChecker();
-				new Timer().schedule(updateChecker, 5000, (1000 * 3600 * updateCheckInterval));
-			}
+			startUpdateChecker();
 
 			// Init commands
 			Command.init();
@@ -284,6 +274,22 @@ public class Bot extends ListenerAdapter {
 		user.openPrivateChannel().queue(privateChannel -> {
 			privateChannel.sendMessage(msg).queue();
 		});
+	}
+
+	private static void startUpdateChecker() {
+		if(updateChecker == null) {
+			int updateCheckInterval;
+			try {
+				updateCheckInterval = Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
+			} catch (NumberFormatException e) {
+				updateCheckInterval = 0;
+			}
+			if(updateCheckInterval > 0) {
+				// First update check delayed 5 seconds, then all updateCheckInterval hours
+				updateChecker = new UpdateChecker();
+				new Timer().schedule(updateChecker, 5000, (1000 * 3600 * updateCheckInterval));
+			}
+		}
 	}
 
 }

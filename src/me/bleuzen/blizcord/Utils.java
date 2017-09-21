@@ -1,5 +1,7 @@
 package me.bleuzen.blizcord;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -47,6 +49,15 @@ public class Utils {
 		Guild guild = Bot.getGuild();
 		Role adminRole = Bot.getAdminRole();
 		return user.getId().equals(guild.getOwner().getUser().getId()) || (adminRole != null && guild.getMember(user).getRoles().contains(adminRole));
+	}
+
+	static void openInBrowser(String link) {
+		try {
+			Desktop.getDesktop().browse(new URI(link));
+		} catch (Exception e) {
+			GUI.showErrMsgBox(e.getMessage());
+			a.errExit();
+		}
 	}
 
 }

@@ -11,12 +11,7 @@ public class UpdateChecker extends TimerTask {
 	private String json;
 
 	private boolean updateAvailable = false;
-
-	//TODO: move notification to GUI, generate Download link
-	/*
-	 * - disable GUI update message flag
-	 * - disable GUI update message after first one -> send to server owner
-	 * */
+	private boolean alreadyNotified = false;
 
 	private void checkForUpdate() {
 		Log.debug("[Updater] Checking for updates ...");
@@ -86,8 +81,19 @@ public class UpdateChecker extends TimerTask {
 
 	@Override
 	public void run() {
-		if(!updateAvailable) {
+		if(!alreadyNotified) {
 			checkForUpdate();
+			if(updateAvailable) {
+				// Send update message to server owner
+				Bot.sendUpdateMessage(true);
+
+				// Display in GUI
+				if(a.isGui()) {
+					GUI.showUpdatePanel();
+				}
+
+				alreadyNotified = true;
+			}
 		}
 	}
 

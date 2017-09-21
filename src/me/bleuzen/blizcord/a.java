@@ -44,9 +44,15 @@ public class a {
 			}
 			try {
 				try {
-					if(System.getProperty("os.name").toLowerCase().equals("linux") && System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
+					if(System.getProperty("os.name").toLowerCase().equals("linux")) {
+						// Linux Font fix
+						// https://wiki.archlinux.org/index.php/Java_Runtime_Environment_fonts
+						System.setProperty("awt.useSystemAAFontSettings", "gasp");
+
 						// KDE theme fix
-						UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+						if(System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
+							UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+						}
 					} else {
 						// Use the systems theme
 						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

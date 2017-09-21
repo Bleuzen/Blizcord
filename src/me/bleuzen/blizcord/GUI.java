@@ -1,5 +1,5 @@
 package me.bleuzen.blizcord;
-import java.awt.Desktop;
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -27,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
@@ -63,6 +63,9 @@ public class GUI extends JFrame {
 	private JButton btnNext;
 
 	private File addFileChooserDir;
+	private JPanel panelUpdate;
+	private JLabel lblANewVersion;
+	private JButton btnDownload;
 
 	public GUI() {
 		instance = this;
@@ -286,6 +289,29 @@ public class GUI extends JFrame {
 		lblVersion.setBounds(344, 134, 134, 26);
 		contentPane.add(lblVersion);
 
+		panelUpdate = new JPanel();
+		panelUpdate.setVisible(false);
+		panelUpdate.setBorder(new LineBorder(null, 2, true));
+		panelUpdate.setBounds(10, 174, 470, 30);
+		contentPane.add(panelUpdate);
+		panelUpdate.setLayout(new BorderLayout(0, 0));
+
+		lblANewVersion = new JLabel("A new version is available!");
+		lblANewVersion.setHorizontalAlignment(SwingConstants.CENTER);
+		panelUpdate.add(lblANewVersion, BorderLayout.CENTER);
+
+		btnDownload = new JButton("Download");
+		btnDownload.setFocusable(false);
+		btnDownload.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Utils.openInBrowser("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases");
+			}
+		});
+		panelUpdate.add(btnDownload, BorderLayout.EAST);
+
+		/* ----- */
+
 		// Load the GUI Config
 		File guiConfigFileCustomConfig = new File(System.getProperty("java.io.tmpdir"), "blizcordguicustomconfig");
 		if(guiConfigFileCustomConfig.exists()) {
@@ -356,12 +382,7 @@ public class GUI extends JFrame {
 	static void addToSever(String link) {
 		int r = JOptionPane.showConfirmDialog(instance, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
 		if(r == JOptionPane.YES_OPTION) {
-			try {
-				Desktop.getDesktop().browse(new URI(link));
-			} catch (Exception e) {
-				showErrMsgBox(e.getMessage());
-				a.errExit();
-			}
+			Utils.openInBrowser(link);
 		} else if(r == JOptionPane.NO_OPTION) {
 			System.exit(0);
 		}
@@ -369,5 +390,12 @@ public class GUI extends JFrame {
 
 	static void settglbtnPauseSelected(boolean selected) {
 		instance.tglbtnPause.setSelected(selected);
+	}
+
+	static void showUpdatePanel() {
+		if(!instance.panelUpdate.isVisible()) {
+			instance.panelUpdate.setVisible(true);
+			instance.setSize(instance.getWidth(), instance.getHeight() + 50);
+		}
 	}
 }
