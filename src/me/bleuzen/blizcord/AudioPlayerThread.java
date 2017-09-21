@@ -230,14 +230,14 @@ public class AudioPlayerThread implements Runnable {
 				Bot.getControlChannel().sendMessage("Adding all supported files from folder to queue ...").queue();;
 				File[] files = inputFile.listFiles();
 				Arrays.sort(files);
-				int addesFiles = 0;
+				int addedFiles = 0;
 				for(File f : files) {
 					if(f.isFile()) {
 						loadAndPlay(Bot.getControlChannel(), f.getAbsolutePath(), false, true);
-						addesFiles++;
+						addedFiles++;
 					}
 				}
-				Bot.getControlChannel().sendMessage("``Added " + addesFiles + " files.``").queue();
+				Bot.getControlChannel().sendMessage("``Added " + addedFiles + " files.``").queue();
 			} else {
 				loadAndPlay(Bot.getControlChannel(), arg, false, false);
 			}
