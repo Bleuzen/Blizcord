@@ -31,6 +31,8 @@ This program makes use of the following librarys:
 
 [lavaplayer](https://github.com/sedmelluq/lavaplayer)
 
+[JDA-NAS](https://github.com/sedmelluq/jda-nas)
+
 [JNativeHook](https://github.com/kwhat/jnativehook)
 
 [Logback](https://github.com/qos-ch/logback)

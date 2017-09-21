@@ -1,6 +1,6 @@
 package me.bleuzen.blizcord.commands;
 
-import me.bleuzen.blizcord.PlayerThread;
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -20,11 +20,11 @@ class Loop extends Command {
 			return;
 		}
 
-		if(PlayerThread.loop) {
-			PlayerThread.loop = false;
+		if(AudioPlayerThread.loop) {
+			AudioPlayerThread.loop = false;
 			channel.sendMessage(author.getAsMention() + " ``Looping disabled.``").queue();
 		} else {
-			PlayerThread.loop = true;
+			AudioPlayerThread.loop = true;
 			channel.sendMessage(author.getAsMention() + " ``Looping enabled.``").queue();
 		}
 	}

@@ -1,5 +1,7 @@
 package me.bleuzen.blizcord;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -14,7 +16,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class PlayerThread implements Runnable {
+public class AudioPlayerThread implements Runnable {
 
 	// currently everything for only 1 server (static)
 
@@ -217,6 +219,31 @@ public class PlayerThread implements Runnable {
 		return musicManager.player.getPlayingTrack() != null;
 	}
 
+	public static void addToPlaylist(String arg) {
+		Bot.joinVoiceChannel(); // try to join if not already
+
+		if(Bot.joined) { // if successfully joined
+
+			File inputFile = new File(arg);
+
+			if(inputFile.isDirectory()) {
+				Bot.getControlChannel().sendMessage("Adding all supported files from folder to queue ...").queue();;
+				File[] files = inputFile.listFiles();
+				Arrays.sort(files);
+				int addesFiles = 0;
+				for(File f : files) {
+					if(f.isFile()) {
+						loadAndPlay(Bot.getControlChannel(), f.getAbsolutePath(), false, true);
+						addesFiles++;
+					}
+				}
+				Bot.getControlChannel().sendMessage("``Added " + addesFiles + " files.``").queue();
+			} else {
+				loadAndPlay(Bot.getControlChannel(), arg, false, false);
+			}
+
+		}
+	}
 
 
 	/* UPDATE GAME */

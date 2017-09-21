@@ -9,8 +9,8 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Config;
-import me.bleuzen.blizcord.PlayerThread;
 import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -34,7 +34,7 @@ class Save extends Command {
 			channel.sendMessage(author.getAsMention() + " ``Please specify a playlist name. Put it behind this command.``").queue();
 			return;
 		}
-		if(!PlayerThread.isPlaying()) {
+		if(!AudioPlayerThread.isPlaying()) {
 			channel.sendMessage(author.getAsMention() + " ``The playlist is empty, nothing to save.``").queue();
 			return;
 		}
@@ -48,10 +48,10 @@ class Save extends Command {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(new File(playlistsFolder, arg), StandardCharsets.UTF_8, false));
 			// Write currently playing track
-			writer.write(PlayerThread.getMusicManager().player.getPlayingTrack().getInfo().uri);
+			writer.write(AudioPlayerThread.getMusicManager().player.getPlayingTrack().getInfo().uri);
 			writer.newLine();
 			// Write upcoming tracks
-			ArrayList<AudioTrack> upcoming = PlayerThread.getMusicManager().scheduler.getList();
+			ArrayList<AudioTrack> upcoming = AudioPlayerThread.getMusicManager().scheduler.getList();
 			if(!upcoming.isEmpty()) {
 				for(int i = 0; i < upcoming.size(); i++) {
 					writer.write(upcoming.get(i).getInfo().uri);

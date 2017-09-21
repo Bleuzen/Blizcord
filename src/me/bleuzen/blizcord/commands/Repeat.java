@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import me.bleuzen.blizcord.PlayerThread;
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -39,11 +39,11 @@ class Repeat extends Command {
 			}
 		}
 
-		if(PlayerThread.isPlaying()) {
+		if(AudioPlayerThread.isPlaying()) {
 
 			ArrayList<AudioTrack> songs = new ArrayList<>();
-			songs.add(PlayerThread.getMusicManager().player.getPlayingTrack());
-			ArrayList<AudioTrack> upcoming = PlayerThread.getMusicManager().scheduler.getList();
+			songs.add(AudioPlayerThread.getMusicManager().player.getPlayingTrack());
+			ArrayList<AudioTrack> upcoming = AudioPlayerThread.getMusicManager().scheduler.getList();
 			if(!upcoming.isEmpty()) {
 				for(int i = 0; i < upcoming.size(); i++) {
 					songs.add(upcoming.get(i));
@@ -52,7 +52,7 @@ class Repeat extends Command {
 
 			for(int i = 0; i < repeats; i++) {
 				for(int j = 0; j < songs.size(); j++) {
-					PlayerThread.play(songs.get(j).makeClone());
+					AudioPlayerThread.play(songs.get(j).makeClone());
 				}
 			}
 

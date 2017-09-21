@@ -2,7 +2,7 @@ package me.bleuzen.blizcord.commands;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import me.bleuzen.blizcord.PlayerThread;
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -22,7 +22,7 @@ class Jump extends Command {
 			return;
 		}
 
-		if(!PlayerThread.isPlaying()) {
+		if(!AudioPlayerThread.isPlaying()) {
 			channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
 			return;
 		}
@@ -42,7 +42,7 @@ class Jump extends Command {
 			}
 		}
 
-		AudioTrack track = PlayerThread.getMusicManager().player.getPlayingTrack();
+		AudioTrack track = AudioPlayerThread.getMusicManager().player.getPlayingTrack();
 		track.setPosition(track.getPosition() + (1000*seconds)); // Lavaplayer handles values < 0 or > track length
 	}
 

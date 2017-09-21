@@ -1,7 +1,7 @@
 package me.bleuzen.blizcord;
-import java.io.File;
-import java.util.Arrays;
 import java.util.Timer;
+
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 
 import me.bleuzen.blizcord.commands.Command;
 import net.dv8tion.jda.core.AccountType;
@@ -63,17 +63,30 @@ public class Bot extends ListenerAdapter {
 		Log.info("Starting JDA ...");
 
 		try {
-			api = new JDABuilder(AccountType.BOT).setToken(Config.get(Config.BOT_TOKEN))
-					.setAutoReconnect(Config.getBoolean(Config.AUTO_RECONNECT))
-					//.setEnableShutdownHook(false) // default: true
-					.buildBlocking();
+			JDABuilder builder = new JDABuilder(AccountType.BOT).setToken(Config.get(Config.BOT_TOKEN));
+
+			if(Config.getBoolean(Config.AUTO_RECONNECT)) {
+				builder.setAutoReconnect(true);
+				Log.debug("Auto Reconnect: enabled");
+			} else {
+				builder.setAutoReconnect(true);
+				Log.debug("Auto Reconnect: disabled");
+			}
+
+			if(Config.getBoolean(Config.USE_NATIVE_AUDIO_SYSTEM)) {
+				builder.setAudioSendFactory(new NativeAudioSendFactory());
+				Log.debug("Native audio system: enabled");
+			} else {
+				Log.debug("Native audio system: disabled");
+			}
+
+			api = builder.buildBlocking();
+
 			api.addEventListener(new Bot());
 
-			Log.debug("Auto Reconnect: " + api.isAutoReconnect());
 
 			// test for only one server
 			int guilds = api.getGuilds().size();
-
 			if(guilds == 0) {
 
 				// https://discordapi.com/permissions.html#3402768
@@ -126,11 +139,11 @@ public class Bot extends ListenerAdapter {
 			}
 
 			// Init Player
-			PlayerThread.init();
+			AudioPlayerThread.init();
 
 			// Start game update thread
 			if(Config.getBoolean(Config.DISPLAY_SONG_AS_GAME)) {
-				new Thread(new PlayerThread()).start();
+				new Thread(new AudioPlayerThread()).start();
 			}
 
 			// Start NativeKeyListener
@@ -175,7 +188,7 @@ public class Bot extends ListenerAdapter {
 		System.exit(0);
 	}
 
-	public static void join() {
+	public static void joinVoiceChannel() {
 		if (!joined) {
 			String cName = Config.get(Config.VOICE_CHANNEL);
 			VoiceChannel channel = guild.getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(cName)).findFirst().orElse(null);
@@ -190,7 +203,7 @@ public class Bot extends ListenerAdapter {
 		}
 	}
 
-	static void leave() {
+	static void leaveVoiceChannel() {
 		guild.getAudioManager().closeAudioConnection();
 		joined = false;
 	}
@@ -237,43 +250,17 @@ public class Bot extends ListenerAdapter {
 		a.errExit("I got kicked.");
 	}
 
-	public static void addToPlaylist(String arg) {
-		join(); // try to join if not already
-
-		if(joined) { // if successfully joined
-
-			File inputFile = new File(arg);
-
-			if(inputFile.isDirectory()) {
-				controlChannel.sendMessage("Adding all supported files from folder to queue ...").queue();;
-				File[] files = inputFile.listFiles();
-				Arrays.sort(files);
-				int addesFiles = 0;
-				for(File f : files) {
-					if(f.isFile()) {
-						PlayerThread.loadAndPlay(controlChannel, f.getAbsolutePath(), false, true);
-						addesFiles++;
-					}
-				}
-				controlChannel.sendMessage("``Added " + addesFiles + " files.``").queue();
-			} else {
-				PlayerThread.loadAndPlay(controlChannel, arg, false, false);
-			}
-
-		}
-	}
-
 	public static void stopPlayer() {
 		// stop the music
-		PlayerThread.stop();
+		AudioPlayerThread.stop();
 		// leave the channel
-		leave();
+		leaveVoiceChannel();
 		// cancel skipping
-		PlayerThread.skipping = false;
+		AudioPlayerThread.skipping = false;
 		// clear the playlist
-		PlayerThread.getMusicManager().scheduler.clear();
+		AudioPlayerThread.getMusicManager().scheduler.clear();
 		// reset pause state
-		PlayerThread.setPaused(false);
+		AudioPlayerThread.setPaused(false);
 	}
 
 	static void setGame(Game game) {

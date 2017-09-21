@@ -1,6 +1,6 @@
 package me.bleuzen.blizcord.commands;
 
-import me.bleuzen.blizcord.PlayerThread;
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -20,7 +20,7 @@ class Seek extends Command {
 			return;
 		}
 
-		if(!PlayerThread.isPlaying()) {
+		if(!AudioPlayerThread.isPlaying()) {
 			channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
 			return;
 		}
@@ -54,7 +54,7 @@ class Seek extends Command {
 			return;
 		}
 
-		PlayerThread.getMusicManager().player.getPlayingTrack().setPosition(ms);
+		AudioPlayerThread.getMusicManager().player.getPlayingTrack().setPosition(ms);
 	}
 
 }

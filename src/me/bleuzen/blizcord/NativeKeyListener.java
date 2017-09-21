@@ -16,7 +16,7 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 		switch (keyCode) {
 		case NativeKeyEvent.VC_MEDIA_PLAY:
 			Log.debug("NativeKeyEvent: VC_MEDIA_PLAY");
-			PlayerThread.togglePause();
+			AudioPlayerThread.togglePause();
 			break;
 
 		case NativeKeyEvent.VC_MEDIA_STOP:
@@ -26,14 +26,14 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 
 		case NativeKeyEvent.VC_MEDIA_PREVIOUS:
 			Log.debug("NativeKeyEvent: VC_MEDIA_PREVIOUS");
-			if(PlayerThread.isPlaying()) {
-				PlayerThread.getMusicManager().player.getPlayingTrack().setPosition(0);
+			if(AudioPlayerThread.isPlaying()) {
+				AudioPlayerThread.getMusicManager().player.getPlayingTrack().setPosition(0);
 			}
 			break;
 
 		case NativeKeyEvent.VC_MEDIA_NEXT:
 			Log.debug("NativeKeyEvent: VC_MEDIA_NEXT");
-			PlayerThread.getMusicManager().scheduler.nextTrack(1);
+			AudioPlayerThread.getMusicManager().scheduler.nextTrack(1);
 			break;
 
 		default:

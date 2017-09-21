@@ -14,8 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 @SuppressWarnings("serial")
@@ -39,6 +41,11 @@ public class GUI_Config extends JFrame {
 	private final JCheckBox chckbxCustomVolume;
 	private final JSpinner spinnerVolume;
 	private final JCheckBox chckbxEnableMediaControl;
+	private final JTabbedPane tabbedPane;
+	private final JPanel panel_Basic;
+	private final JPanel panel_Advanced;
+	private final JCheckBox chckbxAutoReconnect;
+	private final JCheckBox chckbxNativeAudioSystem;
 
 	public GUI_Config(File config) {
 		instance = this;
@@ -48,7 +55,7 @@ public class GUI_Config extends JFrame {
 		setType(Type.UTILITY);
 		setTitle(configFile.getName());
 		setResizable(false);
-		setSize(360, 360);
+		setSize(390, 360);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -58,84 +65,91 @@ public class GUI_Config extends JFrame {
 
 		getContentPane().setLayout(null);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 4, 348, 322);
-		getContentPane().add(panel);
-		panel.setLayout(null);
+		tabbedPane = new JTabbedPane(SwingConstants.TOP);
+		tabbedPane.setBounds(4, 4, 376, 270);
+		getContentPane().add(tabbedPane);
+
+		panel_Basic = new JPanel();
+		tabbedPane.addTab("Basic", null, panel_Basic, null);
+		panel_Basic.setLayout(null);
 
 		JLabel bottokenlable = new JLabel("Bot token:");
-		bottokenlable.setBounds(12, 8, 120, 28);
-		panel.add(bottokenlable);
-
-		JLabel controlchannellable = new JLabel("Control channel:");
-		controlchannellable.setToolTipText("The channel where you can send commands to the bot");
-		controlchannellable.setBounds(12, 38, 120, 28);
-		panel.add(controlchannellable);
-
-		JLabel commandprefixlable = new JLabel("Command prefix:");
-		commandprefixlable.setBounds(10, 68, 120, 28);
-		panel.add(commandprefixlable);
+		bottokenlable.setBounds(8, 8, 120, 28);
+		panel_Basic.add(bottokenlable);
 
 		bottoken = new JTextField();
-		bottoken.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(bottoken.getText().length() < 2) {
-					hideGetButton();
-				}
-			}
-		});
 		bottoken.setBounds(140, 8, 206, 28);
-		panel.add(bottoken);
+		panel_Basic.add(bottoken);
+
+		JLabel controlchannellable = new JLabel("Control channel:");
+		controlchannellable.setBounds(8, 38, 120, 28);
+		panel_Basic.add(controlchannellable);
+		controlchannellable.setToolTipText("The channel where you can send commands to the bot");
+
+		JLabel commandprefixlable = new JLabel("Command prefix:");
+		commandprefixlable.setBounds(8, 68, 120, 28);
+		panel_Basic.add(commandprefixlable);
 
 		commandprefix = new JTextField();
 		commandprefix.setBounds(140, 68, 206, 28);
-		panel.add(commandprefix);
+		panel_Basic.add(commandprefix);
 
 		JLabel voicechannellable = new JLabel("Voice channel:");
+		voicechannellable.setBounds(8, 98, 120, 28);
+		panel_Basic.add(voicechannellable);
 		voicechannellable.setToolTipText("The voice channel which the bot will join");
-		voicechannellable.setBounds(10, 98, 120, 28);
-		panel.add(voicechannellable);
 
 		voicechannel = new JTextField();
 		voicechannel.setBounds(140, 98, 206, 28);
-		panel.add(voicechannel);
+		panel_Basic.add(voicechannel);
 
 		adminsrole = new JTextField();
 		adminsrole.setBounds(140, 128, 206, 28);
-		panel.add(adminsrole);
+		panel_Basic.add(adminsrole);
 
 		display_song_as_game = new JCheckBox("Display song as game");
+		display_song_as_game.setBounds(8, 158, 330, 28);
+		panel_Basic.add(display_song_as_game);
 		display_song_as_game.setToolTipText("Displays the name of the current song as game on Discord");
-		display_song_as_game.setBounds(10, 158, 330, 28);
-		panel.add(display_song_as_game);
 
 		update_check_box = new JCheckBox("Update check");
-		update_check_box.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				update_check_interval_hours_spinner.setEnabled(update_check_box.isSelected());
-			}
-		});
-		update_check_box.setBounds(10, 188, 130, 28);
-		panel.add(update_check_box);
+		update_check_box.setBounds(8, 188, 130, 28);
+		panel_Basic.add(update_check_box);
 
 		update_check_interval_hours_spinner = new JSpinner();
+		update_check_interval_hours_spinner.setBounds(276, 188, 64, 28);
+		panel_Basic.add(update_check_interval_hours_spinner);
 		update_check_interval_hours_spinner.setEnabled(false);
 		update_check_interval_hours_spinner.setModel(new SpinnerNumberModel(24, 1, null, 1));
-		update_check_interval_hours_spinner.setBounds(276, 188, 64, 28);
-		panel.add(update_check_interval_hours_spinner);
 
 		lblIntervalInHours = new JLabel("Interval in hours:");
 		lblIntervalInHours.setBounds(148, 188, 124, 28);
-		panel.add(lblIntervalInHours);
+		panel_Basic.add(lblIntervalInHours);
 
 		controlchannel = new JTextField();
 		controlchannel.setBounds(140, 38, 206, 28);
-		panel.add(controlchannel);
+		panel_Basic.add(controlchannel);
 
 		btnGet = new JButton("Get");
+		btnGet.setBounds(266, 8, 80, 28);
+		panel_Basic.add(btnGet);
 		btnGet.setToolTipText(Values.DISCORD_GET_TOKEN);
+
+		chckbxAdminsRole = new JCheckBox("Admins role");
+		chckbxAdminsRole.setBounds(8, 128, 120, 28);
+		panel_Basic.add(chckbxAdminsRole);
+		chckbxAdminsRole.setToolTipText("Users in this role can control the bot");
+		chckbxAdminsRole.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(chckbxAdminsRole.isSelected()) {
+					adminsrole.setEnabled(true);
+				} else {
+					adminsrole.setEnabled(false);
+					adminsrole.setText("");
+				}
+			}
+		});
 		btnGet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -149,55 +163,65 @@ public class GUI_Config extends JFrame {
 			}
 		});
 		btnGet.setVisible(false);
-		btnGet.setBounds(266, 8, 80, 28);
-		panel.add(btnGet);
-
-		chckbxAdminsRole = new JCheckBox("Admins role");
-		chckbxAdminsRole.setToolTipText("Users in this role can control the bot");
-		chckbxAdminsRole.addActionListener(new ActionListener() {
+		update_check_box.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(chckbxAdminsRole.isSelected()) {
-					adminsrole.setEnabled(true);
-				} else {
-					adminsrole.setEnabled(false);
-					adminsrole.setText("");
+				update_check_interval_hours_spinner.setEnabled(update_check_box.isSelected());
+			}
+		});
+		bottoken.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(bottoken.getText().length() < 2) {
+					hideGetButton();
 				}
 			}
 		});
-		chckbxAdminsRole.setBounds(10, 128, 120, 28);
-		panel.add(chckbxAdminsRole);
+
+		panel_Advanced = new JPanel();
+		tabbedPane.addTab("Advanced", null, panel_Advanced, null);
+		panel_Advanced.setLayout(null);
 
 		chckbxCustomVolume = new JCheckBox("Custom Volume");
+		chckbxCustomVolume.setBounds(8, 8, 240, 28);
+		panel_Advanced.add(chckbxCustomVolume);
 		chckbxCustomVolume.setToolTipText("Change the volume (other than 100% requires more CPU)");
+
+		spinnerVolume = new JSpinner();
+		spinnerVolume.setBounds(276, 8, 64, 28);
+		panel_Advanced.add(spinnerVolume);
+		spinnerVolume.setEnabled(false);
+		spinnerVolume.setModel(new SpinnerNumberModel(100, 5, 100, 5));
+
+		chckbxEnableMediaControl = new JCheckBox("Enable media control keys");
+		chckbxEnableMediaControl.setBounds(8, 38, 262, 28);
+		panel_Advanced.add(chckbxEnableMediaControl);
+		//TODO: Update ToolTipText, when JNativeHook got a fix
+		chckbxEnableMediaControl.setToolTipText("<html>If enabled you can use the media control keys on your keyboard to control the bot.<br>This will increase your CPU and RAM usage. Currently this does not work on all systems.</html>");
+
+		chckbxAutoReconnect = new JCheckBox("Auto Reconnect");
+		chckbxAutoReconnect.setToolTipText("Sets whether or not JDA should try to reconnect if a connection-error is encountered.");
+		chckbxAutoReconnect.setBounds(8, 68, 262, 28);
+		panel_Advanced.add(chckbxAutoReconnect);
+
+		chckbxNativeAudioSystem = new JCheckBox("Use Native Audio System");
+		chckbxNativeAudioSystem.setToolTipText("Gets rid of stuttering caused by GC pauses. This may not work on all systems.");
+		chckbxNativeAudioSystem.setBounds(8, 98, 262, 28);
+		panel_Advanced.add(chckbxNativeAudioSystem);
 		chckbxCustomVolume.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				spinnerVolume.setEnabled(chckbxCustomVolume.isSelected());
 			}
 		});
-		chckbxCustomVolume.setBounds(10, 218, 240, 28);
-		panel.add(chckbxCustomVolume);
-
-		spinnerVolume = new JSpinner();
-		spinnerVolume.setEnabled(false);
-		spinnerVolume.setModel(new SpinnerNumberModel(100, 5, 100, 5));
-		spinnerVolume.setBounds(276, 218, 64, 28);
-		panel.add(spinnerVolume);
-
-		chckbxEnableMediaControl = new JCheckBox("Enable media control keys");
-		//TODO: Update ToolTipText, when JNativeHook got a fix
-		chckbxEnableMediaControl.setToolTipText("<html>If enabled you can use the media control keys on your keyboard to control the bot.<br>This will increase your CPU and RAM usage. Currently this does not work on all systems.</html>");
-		chckbxEnableMediaControl.setBounds(10, 248, 262, 28);
-		panel.add(chckbxEnableMediaControl);
 
 		JButton btnApply = new JButton("Apply");
-		btnApply.setBounds(248, 282, 90, 28);
-		panel.add(btnApply);
+		btnApply.setBounds(280, 286, 90, 28);
+		getContentPane().add(btnApply);
 		btnApply.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				btnApply.setEnabled(false); // prevent from double clicking
+				btnApply.setEnabled(false);
 
 				Config.set(Config.BOT_TOKEN, bottoken.getText());
 				Config.set(Config.CONTROL_CHANNEL, controlchannel.getText());
@@ -208,9 +232,11 @@ public class GUI_Config extends JFrame {
 				Config.set(Config.UPDATE_CHECK_INTERVAL_HOURS, (update_check_box.isSelected() ? update_check_interval_hours_spinner.getValue().toString() : "0"));
 				Config.set(Config.VOLUME, (chckbxCustomVolume.isSelected() ? spinnerVolume.getValue().toString() : "100"));
 				Config.set(Config.ENABLE_MEDIA_CONTROL_KEYS, String.valueOf(chckbxEnableMediaControl.isSelected()));
+				Config.set(Config.AUTO_RECONNECT, String.valueOf(chckbxAutoReconnect.isSelected()));
+				Config.set(Config.USE_NATIVE_AUDIO_SYSTEM, String.valueOf(chckbxNativeAudioSystem.isSelected()));
 
 				if(Config.save()) {
-					JOptionPane.showMessageDialog(instance, "Config saved.", Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
+					// Do nothing, close the window
 				} else {
 					JOptionPane.showMessageDialog(instance, "Failed to save config.", Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 				}
@@ -228,8 +254,8 @@ public class GUI_Config extends JFrame {
 
 		commandprefix.setText(Config.get(Config.COMMAND_PREFIX));
 		controlchannel.setText(Config.get(Config.CONTROL_CHANNEL));
-		display_song_as_game.setSelected(Boolean.parseBoolean(Config.get(Config.DISPLAY_SONG_AS_GAME)));
-		chckbxEnableMediaControl.setSelected(Boolean.parseBoolean(Config.get(Config.ENABLE_MEDIA_CONTROL_KEYS)));
+		display_song_as_game.setSelected(Config.getBoolean(Config.DISPLAY_SONG_AS_GAME));
+		chckbxEnableMediaControl.setSelected(Config.getBoolean(Config.ENABLE_MEDIA_CONTROL_KEYS));
 		voicechannel.setText(Config.get(Config.VOICE_CHANNEL));
 
 		if(a.isDisableUpdateChecker()) {
@@ -249,6 +275,9 @@ public class GUI_Config extends JFrame {
 			spinnerVolume.setEnabled(true);
 			spinnerVolume.setValue(vol);
 		}
+
+		chckbxAutoReconnect.setSelected(Config.getBoolean(Config.AUTO_RECONNECT));
+		chckbxNativeAudioSystem.setSelected(Config.getBoolean(Config.USE_NATIVE_AUDIO_SYSTEM));
 
 		String token = Config.get(Config.BOT_TOKEN);
 		if(token.isEmpty()) {

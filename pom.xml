@@ -32,11 +32,17 @@
       <artifactId>lavaplayer</artifactId>
       <version>1.2.43</version>
     </dependency>
+    
+    <dependency>
+      <groupId>com.sedmelluq</groupId>
+      <artifactId>jda-nas</artifactId>
+      <version>1.0.5</version>
+    </dependency>
 
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>3.3.0_272</version>
+      <version>3.3.0_273</version>
     </dependency>
 
     <dependency>

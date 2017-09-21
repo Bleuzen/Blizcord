@@ -13,6 +13,8 @@ public class UpdateChecker extends TimerTask {
 	private boolean updateAvailable = false;
 	private boolean alreadyNotified = false;
 
+	//TODO: move notification to GUI
+
 	private void checkForUpdate() {
 		Log.debug("[Updater] Checking for updates ...");
 

@@ -227,7 +227,7 @@ public class GUI extends JFrame {
 					// add all selected files
 					File[] selected = fileChooser.getSelectedFiles();
 					for(File f : selected) {
-						Bot.addToPlaylist(f.getAbsolutePath());
+						AudioPlayerThread.addToPlaylist(f.getAbsolutePath());
 					}
 
 					// remember the latest dir
@@ -245,7 +245,7 @@ public class GUI extends JFrame {
 		tglbtnPause.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PlayerThread.togglePause();
+				AudioPlayerThread.togglePause();
 			}
 		});
 		tglbtnPause.setFocusable(false);
@@ -266,7 +266,7 @@ public class GUI extends JFrame {
 		btnNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PlayerThread.getMusicManager().scheduler.nextTrack(1);
+				AudioPlayerThread.getMusicManager().scheduler.nextTrack(1);
 			}
 		});
 		panelControls.add(btnNext);

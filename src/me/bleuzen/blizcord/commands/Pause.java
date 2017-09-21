@@ -1,6 +1,6 @@
 package me.bleuzen.blizcord.commands;
 
-import me.bleuzen.blizcord.PlayerThread;
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -20,11 +20,11 @@ class Pause extends Command {
 			return;
 		}
 
-		if(PlayerThread.isPaused()) {
+		if(AudioPlayerThread.isPaused()) {
 			channel.sendMessage("``Continue playback ...``").queue();
-			PlayerThread.setPaused(false);
+			AudioPlayerThread.setPaused(false);
 		} else {
-			PlayerThread.setPaused(true);
+			AudioPlayerThread.setPaused(true);
 			channel.sendMessage("``Paused.\n"
 					+ "Type this command again to resume.``").queue();
 		}

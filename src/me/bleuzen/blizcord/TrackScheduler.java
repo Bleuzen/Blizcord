@@ -63,7 +63,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	public void nextTrack(int tracks) {
 		// Hey PlayerThread, I'm skipping, stop the updates!
-		PlayerThread.skipping = true;
+		AudioPlayerThread.skipping = true;
 
 		int preSkips = tracks - 1;
 		if(preSkips > 0) {
@@ -78,13 +78,13 @@ public class TrackScheduler extends AudioEventAdapter {
 		// last skip, start next track
 		nextTrack();
 		// done skipping
-		PlayerThread.skipping = false;
+		AudioPlayerThread.skipping = false;
 	}
 
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		// loop
-		boolean loop = PlayerThread.loop && (endReason == AudioTrackEndReason.FINISHED);
+		boolean loop = AudioPlayerThread.loop && (endReason == AudioTrackEndReason.FINISHED);
 		// save old track
 		AudioTrack loopTrack = null;
 		if(loop) {

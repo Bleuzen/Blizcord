@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Bot;
 import me.bleuzen.blizcord.Config;
-import me.bleuzen.blizcord.PlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -35,12 +35,12 @@ class Load extends Command {
 				return;
 			}
 
-			Bot.join(); // try to join if not already
+			Bot.joinVoiceChannel(); // try to join if not already
 
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playlistFile), StandardCharsets.UTF_8));
 			String line;
 			while((line = bufferedReader.readLine()) != null) {
-				PlayerThread.loadAndPlay(channel, line, false, true);
+				AudioPlayerThread.loadAndPlay(channel, line, false, true);
 			}
 			bufferedReader.close();
 

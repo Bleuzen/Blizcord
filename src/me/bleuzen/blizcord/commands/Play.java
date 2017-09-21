@@ -1,7 +1,7 @@
 package me.bleuzen.blizcord.commands;
 
+import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Bot;
-import me.bleuzen.blizcord.PlayerThread;
 import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -26,10 +26,10 @@ class Play extends Command {
 			return;
 		}
 
-		Bot.join(); // try to join if not already
+		Bot.joinVoiceChannel(); // try to join if not already
 
 		if(Bot.joined) { // if successfully joined
-			PlayerThread.loadAndPlay(channel, arg, true, false);
+			AudioPlayerThread.loadAndPlay(channel, arg, true, false);
 		}
 	}
 

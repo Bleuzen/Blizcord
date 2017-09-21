@@ -20,6 +20,7 @@ public class Config {
 	static final String VOLUME = "VOLUME";
 	static final String ENABLE_MEDIA_CONTROL_KEYS = "ENABLE_MEDIA_CONTROL_KEYS";
 	static final String AUTO_RECONNECT = "AUTO_RECONNECT";
+	static final String USE_NATIVE_AUDIO_SYSTEM = "USE_NATIVE_AUDIO_SYSTEM";
 
 	private static File APP_DIR = null;
 	private static File DEFAULT_CONFIG = null;
@@ -48,6 +49,7 @@ public class Config {
 		defaults.put(VOLUME, "100");
 		defaults.put(ENABLE_MEDIA_CONTROL_KEYS, "false");
 		defaults.put(AUTO_RECONNECT, "true");
+		defaults.put(USE_NATIVE_AUDIO_SYSTEM, "true");
 
 		JSONObject read;
 		try {
@@ -96,7 +98,7 @@ public class Config {
 	}
 
 	static boolean getBoolean(String key) {
-		return Boolean.valueOf(get(key));
+		return Boolean.parseBoolean(get(key));
 	}
 
 	static void set(String key, String value) {
