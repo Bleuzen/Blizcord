@@ -9,7 +9,13 @@ public class a {
 
 	private static boolean gui;
 	private static boolean debug;
-	private static boolean disableUpdateChecker; // for AUR users, currently only disabled in GUI
+
+	/*
+	 * > Mainly for AUR users
+	 * - disable checkbox in GUI_Config
+	 * - not check for updates
+	 * */
+	private static boolean disableUpdateChecker;
 
 	static boolean isGui() {
 		return gui;
@@ -19,7 +25,7 @@ public class a {
 		return debug;
 	}
 
-	static boolean isDisableUpdateChecker() {
+	public static boolean isDisableUpdateChecker() {
 		return disableUpdateChecker;
 	}
 

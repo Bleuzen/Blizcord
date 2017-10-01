@@ -35,9 +35,24 @@ public class Bot extends ListenerAdapter {
 
 	private static long startTime;
 
-	public static UpdateChecker updateChecker;
-
 	public static boolean joined;
+
+	private static UpdateChecker updateChecker;
+
+	public static UpdateChecker getUpdateChecker() {
+		if(updateChecker == null) {
+
+			// Get sure that it doesn't work if disabled
+			if(a.isDisableUpdateChecker()) {
+				return null;
+			}
+
+			// Init updateChecker
+			updateChecker = new UpdateChecker(Values.BOT_GITHUB_REPO);
+		}
+
+		return updateChecker;
+	}
 
 	static JDA getApi() {
 		return api;
@@ -288,13 +303,17 @@ public class Bot extends ListenerAdapter {
 	}
 
 	public static void sendUpdateMessage(boolean toOwner) {
-		String uMsg = "A new version is available!\n"
-				+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases";
+		// Check if bot is already running (could not when starting GUI)
+		// prevent NullPointerException
+		if(api != null) {
+			String uMsg = "A new version is available!\n"
+					+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases";
 
-		if(toOwner) {
-			sendMessage(guild.getOwner().getUser(), uMsg);
-		} else {
-			controlChannel.sendMessage(uMsg).queue();
+			if(toOwner) {
+				sendMessage(guild.getOwner().getUser(), uMsg);
+			} else {
+				controlChannel.sendMessage(uMsg).queue();
+			}
 		}
 	}
 
@@ -305,17 +324,17 @@ public class Bot extends ListenerAdapter {
 	}
 
 	private static void startUpdateChecker() {
-		if(updateChecker == null) {
+		if(!a.isDisableUpdateChecker()) {
 			int updateCheckInterval;
 			try {
 				updateCheckInterval = Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
 			} catch (NumberFormatException e) {
 				updateCheckInterval = 0;
 			}
-			if(updateCheckInterval > 0) {
-				// First update check delayed 5 seconds, then all updateCheckInterval hours
-				updateChecker = new UpdateChecker();
-				new Timer().schedule(updateChecker, 5000, (1000 * 3600 * updateCheckInterval));
+			if (updateCheckInterval > 0) {
+				int hours = (1000 * 3600 * updateCheckInterval);
+				// First update check only 5 seconds delayed if NOT from GUI (send message on Discord)
+				new Timer().schedule(getUpdateChecker(), a.isGui() ? hours : 5000, hours);
 			}
 		}
 	}

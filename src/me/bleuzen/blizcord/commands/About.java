@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 
 import me.bleuzen.blizcord.Bot;
 import me.bleuzen.blizcord.Values;
+import me.bleuzen.blizcord.a;
 import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -36,7 +37,7 @@ class About extends Command {
 				+ "GitHub: https://github.com/qos-ch/logback").queue();
 
 
-		if(Bot.updateChecker != null && Bot.updateChecker.isUpdateAvailable()) {
+		if(!a.isDisableUpdateChecker() && Bot.getUpdateChecker().isUpdateAvailable()) {
 			Bot.sendUpdateMessage(false);
 		}
 	}

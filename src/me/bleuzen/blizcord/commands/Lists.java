@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class Lists extends Command {
+class Lists extends Command {
 
 	@Override
 	public String getName() {

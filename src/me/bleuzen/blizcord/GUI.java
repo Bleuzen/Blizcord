@@ -65,7 +65,7 @@ public class GUI extends JFrame {
 	private File addFileChooserDir;
 	private JPanel panelUpdate;
 	private JLabel lblANewVersion;
-	private JButton btnDownload;
+	private JButton btnUpdate;
 
 	public GUI() {
 		instance = this;
@@ -300,17 +300,23 @@ public class GUI extends JFrame {
 		lblANewVersion.setHorizontalAlignment(SwingConstants.CENTER);
 		panelUpdate.add(lblANewVersion, BorderLayout.CENTER);
 
-		btnDownload = new JButton("Download");
-		btnDownload.setFocusable(false);
-		btnDownload.addActionListener(new ActionListener() {
+		btnUpdate = new JButton("Update");
+		btnUpdate.setFocusable(false);
+		btnUpdate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Utils.openInBrowser("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases");
+				System.exit(0);
 			}
 		});
-		panelUpdate.add(btnDownload, BorderLayout.EAST);
+		panelUpdate.add(btnUpdate, BorderLayout.EAST);
 
 		/* ----- */
+
+		// Check for updates the first time
+		if(!a.isDisableUpdateChecker()) {
+			new Thread(Bot.getUpdateChecker()).start();
+		}
 
 		// Load the GUI Config
 		File guiConfigFileCustomConfig = new File(System.getProperty("java.io.tmpdir"), "blizcordguicustomconfig");

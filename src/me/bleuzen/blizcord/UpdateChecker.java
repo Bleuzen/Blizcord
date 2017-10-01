@@ -8,16 +8,22 @@ import java.util.TimerTask;
 
 public class UpdateChecker extends TimerTask {
 
+	private final String GITHUB_REPO;
+
 	private String json;
 
 	private boolean updateAvailable = false;
-	private boolean alreadyNotified = false;
+	//private boolean alreadyNotified = false;
+
+	public UpdateChecker(String githubRepo) {
+		GITHUB_REPO = githubRepo;
+	}
 
 	private void checkForUpdate() {
 		Log.debug("[Updater] Checking for updates ...");
 
 		try {
-			InputStream inputStream = new URL("https://api.github.com/repos/" + Values.BOT_GITHUB_REPO + "/releases/latest").openStream();
+			InputStream inputStream = new URL("https://api.github.com/repos/" + GITHUB_REPO + "/releases/latest").openStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			json = bufferedReader.readLine();
 
@@ -81,18 +87,19 @@ public class UpdateChecker extends TimerTask {
 
 	@Override
 	public void run() {
-		if(!alreadyNotified) {
+		// Check for update if needed
+		if(!updateAvailable) {
 			checkForUpdate();
-			if(updateAvailable) {
-				// Send update message to server owner
-				Bot.sendUpdateMessage(true);
+		}
 
-				// Display in GUI
-				if(a.isGui()) {
-					GUI.showUpdatePanel();
-				}
+		// Notify the user
+		if(updateAvailable) {
+			// Send update message to server owner
+			Bot.sendUpdateMessage(true);
 
-				alreadyNotified = true;
+			// Display in GUI
+			if(a.isGui()) {
+				GUI.showUpdatePanel();
 			}
 		}
 	}

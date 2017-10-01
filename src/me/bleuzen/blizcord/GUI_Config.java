@@ -33,7 +33,7 @@ public class GUI_Config extends JFrame {
 	private final JTextField voicechannel;
 	private final JTextField adminsrole;
 	private final JCheckBox display_song_as_game;
-	private final JCheckBox update_check_box;
+	private final JCheckBox periodic_update_check_box;
 	private final JSpinner update_check_interval_hours_spinner;
 	private final JLabel lblIntervalInHours;
 	private final JButton btnGet;
@@ -112,9 +112,9 @@ public class GUI_Config extends JFrame {
 		panel_Basic.add(display_song_as_game);
 		display_song_as_game.setToolTipText("Displays the name of the current song as game on Discord");
 
-		update_check_box = new JCheckBox("Update check");
-		update_check_box.setBounds(8, 188, 130, 28);
-		panel_Basic.add(update_check_box);
+		periodic_update_check_box = new JCheckBox("Periodic update check");
+		periodic_update_check_box.setBounds(8, 188, 192, 28);
+		panel_Basic.add(periodic_update_check_box);
 
 		update_check_interval_hours_spinner = new JSpinner();
 		update_check_interval_hours_spinner.setBounds(276, 188, 64, 28);
@@ -122,8 +122,8 @@ public class GUI_Config extends JFrame {
 		update_check_interval_hours_spinner.setEnabled(false);
 		update_check_interval_hours_spinner.setModel(new SpinnerNumberModel(24, 1, null, 1));
 
-		lblIntervalInHours = new JLabel("Interval in hours:");
-		lblIntervalInHours.setBounds(148, 188, 124, 28);
+		lblIntervalInHours = new JLabel("Hours:");
+		lblIntervalInHours.setBounds(204, 188, 68, 28);
 		panel_Basic.add(lblIntervalInHours);
 
 		controlchannel = new JTextField();
@@ -163,10 +163,10 @@ public class GUI_Config extends JFrame {
 			}
 		});
 		btnGet.setVisible(false);
-		update_check_box.addActionListener(new ActionListener() {
+		periodic_update_check_box.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				update_check_interval_hours_spinner.setEnabled(update_check_box.isSelected());
+				update_check_interval_hours_spinner.setEnabled(periodic_update_check_box.isSelected());
 			}
 		});
 		bottoken.addKeyListener(new KeyAdapter() {
@@ -229,7 +229,7 @@ public class GUI_Config extends JFrame {
 				Config.set(Config.VOICE_CHANNEL, voicechannel.getText());
 				Config.set(Config.ADMINS_ROLE, adminsrole.getText());
 				Config.set(Config.DISPLAY_SONG_AS_GAME, String.valueOf(display_song_as_game.isSelected()));
-				Config.set(Config.UPDATE_CHECK_INTERVAL_HOURS, (update_check_box.isSelected() ? update_check_interval_hours_spinner.getValue().toString() : "0"));
+				Config.set(Config.UPDATE_CHECK_INTERVAL_HOURS, (periodic_update_check_box.isSelected() ? update_check_interval_hours_spinner.getValue().toString() : "0"));
 				Config.set(Config.VOLUME, (chckbxCustomVolume.isSelected() ? spinnerVolume.getValue().toString() : "100"));
 				Config.set(Config.ENABLE_MEDIA_CONTROL_KEYS, String.valueOf(chckbxEnableMediaControl.isSelected()));
 				Config.set(Config.AUTO_RECONNECT, String.valueOf(chckbxAutoReconnect.isSelected()));
@@ -259,11 +259,11 @@ public class GUI_Config extends JFrame {
 		voicechannel.setText(Config.get(Config.VOICE_CHANNEL));
 
 		if(a.isDisableUpdateChecker()) {
-			update_check_box.setEnabled(false);
+			periodic_update_check_box.setEnabled(false);
 		} else {
 			int updateH = Integer.parseInt(Config.get(Config.UPDATE_CHECK_INTERVAL_HOURS));
 			if (updateH != 0) {
-				update_check_box.setSelected(true);
+				periodic_update_check_box.setSelected(true);
 				update_check_interval_hours_spinner.setEnabled(true);
 				update_check_interval_hours_spinner.setValue(updateH);
 			}
