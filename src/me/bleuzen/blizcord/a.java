@@ -1,21 +1,15 @@
 package me.bleuzen.blizcord;
 import java.awt.GraphicsEnvironment;
-import java.io.File;
 
 import javax.swing.UIManager;
 
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
-import net.dv8tion.jda.core.utils.SimpleLog;
-import net.dv8tion.jda.core.utils.SimpleLog.Level;
+import me.bleuzen.blizcord.Utils.ArgumentUtils;
 
 public class a {
 
 	private static boolean gui;
 	private static boolean debug;
-	private static boolean disableUpdateChecker; // for AUR users (currently only disabled in GUI)
-	private static File configFile;
+	private static boolean disableUpdateChecker; // for AUR users, currently only disabled in GUI
 
 	static boolean isGui() {
 		return gui;
@@ -30,17 +24,18 @@ public class a {
 	}
 
 	public static void main(String[] args) {
-		gui = containsArg(args, "--gui");
-		debug = containsArg(args, "--debug") || Values.DEV;
-		disableUpdateChecker = containsArg(args, "--disable-update-checker");
+		debug = ArgumentUtils.containsArg(args, "--debug") || Values.DEV;
+		Log.init();
 
-		setupLogging();
+		gui = ArgumentUtils.containsArg(args, "--gui");
+		disableUpdateChecker = ArgumentUtils.containsArg(args, "--disable-update-checker");
 
 		if(gui) {
+
 			if(GraphicsEnvironment.isHeadless()) {
 				// no gui supported
 				gui = false; // disable gui mode
-				errExit("GUI is not supported on your system.");
+				Utils.errExit("GUI is not supported on your system.");
 			}
 			try {
 				try {
@@ -67,125 +62,13 @@ public class a {
 				GUI frame = new GUI();
 				frame.setVisible(true);
 			} catch (Exception e) {
-				errExit("Failed to start GUI: " + e.getMessage());
+				Utils.errExit("Failed to start GUI: " + e.getMessage());
 			}
+
 		} else {
-			launch(args);
-		}
-	}
-
-	static void launch(String[] args) {
-		Log.info("Version: " + Values.BOT_VERSION);
-		Log.info("Developer: " + Values.BOT_DEVELOPER);
-
-		Log.info("Starting bot ...");
-
-		// init config
-		String configArg = getArg(args, "--config");
-		if(configArg != null) {
-			configFile = new File(configArg);
-		} else {
-			configFile = Config.getDefaultConfig();
+			Bot.launch(args);
 		}
 
-		Log.info("Config: " + configFile.getAbsolutePath());
-
-		if(!Config.init(configFile, gui)) {
-			errExit("Failed to load config.", Values.EXIT_CODE_RESTART_GUI);
-		}
-
-		// Start the bot
-		Bot.start();
-	}
-
-	static void errExit() {
-		errExit(null);
-	}
-
-	static void errExit(String msg) {
-		errExit(msg, 1);
-	}
-
-
-	static void errExit(String msg, int exitCode) {
-		if(gui) {
-			GUI.onErrExit(msg);
-		} else {
-			Log.error("Crash! Reason:");
-			System.err.println(msg == null ? "Unknown" : msg);
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				//e.printStackTrace();
-			}
-		}
-
-		if(exitCode >= 1 && exitCode <= 127) {
-			System.exit(exitCode);
-		} else {
-			System.exit(0);
-		}
-	}
-
-	private static int getArgIndex(String[] args, String arg) {
-		int ir = -1; // return -1 if args does not contain the argument
-		for(int in = 0; in < args.length; in++) {
-			if(args[in].equalsIgnoreCase(arg)) {
-				ir = in;
-				break;
-			}
-		}
-		return ir;
-	}
-
-	private static boolean containsArg(String[] args, String arg) {
-		return getArgIndex(args, arg) != -1;
-	}
-
-	// returns what is behind an argument
-	private static String getArg(String[] args, String arg) {
-		String result = null; // return null if argument is not given
-		int i = getArgIndex(args, arg);
-		if(i != -1) {
-			result = args[i + 1];
-		}
-		return result;
-	}
-
-	private static void setupLogging() {
-		Logger lavaplayerLogger = (Logger) LoggerFactory.getLogger("com.sedmelluq.discord.lavaplayer");
-
-		if(debug) {
-			// set JDA logging to DEBUG
-			SimpleLog.LEVEL = Level.DEBUG;
-			// set lavaplayer logging to DEBUG
-			lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.DEBUG);
-			// set JNativeHook logging level to WARNING
-			NativeKeyListener.setLevel(java.util.logging.Level.WARNING);
-		} else {
-			if(gui) {
-				// disable JDA logging
-				SimpleLog.LEVEL = Level.OFF;
-				// disable lavaplayer logging
-				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.OFF);
-				// set JNativeHook logging level to OFF
-				NativeKeyListener.setLevel(java.util.logging.Level.OFF);
-			} else {
-				// set JDA logging to WARNING
-				SimpleLog.LEVEL = Level.WARNING;
-				// set lavaplayer logging to WARN
-				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.WARN);
-				// set JNativeHook logging level to WARNING
-				NativeKeyListener.setLevel(java.util.logging.Level.WARNING);
-			}
-		}
-
-
-		// init own Logger
-		Log.init(debug);
-
-		// Print first log message
-		Log.debug("Logger initialized.");
 	}
 
 }

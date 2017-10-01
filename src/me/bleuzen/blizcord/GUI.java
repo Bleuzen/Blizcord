@@ -189,9 +189,9 @@ public class GUI extends JFrame {
 						// start bot
 						if(chckbxUseCustomConfig.isSelected()) {
 							setTitle(getTitle() + " - " + cfgFile.getName());
-							a.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
+							Bot.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
 						} else {
-							a.launch(new String[]{});
+							Bot.launch(new String[]{});
 						}
 
 						btnStart.setVisible(false);

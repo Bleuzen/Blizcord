@@ -83,10 +83,10 @@ public class Config {
 					GUI.showMsgBox(gotGeneratedOrUpdatedMSG);
 					initialized = true;
 				} else {
-					a.errExit(gotGeneratedOrUpdatedMSG + " Please edit it now.");
+					Utils.errExit(gotGeneratedOrUpdatedMSG + " Please edit it now.");
 				}
 			} else {
-				a.errExit("Failed to generate config. (Do you have write access here?)", Values.EXIT_CODE_RESTART_GUI);
+				Utils.errExit("Failed to generate config. (Do you have write access here?)", Values.EXIT_CODE_RESTART_GUI);
 			}
 		}
 
@@ -147,7 +147,7 @@ public class Config {
 
 		if(!APP_DIR.exists()) {
 			if(!APP_DIR.mkdir()) {
-				a.errExit("Failed to create config directory:" + System.lineSeparator() + APP_DIR.getAbsolutePath());
+				Utils.errExit("Failed to create config directory:" + System.lineSeparator() + APP_DIR.getAbsolutePath());
 			}
 		}
 

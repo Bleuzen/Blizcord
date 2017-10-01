@@ -54,7 +54,7 @@ public class AudioPlayerThread implements Runnable {
 			musicManager.player.setVolume(Integer.parseInt(Config.get(Config.VOLUME)));
 			Log.debug("Volume set to: {}", musicManager.player.getVolume());
 		} catch (NumberFormatException e) {
-			a.errExit("Invalid volume", Values.EXIT_CODE_RESTART_GUI);
+			Utils.errExit("Invalid volume", Values.EXIT_CODE_RESTART_GUI);
 		}
 	}
 
@@ -137,6 +137,11 @@ public class AudioPlayerThread implements Runnable {
 
 			@Override
 			public void noMatches() {
+				if(trackUrl.startsWith(Values.SEARCH_PREFIX_YOUTUBE)) {
+					channel.sendMessage("No search results for: " + trackUrl.substring(Values.SEARCH_PREFIX_YOUTUBE.length())).queue();
+					return;
+				}
+
 				channel.sendMessage("Nothing found by: " + trackUrl).queue();
 			}
 

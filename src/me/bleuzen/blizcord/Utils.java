@@ -56,8 +56,72 @@ public class Utils {
 			Desktop.getDesktop().browse(new URI(link));
 		} catch (Exception e) {
 			GUI.showErrMsgBox(e.getMessage());
-			a.errExit();
+			errExit();
 		}
 	}
+
+	static void errExit() {
+		errExit(null);
+	}
+
+	static void errExit(String msg) {
+		errExit(msg, 1);
+	}
+
+
+	static void errExit(String msg, int exitCode) {
+		if(a.isGui()) {
+			GUI.onErrExit(msg);
+		} else {
+			Log.error("Crash! Reason:");
+			System.err.println(msg == null ? "Unknown" : msg);
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				//e.printStackTrace();
+			}
+		}
+
+		if(exitCode >= 1 && exitCode <= 127) {
+			System.exit(exitCode);
+		} else {
+			System.exit(0);
+		}
+	}
+
+
+	public static class ArgumentUtils {
+
+		public static int getArgIndex(String[] args, String arg) {
+			int ir = -1; // return -1 if args does not contain the argument
+			for(int in = 0; in < args.length; in++) {
+				if(args[in].equalsIgnoreCase(arg)) {
+					ir = in;
+					break;
+				}
+			}
+			return ir;
+		}
+
+		public static boolean containsArg(String[] args, String arg) {
+			return getArgIndex(args, arg) != -1;
+		}
+
+		// returns what is behind an argument
+		public static String getArg(String[] args, String arg) {
+			String result = null; // return null if argument is not given
+			int i = getArgIndex(args, arg);
+			if(i != -1) {
+				try {
+					result = args[i + 1];
+				} catch(ArrayIndexOutOfBoundsException e) {
+					Log.debug("Invalid argument value: {}", arg);
+				}
+			}
+			return result;
+		}
+
+	}
+
 
 }
