@@ -51,7 +51,7 @@ class Repeat extends Command {
 
 			for(int i = 0; i < repeats; i++) {
 				for(int j = 0; j < songs.size(); j++) {
-					AudioPlayerThread.play(songs.get(j).makeClone());
+					AudioPlayerThread.addToPlaylist(songs.get(j).makeClone());
 				}
 			}
 

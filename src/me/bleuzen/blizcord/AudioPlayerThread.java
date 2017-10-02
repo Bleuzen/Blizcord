@@ -100,6 +100,7 @@ public class AudioPlayerThread implements Runnable {
 			public void trackLoaded(AudioTrack track) {
 
 				if(direct) {
+
 					if(track.getSourceManager().getSourceName().equals("youtube")) {
 						playDirect(track, getYouTubeStartTimeMS(trackUrl));
 					} else {
@@ -108,11 +109,14 @@ public class AudioPlayerThread implements Runnable {
 
 					// quiet check not needed, since there will be never more than one track / message
 					channel.sendMessage("Now playing: " + Utils.getTrackName(track)).queue();
+
 				} else {
-					play(track);
+
+					addToPlaylist(track);
 					if(!quiet) {
 						channel.sendMessage("Added track to queue: " + Utils.getTrackName(track)).queue();
 					}
+
 				}
 
 			}
@@ -121,15 +125,30 @@ public class AudioPlayerThread implements Runnable {
 			public void playlistLoaded(AudioPlaylist playlist) {
 
 				if(direct) {
+
 					AudioTrack directTrack = playlist.getTracks().get(0);
 					playDirect(directTrack, 0);
 					channel.sendMessage("Now playing: " + Utils.getTrackName(directTrack)).queue();
+
 				} else {
-					for (AudioTrack track : playlist.getTracks()) {
-						play(track);
-					}
-					if(!quiet) {
-						channel.sendMessage("Added playlist to queue: " + playlist.getName()).queue();
+
+					if(trackUrl.startsWith(Values.SEARCH_PREFIX_YOUTUBE)) {
+
+						AudioTrack firstSearchResult = playlist.getTracks().get(0);
+						addToPlaylist(firstSearchResult);
+						if(!quiet) {
+							channel.sendMessage("Added track to queue: " + Utils.getTrackName(firstSearchResult)).queue();
+						}
+
+					} else {
+
+						for (AudioTrack track : playlist.getTracks()) {
+							addToPlaylist(track);
+						}
+						if(!quiet) {
+							channel.sendMessage("Added playlist to queue: " + playlist.getName()).queue();
+						}
+
 					}
 				}
 
@@ -185,7 +204,7 @@ public class AudioPlayerThread implements Runnable {
 		return ms;
 	}
 
-	public static void play(AudioTrack track) {
+	public static void addToPlaylist(AudioTrack track) {
 		//connectToFirstVoiceChannel(guild.getAudioManager());
 
 		musicManager.scheduler.queue(track);

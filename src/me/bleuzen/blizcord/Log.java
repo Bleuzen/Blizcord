@@ -83,6 +83,7 @@ public class Log {
 
 	private static void setupOtherLoggers() {
 		Logger lavaplayerLogger = (Logger) LoggerFactory.getLogger("com.sedmelluq.discord.lavaplayer");
+		Logger jdaLogger = (Logger) LoggerFactory.getLogger("net.dv8tion.jda");
 
 		if(a.isDebug()) {
 			// set JDA logging to DEBUG
@@ -94,14 +95,14 @@ public class Log {
 		} else {
 			if(a.isGui()) {
 				// disable JDA logging (only ERROR)
-				SimpleLog.LEVEL = org.slf4j.event.Level.ERROR; //TODO: Still prints DEBUG messages (JDA bug?)
+				jdaLogger.setLevel(Level.ERROR);
 				// disable lavaplayer logging
 				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.OFF);
 				// set JNativeHook logging level to OFF
 				NativeKeyListener.setLevel(java.util.logging.Level.OFF);
 			} else {
 				// set JDA logging to WARN
-				SimpleLog.LEVEL = org.slf4j.event.Level.WARN; //TODO: Still prints DEBUG messages (JDA bug?)
+				jdaLogger.setLevel(Level.WARN);
 				// set lavaplayer logging to WARN
 				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.WARN);
 				// set JNativeHook logging level to WARNING
