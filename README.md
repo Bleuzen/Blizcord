@@ -1,9 +1,8 @@
 # Blizcord
 A Discord Bot with (optional) GUI written in Java which can play music from YouTube or local files
 
-![](images/Screenshot_20171002_012707.png)
-![](images/Screenshot_20171002_012802.png)
-![](images/Screenshot_20171002_012829.png)
+![](images/Screenshot_20171002_113712.png)
+![](images/Screenshot_20171002_113729.png)
 
 ## Installation
 ### Linux

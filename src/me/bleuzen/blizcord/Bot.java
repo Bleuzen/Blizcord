@@ -261,19 +261,27 @@ public class Bot extends ListenerAdapter {
 				arg = null;
 			}
 
-			boolean success = false;
+			boolean commandFound = false;
 
 			for(Command command : Command.commands) {
 				if (command.compare(cmd)) {
-					command.execute(arg, author, channel, guild);
-					success = true;
+					commandFound = true;
+
+					if(command.hasPermission(author)) {
+						command.execute(arg, author, channel, guild);
+					} else {
+						channel.sendMessage(author.getAsMention() + " ``You are not allowed to use this command.``").queue();
+					}
+
 					break;
 				}
 			}
 
-			if (!success) {
-				channel.sendMessage(author.getAsMention() + " ``Unknown command``").queue();
+			if(commandFound) {
+				return;
 			}
+
+			channel.sendMessage(author.getAsMention() + " ``Unknown command``").queue();
 
 		}
 	}

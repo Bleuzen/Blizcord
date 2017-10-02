@@ -21,6 +21,11 @@ class Load extends Command {
 	}
 
 	@Override
+	public boolean isAdminOnly() {
+		return true;
+	}
+
+	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		// arg = playlist name
 		if(arg == null) {

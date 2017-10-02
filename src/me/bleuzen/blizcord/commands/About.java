@@ -18,6 +18,11 @@ class About extends Command {
 	}
 
 	@Override
+	public boolean isAdminOnly() {
+		return false;
+	}
+
+	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		channel.sendMessage("__**" + Values.BOT_NAME + "**__\n\n"
 				+ "Version: " + Values.BOT_VERSION + "\n"

@@ -13,6 +13,11 @@ class Help extends Command {
 	}
 
 	@Override
+	public boolean isAdminOnly() {
+		return false;
+	}
+
+	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		channel.sendMessage(author.getAsMention() + " **Commands:**\n"
 				+ "```"

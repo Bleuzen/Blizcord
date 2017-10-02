@@ -13,6 +13,11 @@ class List extends Command {
 	}
 
 	@Override
+	public boolean isAdminOnly() {
+		return false;
+	}
+
+	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		AudioPlayerThread.sendPlaylist(author, channel);
 	}

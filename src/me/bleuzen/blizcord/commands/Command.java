@@ -2,6 +2,7 @@ package me.bleuzen.blizcord.commands;
 
 import java.util.ArrayList;
 
+import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -38,7 +39,17 @@ public abstract class Command {
 		return cmd.equalsIgnoreCase(getName());
 	}
 
+	public boolean hasPermission(User user) {
+		if(isAdminOnly()) {
+			return Utils.isAdmin(user);
+		} else {
+			return true;
+		}
+	}
+
 	public abstract String getName();
+
+	public abstract boolean isAdminOnly();
 
 	public abstract void execute(String arg, User author, MessageChannel channel, Guild guild);
 

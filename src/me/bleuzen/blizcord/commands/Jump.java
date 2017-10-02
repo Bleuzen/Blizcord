@@ -3,7 +3,6 @@ package me.bleuzen.blizcord.commands;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import me.bleuzen.blizcord.AudioPlayerThread;
-import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -16,12 +15,12 @@ class Jump extends Command {
 	}
 
 	@Override
-	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		if(!Utils.isAdmin(author)) {
-			channel.sendMessage(author.getAsMention() + " ``Only admins can jump.``").queue();
-			return;
-		}
+	public boolean isAdminOnly() {
+		return true;
+	}
 
+	@Override
+	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		if(!AudioPlayerThread.isPlaying()) {
 			channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
 			return;

@@ -13,6 +13,11 @@ class Add extends Command {
 	}
 
 	@Override
+	public boolean isAdminOnly() {
+		return false;
+	}
+
+	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		if(arg == null) {
 			channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();

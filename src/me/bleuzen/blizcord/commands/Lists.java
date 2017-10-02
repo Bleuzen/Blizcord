@@ -16,6 +16,11 @@ class Lists extends Command {
 	}
 
 	@Override
+	public boolean isAdminOnly() {
+		return true;
+	}
+
+	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		File playlistsFolder = new File(Config.getAppDir(), "playlists");
 		if(!playlistsFolder.isDirectory()) {

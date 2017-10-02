@@ -14,12 +14,12 @@ class Seek extends Command {
 	}
 
 	@Override
-	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		if(!Utils.isAdmin(author)) {
-			channel.sendMessage(author.getAsMention() + " ``Only admins can use this command.``").queue();
-			return;
-		}
+	public boolean isAdminOnly() {
+		return true;
+	}
 
+	@Override
+	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		if(!AudioPlayerThread.isPlaying()) {
 			channel.sendMessage(author.getAsMention() + " ``Currently I'm not playing.``").queue();
 			return;

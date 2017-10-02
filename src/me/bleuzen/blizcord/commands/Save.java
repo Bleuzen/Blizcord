@@ -11,7 +11,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Config;
-import me.bleuzen.blizcord.Utils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -24,11 +23,12 @@ class Save extends Command {
 	}
 
 	@Override
+	public boolean isAdminOnly() {
+		return true;
+	}
+
+	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		if(!Utils.isAdmin(author)) {
-			channel.sendMessage(author.getAsMention() + " ``Sorry, only admins can save playlists.``").queue();
-			return;
-		}
 		// arg = playlist name
 		if(arg == null) {
 			channel.sendMessage(author.getAsMention() + " ``Please specify a playlist name. Put it behind this command.``").queue();
