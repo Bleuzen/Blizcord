@@ -320,7 +320,7 @@ public class GUI extends JFrame {
 		btnUpdate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Utils.openInBrowser("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases");
+				Utils.openInBrowser("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/download/" + Bot.getUpdateChecker().getLatestTag() + "/" + Values.BOT_NAME + ".exe");
 				System.exit(0);
 			}
 		});

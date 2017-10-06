@@ -14,6 +14,7 @@ public class UpdateChecker extends TimerTask {
 	private final String GITHUB_REPO;
 
 	private boolean updateAvailable = false;
+	private String latestTag = null;
 
 	public UpdateChecker(String githubRepo) {
 		GITHUB_REPO = githubRepo;
@@ -23,10 +24,7 @@ public class UpdateChecker extends TimerTask {
 		Log.info("[Updater] Checking for updates ...");
 
 		try {
-			InputStream inputStream = new URL("https://api.github.com/repos/" + GITHUB_REPO + "/releases/latest").openStream();
-			JSONObject json = new JSONObject(new JSONTokener(inputStream));
-
-			inputStream.close();
+			JSONObject json = fetchJSON("https://api.github.com/repos/" + GITHUB_REPO + "/releases/latest");
 
 			String tagName = json.getString("tag_name");
 			boolean prerelease = json.getBoolean("prerelease");
@@ -40,6 +38,8 @@ public class UpdateChecker extends TimerTask {
 				return;
 			}
 
+			latestTag = tagName;
+
 			String online = tagName;
 			String local = Values.BOT_VERSION;
 
@@ -48,6 +48,13 @@ public class UpdateChecker extends TimerTask {
 			Log.warn("Failed to check for updates.");
 			e.printStackTrace();
 		}
+	}
+
+	private JSONObject fetchJSON(String url) throws Exception {
+		InputStream inputStream = new URL(url).openStream();
+		JSONObject json = new JSONObject(new JSONTokener(inputStream));
+		inputStream.close();
+		return json;
 	}
 
 	private String toVersionString(String version) {
@@ -85,6 +92,10 @@ public class UpdateChecker extends TimerTask {
 
 	public boolean isUpdateAvailable() {
 		return updateAvailable;
+	}
+
+	public String getLatestTag() {
+		return latestTag;
 	}
 
 	@Override
