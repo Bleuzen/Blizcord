@@ -16,7 +16,7 @@ import me.bleuzen.blizcord.Log;
 import me.bleuzen.blizcord.Utils;
 import me.bleuzen.blizcord.Values;
 import me.bleuzen.blizcord.a;
-import me.bleuzen.blizcord.gui.GUI;
+import me.bleuzen.blizcord.gui.GUI_Main;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -233,7 +233,7 @@ public class AudioPlayerThread implements Runnable {
 		musicManager.player.setPaused(p);
 
 		if(a.isGui()) {
-			GUI.settglbtnPauseSelected(p);
+			GUI_Main.settglbtnPauseSelected(p);
 		}
 	}
 

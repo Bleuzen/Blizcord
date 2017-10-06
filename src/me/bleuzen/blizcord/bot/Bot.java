@@ -13,7 +13,7 @@ import me.bleuzen.blizcord.Utils.ArgumentUtils;
 import me.bleuzen.blizcord.Values;
 import me.bleuzen.blizcord.a;
 import me.bleuzen.blizcord.bot.commands.Command;
-import me.bleuzen.blizcord.gui.GUI;
+import me.bleuzen.blizcord.gui.GUI_Main;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -106,6 +106,7 @@ public class Bot extends ListenerAdapter {
 	private static void start() {
 		if(Config.get(Config.BOT_TOKEN).isEmpty()) {
 			Utils.errExit("You must specify a Token in the config file!", Values.EXIT_CODE_RESTART_GUI);
+			//TODO: Don't crash anymore
 		}
 
 		Log.info("Starting JDA ...");
@@ -141,7 +142,7 @@ public class Bot extends ListenerAdapter {
 				String inviteUrl = api.asBot().getInviteUrl(Permission.getPermissions(3402768));
 
 				if(a.isGui()) {
-					GUI.addToSever(inviteUrl);
+					GUI_Main.addToSever(inviteUrl);
 				} else {
 					Log.info("To add me to your server visit:" + System.lineSeparator() + inviteUrl);
 				}

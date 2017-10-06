@@ -40,7 +40,7 @@ import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import me.bleuzen.blizcord.bot.Bot;
 
 @SuppressWarnings("serial")
-public class GUI extends JFrame {
+public class GUI_Main extends JFrame {
 
 	private static final File DEFAULT_CONFIG_FILE = Config.getDefaultConfig();
 
@@ -53,7 +53,7 @@ public class GUI extends JFrame {
 		return iconSet;
 	}
 
-	private static GUI instance;
+	private static GUI_Main instance;
 
 	private JPanel contentPane;
 	private JLabel lblConfig;
@@ -76,7 +76,7 @@ public class GUI extends JFrame {
 	private JLabel lblANewVersion;
 	private JButton btnUpdate;
 
-	public GUI() {
+	public GUI_Main() {
 		instance = this;
 
 		setTitle(Values.BOT_NAME);
@@ -89,7 +89,7 @@ public class GUI extends JFrame {
 		contentPane.setLayout(null);
 
 		try {
-			InputStream imgStream = GUI.class.getResourceAsStream("icon.png");
+			InputStream imgStream = GUI_Main.class.getResourceAsStream("icon.png");
 			icon = ImageIO.read(imgStream);
 			iconSet = true;
 			setIconImage(icon);
@@ -131,16 +131,18 @@ public class GUI extends JFrame {
 		btnEdit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// disable some controls (because config gets already initialized, cannot get changed anymore)
 				btnBrowse.setEnabled(false);
 				txtCustomconfig.setEnabled(false);
 				chckbxUseCustomConfig.setEnabled(false);
-				btnEdit.setEnabled(false); // disable to prevent double clicking
 
 				File cfgFile = getConfig();
 
-				GUI_Config.instance = new GUI_Config(cfgFile);
-				GUI_Config.instance.setVisible(true);
+				if(GUI_Config.instance != null && GUI_Config.instance.isVisible()) {
+					GUI_Config.instance.toFront();
+				} else {
+					GUI_Config.instance = new GUI_Config(cfgFile);
+					GUI_Config.instance.setVisible(true);
+				}
 			}
 		});
 		btnEdit.setFocusable(false);
@@ -185,6 +187,14 @@ public class GUI extends JFrame {
 
 				if(!cfgFile.exists()) {
 					showMsgBox("The config file doesn't exist already. Please use the 'Edit' button first.");
+					return;
+				}
+
+				// check if Config is already saved (by GUI_Config)
+				// GUI_Config.instance gets reset to null after Config got saved
+				// If not null, display an error
+				if(GUI_Config.instance != null) {
+					showMsgBox("You forgot to Apply (save) the config.");
 					return;
 				}
 

@@ -5,7 +5,7 @@ import javax.swing.UIManager;
 
 import me.bleuzen.blizcord.Utils.ArgumentUtils;
 import me.bleuzen.blizcord.bot.Bot;
-import me.bleuzen.blizcord.gui.GUI;
+import me.bleuzen.blizcord.gui.GUI_Main;
 
 public class a {
 
@@ -77,7 +77,7 @@ public class a {
 				Log.debug("Launching GUI ...");
 
 				// Launch GUI
-				GUI frame = new GUI();
+				GUI_Main frame = new GUI_Main();
 				frame.setVisible(true);
 			} catch (Exception e) {
 				Utils.errExit("Failed to start GUI: " + e.getMessage());

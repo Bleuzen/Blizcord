@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import me.bleuzen.blizcord.bot.Bot;
-import me.bleuzen.blizcord.gui.GUI;
+import me.bleuzen.blizcord.gui.GUI_Main;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
@@ -78,7 +78,7 @@ public class Utils {
 		try {
 			Desktop.getDesktop().browse(new URI(link));
 		} catch (Exception e) {
-			GUI.showErrMsgBox(e.getMessage());
+			GUI_Main.showErrMsgBox(e.getMessage());
 			errExit();
 		}
 	}
@@ -94,7 +94,7 @@ public class Utils {
 
 	public static void errExit(String msg, int exitCode) {
 		if(a.isGui()) {
-			GUI.onErrExit(msg);
+			GUI_Main.onErrExit(msg);
 		} else {
 			Log.error("Crash! Reason:");
 			System.err.println(msg == null ? "Unknown" : msg);

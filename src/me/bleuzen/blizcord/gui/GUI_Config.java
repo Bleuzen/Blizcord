@@ -63,8 +63,8 @@ public class GUI_Config extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-		if(GUI.isIconSet()) {
-			setIconImage(GUI.getIcon());
+		if(GUI_Main.isIconSet()) {
+			setIconImage(GUI_Main.getIcon());
 		}
 
 		getContentPane().setLayout(null);
@@ -162,7 +162,7 @@ public class GUI_Config extends JFrame {
 				try {
 					Desktop.getDesktop().browse(new URI(Values.DISCORD_GET_TOKEN));
 				} catch (Exception e1) {
-					GUI.showErrMsgBox(e1.getMessage());
+					GUI_Main.showErrMsgBox(e1.getMessage());
 				}
 			}
 		});
@@ -244,9 +244,11 @@ public class GUI_Config extends JFrame {
 				} else {
 					JOptionPane.showMessageDialog(instance, "Failed to save config.", Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 				}
-				dispose();
 
-				GUI.mvToFront();
+				dispose();
+				instance = null;
+
+				GUI_Main.mvToFront();
 			}
 		});
 

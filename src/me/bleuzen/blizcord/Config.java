@@ -8,7 +8,7 @@ import java.util.Iterator;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import me.bleuzen.blizcord.gui.GUI;
+import me.bleuzen.blizcord.gui.GUI_Main;
 
 public class Config {
 
@@ -28,15 +28,12 @@ public class Config {
 	private static File DEFAULT_CONFIG = null;
 
 	private static JSONObject defaults;
-	private static boolean initialized;
 
 	private static File file;
 	private static JSONObject json;
 
 	public static boolean init(File configFile, boolean fromGUI) { // don't crash after generation if fromGUI
-		if(initialized) {
-			return true;
-		}
+		boolean initialized = false;
 
 		file = configFile;
 
@@ -82,7 +79,7 @@ public class Config {
 			if(generate(toAdd)) {
 				String gotGeneratedOrUpdatedMSG = "Config file got generated or updated.";
 				if(fromGUI) {
-					GUI.showMsgBox(gotGeneratedOrUpdatedMSG);
+					GUI_Main.showMsgBox(gotGeneratedOrUpdatedMSG);
 					initialized = true;
 				} else {
 					Utils.errExit(gotGeneratedOrUpdatedMSG + " Please edit it now.");

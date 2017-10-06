@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import me.bleuzen.blizcord.bot.Bot;
-import me.bleuzen.blizcord.gui.GUI;
+import me.bleuzen.blizcord.gui.GUI_Main;
 
 public class UpdateChecker extends TimerTask {
 
@@ -112,7 +112,7 @@ public class UpdateChecker extends TimerTask {
 
 			// Display in GUI
 			if(a.isGui()) {
-				GUI.showUpdatePanel();
+				GUI_Main.showUpdatePanel();
 			}
 		}
 	}
