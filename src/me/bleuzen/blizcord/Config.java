@@ -8,6 +8,8 @@ import java.util.Iterator;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import me.bleuzen.blizcord.gui.GUI;
+
 public class Config {
 
 	public static final String CONTROL_CHANNEL = "CONTROL_CHANNEL";
@@ -101,7 +103,7 @@ public class Config {
 		return Boolean.parseBoolean(get(key));
 	}
 
-	static void set(String key, String value) {
+	public static void set(String key, String value) {
 		setRaw(key, toValue(value));
 	}
 
@@ -117,7 +119,7 @@ public class Config {
 		return save();
 	}
 
-	static boolean save() {
+	public static boolean save() {
 		try {
 			json.write(new FileWriter(file), 2, 0).close();
 			return true;

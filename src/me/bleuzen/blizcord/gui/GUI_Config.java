@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord;
+package me.bleuzen.blizcord.gui;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import me.bleuzen.blizcord.Config;
+import me.bleuzen.blizcord.Values;
+import me.bleuzen.blizcord.a;
 
 @SuppressWarnings("serial")
 public class GUI_Config extends JFrame {

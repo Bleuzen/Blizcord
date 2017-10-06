@@ -12,11 +12,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import me.bleuzen.blizcord.Config;
-import me.bleuzen.blizcord.GUI;
 import me.bleuzen.blizcord.Log;
 import me.bleuzen.blizcord.Utils;
 import me.bleuzen.blizcord.Values;
 import me.bleuzen.blizcord.a;
+import me.bleuzen.blizcord.gui.GUI;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;

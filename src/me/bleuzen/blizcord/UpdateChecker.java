@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.TimerTask;
 
 import me.bleuzen.blizcord.bot.Bot;
+import me.bleuzen.blizcord.gui.GUI;
 
 public class UpdateChecker extends TimerTask {
 

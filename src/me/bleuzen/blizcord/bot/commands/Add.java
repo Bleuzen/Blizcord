@@ -1,15 +1,15 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
 import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-class List extends Command {
+class Add extends Command {
 
 	@Override
 	public String getName() {
-		return "list";
+		return "add";
 	}
 
 	@Override
@@ -19,7 +19,12 @@ class List extends Command {
 
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		AudioPlayerThread.sendPlaylist(author, channel);
+		if(arg == null) {
+			channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();
+			return;
+		}
+
+		AudioPlayerThread.addToPlaylist(arg);
 	}
 
 }

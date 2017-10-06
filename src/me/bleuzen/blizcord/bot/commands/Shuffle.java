@@ -1,15 +1,15 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
 import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-class Loop extends Command {
+class Shuffle extends Command {
 
 	@Override
 	public String getName() {
-		return "loop";
+		return "shuffle";
 	}
 
 	@Override
@@ -19,13 +19,9 @@ class Loop extends Command {
 
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		if(AudioPlayerThread.loop) {
-			AudioPlayerThread.loop = false;
-			channel.sendMessage(author.getAsMention() + " ``Looping disabled.``").queue();
-		} else {
-			AudioPlayerThread.loop = true;
-			channel.sendMessage(author.getAsMention() + " ``Looping enabled.``").queue();
-		}
+		AudioPlayerThread.getMusicManager().scheduler.shuffle();
+
+		channel.sendMessage(author.getAsMention() + " ``The playlist got shuffeled.``").queue();
 	}
 
 }

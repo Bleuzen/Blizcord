@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import me.bleuzen.blizcord.bot.Bot;
+import me.bleuzen.blizcord.gui.GUI;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
@@ -73,7 +74,7 @@ public class Utils {
 		return user.getId().equals(guild.getOwner().getUser().getId()) || (adminRole != null && guild.getMember(user).getRoles().contains(adminRole));
 	}
 
-	static void openInBrowser(String link) {
+	public static void openInBrowser(String link) {
 		try {
 			Desktop.getDesktop().browse(new URI(link));
 		} catch (Exception e) {

@@ -5,7 +5,6 @@ import java.util.Timer;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 
 import me.bleuzen.blizcord.Config;
-import me.bleuzen.blizcord.GUI;
 import me.bleuzen.blizcord.Log;
 import me.bleuzen.blizcord.NativeKeyListener;
 import me.bleuzen.blizcord.UpdateChecker;
@@ -13,7 +12,8 @@ import me.bleuzen.blizcord.Utils;
 import me.bleuzen.blizcord.Utils.ArgumentUtils;
 import me.bleuzen.blizcord.Values;
 import me.bleuzen.blizcord.a;
-import me.bleuzen.blizcord.commands.Command;
+import me.bleuzen.blizcord.bot.commands.Command;
+import me.bleuzen.blizcord.gui.GUI;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

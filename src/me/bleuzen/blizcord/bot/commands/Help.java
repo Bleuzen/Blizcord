@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;

@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord;
+package me.bleuzen.blizcord.gui;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -31,6 +31,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
+import me.bleuzen.blizcord.Config;
+import me.bleuzen.blizcord.Log;
+import me.bleuzen.blizcord.Utils;
+import me.bleuzen.blizcord.Values;
+import me.bleuzen.blizcord.a;
 import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import me.bleuzen.blizcord.bot.Bot;
 
@@ -371,15 +376,15 @@ public class GUI extends JFrame {
 		}));
 	}
 
-	static void onErrExit(String msg) {
+	public static void onErrExit(String msg) {
 		showErrMsgBox("Crash!" + (msg == null ? "" : (" Reason:" + System.lineSeparator() + msg)));
 	}
 
-	static void showMsgBox(String msg) {
+	public static void showMsgBox(String msg) {
 		JOptionPane.showMessageDialog(instance, msg, Values.BOT_NAME, JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	static void showErrMsgBox(String msg) {
+	public static void showErrMsgBox(String msg) {
 		JOptionPane.showMessageDialog(instance, msg, Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 	}
 
@@ -408,7 +413,7 @@ public class GUI extends JFrame {
 		instance.tglbtnPause.setSelected(selected);
 	}
 
-	static void showUpdatePanel() {
+	public static void showUpdatePanel() {
 		if(!instance.panelUpdate.isVisible()) {
 			instance.panelUpdate.setVisible(true);
 			instance.setSize(instance.getWidth(), instance.getHeight() + 50);

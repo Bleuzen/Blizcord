@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
 import java.io.BufferedReader;
 import java.io.File;

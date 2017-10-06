@@ -1,25 +1,25 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
-import me.bleuzen.blizcord.bot.Bot;
+import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-class Stop extends Command {
+class List extends Command {
 
 	@Override
 	public String getName() {
-		return "stop";
+		return "list";
 	}
 
 	@Override
 	public boolean isAdminOnly() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		Bot.stopPlayer();
+		AudioPlayerThread.sendPlaylist(author, channel);
 	}
 
 }

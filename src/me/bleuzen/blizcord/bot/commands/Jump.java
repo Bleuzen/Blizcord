@@ -1,15 +1,17 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
+
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-class Next extends Command {
+class Jump extends Command {
 
 	@Override
 	public String getName() {
-		return "next";
+		return "jump";
 	}
 
 	@Override
@@ -24,22 +26,23 @@ class Next extends Command {
 			return;
 		}
 
-		int skips;
-		if (arg == null) {
-			skips = 1;
+		int seconds;
+		if(arg == null) {
+			seconds = 10;
 		} else {
 			try {
-				skips = Integer.parseInt(arg);
-				if (skips < 1) {
+				seconds = Integer.parseInt(arg);
+				if(seconds == 0) {
 					throw new NumberFormatException();
 				}
-			} catch (NumberFormatException e) {
-				channel.sendMessage(author.getAsMention() + " Invalid number").queue();
+			} catch(NumberFormatException e) {
+				channel.sendMessage(author.getAsMention() +  " Invalid number").queue();
 				return;
 			}
 		}
 
-		AudioPlayerThread.getMusicManager().scheduler.nextTrack(skips);
+		AudioTrack track = AudioPlayerThread.getMusicManager().player.getPlayingTrack();
+		track.setPosition(track.getPosition() + (1000*seconds)); // Lavaplayer handles values < 0 or > track length
 	}
 
 }

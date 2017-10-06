@@ -1,30 +1,32 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
 import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 
-class Add extends Command {
+class Pause extends Command {
 
 	@Override
 	public String getName() {
-		return "add";
+		return "pause";
 	}
 
 	@Override
 	public boolean isAdminOnly() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		if(arg == null) {
-			channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();
-			return;
+		if(AudioPlayerThread.isPaused()) {
+			channel.sendMessage("``Continue playback ...``").queue();
+			AudioPlayerThread.setPaused(false);
+		} else {
+			AudioPlayerThread.setPaused(true);
+			channel.sendMessage("``Paused.\n"
+					+ "Type this command again to resume.``").queue();
 		}
-
-		AudioPlayerThread.addToPlaylist(arg);
 	}
 
 }

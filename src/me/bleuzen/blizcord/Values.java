@@ -9,7 +9,7 @@ public class Values {
 	public static final String BOT_DEVELOPER = "Bleuzen <supgesu@gmail.com>";
 	public static final String BOT_GITHUB_REPO = "Bleuzen/Blizcord";
 
-	static final String DISCORD_GET_TOKEN = "https://discordapp.com/developers/applications/me";
+	public static final String DISCORD_GET_TOKEN = "https://discordapp.com/developers/applications/me";
 
 	public static final String SEARCH_PREFIX_YOUTUBE = "ytsearch:";
 
@@ -21,7 +21,7 @@ public class Values {
 	static final String OS_WINDOWS = "windows";
 	static final String UNKNOWN_OS = "unknown";
 
-	static final String CONFIG_FILE_EXTENSION = "json";
+	public static final String CONFIG_FILE_EXTENSION = "json";
 	static final String DEFAULT_CONFIG_FILENAME = "config." + CONFIG_FILE_EXTENSION;
 
 }

@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 

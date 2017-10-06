@@ -5,6 +5,7 @@ import javax.swing.UIManager;
 
 import me.bleuzen.blizcord.Utils.ArgumentUtils;
 import me.bleuzen.blizcord.bot.Bot;
+import me.bleuzen.blizcord.gui.GUI;
 
 public class a {
 

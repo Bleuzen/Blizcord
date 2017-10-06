@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord.commands;
+package me.bleuzen.blizcord.bot.commands;
 
 import me.bleuzen.blizcord.Utils;
 import me.bleuzen.blizcord.bot.AudioPlayerThread;
