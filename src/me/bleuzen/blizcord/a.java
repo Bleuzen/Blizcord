@@ -4,6 +4,7 @@ import java.awt.GraphicsEnvironment;
 import javax.swing.UIManager;
 
 import me.bleuzen.blizcord.Utils.ArgumentUtils;
+import me.bleuzen.blizcord.bot.Bot;
 
 public class a {
 
@@ -17,7 +18,7 @@ public class a {
 	 * */
 	private static boolean disableUpdateChecker;
 
-	static boolean isGui() {
+	public static boolean isGui() {
 		return gui;
 	}
 
@@ -36,6 +37,13 @@ public class a {
 		gui = ArgumentUtils.containsArg(args, "--gui");
 		disableUpdateChecker = ArgumentUtils.containsArg(args, "--disable-update-checker");
 
+		Log.info("Version: " + Values.BOT_VERSION);
+		Log.info("Developer: " + Values.BOT_DEVELOPER);
+
+		if(Utils.isUnknownOS()) {
+			Log.warn("Your operating system is not supported yet. Some features may not work.");
+		}
+
 		if(gui) {
 
 			if(GraphicsEnvironment.isHeadless()) {
@@ -43,9 +51,15 @@ public class a {
 				gui = false; // disable gui mode
 				Utils.errExit("GUI is not supported on your system.");
 			}
+
 			try {
+
 				try {
-					if(System.getProperty("os.name").toLowerCase().equals("linux")) {
+					// Use the systems theme
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+					// Linux Fixes
+					if(Utils.getOS().equals(Values.OS_LINUX)) {
 						// Linux Font fix
 						// https://wiki.archlinux.org/index.php/Java_Runtime_Environment_fonts
 						System.setProperty("awt.useSystemAAFontSettings", "gasp");
@@ -54,9 +68,6 @@ public class a {
 						if(System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
 							UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 						}
-					} else {
-						// Use the systems theme
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					}
 				} catch (Exception e) {
 					Log.debug("Failed to set look and feel.");

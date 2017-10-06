@@ -1,10 +1,18 @@
-package me.bleuzen.blizcord;
+package me.bleuzen.blizcord.bot;
 import java.io.File;
 import java.util.Timer;
 
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 
+import me.bleuzen.blizcord.Config;
+import me.bleuzen.blizcord.GUI;
+import me.bleuzen.blizcord.Log;
+import me.bleuzen.blizcord.NativeKeyListener;
+import me.bleuzen.blizcord.UpdateChecker;
+import me.bleuzen.blizcord.Utils;
 import me.bleuzen.blizcord.Utils.ArgumentUtils;
+import me.bleuzen.blizcord.Values;
+import me.bleuzen.blizcord.a;
 import me.bleuzen.blizcord.commands.Command;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -58,7 +66,7 @@ public class Bot extends ListenerAdapter {
 		return api;
 	}
 
-	static Guild getGuild() {
+	public static Guild getGuild() {
 		return guild;
 	}
 
@@ -74,10 +82,7 @@ public class Bot extends ListenerAdapter {
 		return startTime;
 	}
 
-	static void launch(String[] args) {
-		Log.info("Version: " + Values.BOT_VERSION);
-		Log.info("Developer: " + Values.BOT_DEVELOPER);
-
+	public static void launch(String[] args) {
 		Log.info("Starting bot ...");
 
 		// init config

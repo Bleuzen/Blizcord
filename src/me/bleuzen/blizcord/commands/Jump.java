@@ -2,7 +2,7 @@ package me.bleuzen.blizcord.commands;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import me.bleuzen.blizcord.AudioPlayerThread;
+import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;

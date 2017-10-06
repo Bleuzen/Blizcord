@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord;
+package me.bleuzen.blizcord.bot;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;

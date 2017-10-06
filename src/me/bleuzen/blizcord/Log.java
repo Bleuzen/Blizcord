@@ -14,23 +14,23 @@ public class Log {
 
 	private static Logger logger;
 
-	static void error(String msg) {
+	public static void error(String msg) {
 		logger.error(msg);
 	}
 
-	static void warn(String msg) {
+	public static void warn(String msg) {
 		logger.warn(msg);
 	}
 
-	static void info(String msg) {
+	public static void info(String msg) {
 		logger.info(msg);
 	}
 
-	static void debug(String msg) {
+	public static void debug(String msg) {
 		logger.debug(msg);
 	}
 
-	static void debug(String format, Object... argArray) {
+	public static void debug(String format, Object... argArray) {
 		logger.debug(format, argArray);
 	}
 

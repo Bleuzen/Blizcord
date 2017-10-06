@@ -10,17 +10,17 @@ import org.json.JSONTokener;
 
 public class Config {
 
-	static final String CONTROL_CHANNEL = "CONTROL_CHANNEL";
-	static final String VOICE_CHANNEL = "VOICE_CHANNEL";
-	static final String BOT_TOKEN = "BOT_TOKEN";
-	static final String COMMAND_PREFIX = "COMMAND_PREFIX";
-	static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
-	static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
-	static final String ADMINS_ROLE = "ADMINS_ROLE";
-	static final String VOLUME = "VOLUME";
-	static final String ENABLE_MEDIA_CONTROL_KEYS = "ENABLE_MEDIA_CONTROL_KEYS";
-	static final String AUTO_RECONNECT = "AUTO_RECONNECT";
-	static final String USE_NATIVE_AUDIO_SYSTEM = "USE_NATIVE_AUDIO_SYSTEM";
+	public static final String CONTROL_CHANNEL = "CONTROL_CHANNEL";
+	public static final String VOICE_CHANNEL = "VOICE_CHANNEL";
+	public static final String BOT_TOKEN = "BOT_TOKEN";
+	public static final String COMMAND_PREFIX = "COMMAND_PREFIX";
+	public static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
+	public static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
+	public static final String ADMINS_ROLE = "ADMINS_ROLE";
+	public static final String VOLUME = "VOLUME";
+	public static final String ENABLE_MEDIA_CONTROL_KEYS = "ENABLE_MEDIA_CONTROL_KEYS";
+	public static final String AUTO_RECONNECT = "AUTO_RECONNECT";
+	public static final String USE_NATIVE_AUDIO_SYSTEM = "USE_NATIVE_AUDIO_SYSTEM";
 
 	private static File APP_DIR = null;
 	private static File DEFAULT_CONFIG = null;
@@ -31,7 +31,7 @@ public class Config {
 	private static File file;
 	private static JSONObject json;
 
-	static boolean init(File configFile, boolean fromGUI) { // don't crash after generation if fromGUI
+	public static boolean init(File configFile, boolean fromGUI) { // don't crash after generation if fromGUI
 		if(initialized) {
 			return true;
 		}
@@ -49,7 +49,7 @@ public class Config {
 		defaults.put(VOLUME, "100");
 		defaults.put(ENABLE_MEDIA_CONTROL_KEYS, "false");
 		defaults.put(AUTO_RECONNECT, "true");
-		defaults.put(USE_NATIVE_AUDIO_SYSTEM, "true");
+		defaults.put(USE_NATIVE_AUDIO_SYSTEM, Utils.isUnknownOS() ? "false" : "true"); // enabled by default, but not for unknown OS
 
 		JSONObject read;
 		try {
@@ -93,11 +93,11 @@ public class Config {
 		return initialized;
 	}
 
-	static String get(String key) {
+	public static String get(String key) {
 		return toValue(json.getString(key));
 	}
 
-	static boolean getBoolean(String key) {
+	public static boolean getBoolean(String key) {
 		return Boolean.parseBoolean(get(key));
 	}
 
@@ -136,13 +136,16 @@ public class Config {
 			return APP_DIR;
 		}
 
-		String os = System.getProperty("os.name").toLowerCase();
-		if(os.equals("linux")) {
+		switch(Utils.getOS()) {
+		case Values.OS_LINUX:
 			APP_DIR = new File(System.getProperty("user.home"), ("." + Values.BOT_NAME.toLowerCase()));
-		} else if(os.startsWith("windows")) {
+			break;
+		case Values.OS_WINDOWS:
 			APP_DIR = new File(System.getenv("APPDATA"), Values.BOT_NAME);
-		} else {
+			break;
+		default:
 			APP_DIR = new File(System.getProperty("user.dir"), Values.BOT_NAME.toLowerCase());
+			break;
 		}
 
 		if(!APP_DIR.exists()) {
@@ -154,12 +157,12 @@ public class Config {
 		return APP_DIR;
 	}
 
-	static File getDefaultConfig() {
+	public static File getDefaultConfig() {
 		if(DEFAULT_CONFIG != null) {
 			return DEFAULT_CONFIG;
 		}
 
-		DEFAULT_CONFIG = new File(getAppDir(), "config.json");
+		DEFAULT_CONFIG = new File(getAppDir(), Values.DEFAULT_CONFIG_FILENAME);
 
 		return DEFAULT_CONFIG;
 	}

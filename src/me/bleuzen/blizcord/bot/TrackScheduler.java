@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord;
+package me.bleuzen.blizcord.bot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +11,8 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+
+import me.bleuzen.blizcord.Utils;
 
 //source (edited): https://github.com/sedmelluq/lavaplayer/tree/master/demo-jda
 

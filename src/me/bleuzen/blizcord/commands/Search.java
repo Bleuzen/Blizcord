@@ -1,8 +1,8 @@
 package me.bleuzen.blizcord.commands;
 
-import me.bleuzen.blizcord.AudioPlayerThread;
-import me.bleuzen.blizcord.Bot;
 import me.bleuzen.blizcord.Values;
+import me.bleuzen.blizcord.bot.AudioPlayerThread;
+import me.bleuzen.blizcord.bot.Bot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;

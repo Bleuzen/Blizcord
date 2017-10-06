@@ -6,6 +6,9 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
+import me.bleuzen.blizcord.bot.AudioPlayerThread;
+import me.bleuzen.blizcord.bot.Bot;
+
 public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyListener {
 
 	private static Level loggingLevel;
@@ -51,7 +54,7 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 		loggingLevel = l;
 	}
 
-	static void init() {
+	public static void init() {
 		try {
 			// Get the logger for "org.jnativehook" and set the level
 			Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());

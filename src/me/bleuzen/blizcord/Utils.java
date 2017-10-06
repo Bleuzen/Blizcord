@@ -6,11 +6,33 @@ import java.util.concurrent.TimeUnit;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import me.bleuzen.blizcord.bot.Bot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 
 public class Utils {
+
+	private static String OS;
+
+	public static String getOS() {
+		if(OS != null) {
+			return OS;
+		}
+
+		String tmp = System.getProperty("os.name").toLowerCase();
+		if(tmp.equals(Values.OS_LINUX)) {
+			return (OS = Values.OS_LINUX);
+		} else if(tmp.startsWith(Values.OS_WINDOWS)) {
+			return (OS = Values.OS_WINDOWS);
+		} else {
+			return (OS = Values.UNKNOWN_OS);
+		}
+	}
+
+	public static boolean isUnknownOS() {
+		return getOS().equals(Values.UNKNOWN_OS);
+	}
 
 	public static long timeToMS(int hours, int minutes, int seconds) {
 		if(seconds > 59 || seconds < 0) {
@@ -64,12 +86,12 @@ public class Utils {
 		errExit(null);
 	}
 
-	static void errExit(String msg) {
+	public static void errExit(String msg) {
 		errExit(msg, 1);
 	}
 
 
-	static void errExit(String msg, int exitCode) {
+	public static void errExit(String msg, int exitCode) {
 		if(a.isGui()) {
 			GUI.onErrExit(msg);
 		} else {

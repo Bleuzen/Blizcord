@@ -2,9 +2,9 @@ package me.bleuzen.blizcord.commands;
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 
-import me.bleuzen.blizcord.Bot;
 import me.bleuzen.blizcord.Values;
 import me.bleuzen.blizcord.a;
+import me.bleuzen.blizcord.bot.Bot;
 import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;

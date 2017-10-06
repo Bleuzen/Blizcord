@@ -9,8 +9,8 @@ import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import me.bleuzen.blizcord.AudioPlayerThread;
 import me.bleuzen.blizcord.Config;
+import me.bleuzen.blizcord.bot.AudioPlayerThread;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;

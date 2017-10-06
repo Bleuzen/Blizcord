@@ -1,4 +1,4 @@
-package me.bleuzen.blizcord;
+package me.bleuzen.blizcord.bot;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,12 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import me.bleuzen.blizcord.Config;
+import me.bleuzen.blizcord.GUI;
+import me.bleuzen.blizcord.Log;
+import me.bleuzen.blizcord.Utils;
+import me.bleuzen.blizcord.Values;
+import me.bleuzen.blizcord.a;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -235,7 +241,7 @@ public class AudioPlayerThread implements Runnable {
 		return musicManager.player.isPaused();
 	}
 
-	static void togglePause() {
+	public static void togglePause() {
 		setPaused(!isPaused());
 	}
 

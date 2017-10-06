@@ -6,6 +6,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.TimerTask;
 
+import me.bleuzen.blizcord.bot.Bot;
+
 public class UpdateChecker extends TimerTask {
 
 	private final String GITHUB_REPO;
@@ -55,7 +57,6 @@ public class UpdateChecker extends TimerTask {
 		local = toVersionString(local);
 		online = toVersionString(online);
 
-		Log.debug("[Updater] Local version: {}", local);
 		Log.debug("[Updater] Online version: {}", online);
 
 		String[] valsLocal = local.split("\\.");

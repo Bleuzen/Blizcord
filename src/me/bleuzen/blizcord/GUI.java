@@ -27,8 +27,12 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.output.FileWriterWithEncoding;
+
+import me.bleuzen.blizcord.bot.AudioPlayerThread;
+import me.bleuzen.blizcord.bot.Bot;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
@@ -150,10 +154,16 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				fileChooser.setAcceptAllFileFilterUsed(true);
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				fileChooser.setFileFilter(new FileNameExtensionFilter(Values.CONFIG_FILE_EXTENSION.toUpperCase() + " file", Values.CONFIG_FILE_EXTENSION));
 				int r = fileChooser.showSaveDialog(null);
 				if(r == JFileChooser.APPROVE_OPTION) {
-					txtCustomconfig.setText(fileChooser.getSelectedFile().getAbsolutePath());
+					String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+					if(!fileName.endsWith(Values.CONFIG_FILE_EXTENSION)) {
+						fileName += ("." + Values.CONFIG_FILE_EXTENSION);
+					}
+
+					txtCustomconfig.setText(fileName);
 				}
 			}
 		});
@@ -385,7 +395,7 @@ public class GUI extends JFrame {
 		}
 	}
 
-	static void addToSever(String link) {
+	public static void addToSever(String link) {
 		int r = JOptionPane.showConfirmDialog(instance, "Do you want to add the bot to your server now?", Values.BOT_NAME, JOptionPane.YES_NO_OPTION);
 		if(r == JOptionPane.YES_OPTION) {
 			Utils.openInBrowser(link);
@@ -394,7 +404,7 @@ public class GUI extends JFrame {
 		}
 	}
 
-	static void settglbtnPauseSelected(boolean selected) {
+	public static void settglbtnPauseSelected(boolean selected) {
 		instance.tglbtnPause.setSelected(selected);
 	}
 

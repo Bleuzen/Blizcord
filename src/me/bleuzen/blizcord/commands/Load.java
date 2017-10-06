@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-import me.bleuzen.blizcord.AudioPlayerThread;
-import me.bleuzen.blizcord.Bot;
 import me.bleuzen.blizcord.Config;
+import me.bleuzen.blizcord.bot.AudioPlayerThread;
+import me.bleuzen.blizcord.bot.Bot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
