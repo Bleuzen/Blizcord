@@ -1,10 +1,10 @@
 package me.bleuzen.blizcord;
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.TimerTask;
+
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import me.bleuzen.blizcord.bot.Bot;
 import me.bleuzen.blizcord.gui.GUI;
@@ -13,24 +13,32 @@ public class UpdateChecker extends TimerTask {
 
 	private final String GITHUB_REPO;
 
-	private String json;
-
 	private boolean updateAvailable = false;
-	//private boolean alreadyNotified = false;
 
 	public UpdateChecker(String githubRepo) {
 		GITHUB_REPO = githubRepo;
 	}
 
 	private void checkForUpdate() {
-		Log.debug("[Updater] Checking for updates ...");
+		Log.info("[Updater] Checking for updates ...");
 
 		try {
 			InputStream inputStream = new URL("https://api.github.com/repos/" + GITHUB_REPO + "/releases/latest").openStream();
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-			json = bufferedReader.readLine();
+			JSONObject json = new JSONObject(new JSONTokener(inputStream));
 
-			String tagName = getJsonValue("tag_name");
+			inputStream.close();
+
+			String tagName = json.getString("tag_name");
+			boolean prerelease = json.getBoolean("prerelease");
+
+			Log.debug("[Updater] [JSON] tag_name: " + tagName);
+			Log.debug("[Updater] [JSON] prerelease: " + prerelease);
+
+			if(prerelease) {
+				updateAvailable = false;
+				Log.debug("[Updater] Skipping version comparison");
+				return;
+			}
 
 			String online = tagName;
 			String local = Values.BOT_VERSION;
@@ -40,14 +48,6 @@ public class UpdateChecker extends TimerTask {
 			Log.warn("Failed to check for updates.");
 			e.printStackTrace();
 		}
-	}
-
-	private String getJsonValue(final String key) throws Exception {
-		int i = json.indexOf(key);
-		if(i == -1) { // json doesn't contain the key
-			throw new Exception();
-		}
-		return json.substring(i + key.length() + 3).split("\"")[0];
 	}
 
 	private String toVersionString(String version) {
