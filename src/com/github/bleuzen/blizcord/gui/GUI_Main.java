@@ -4,8 +4,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -98,15 +96,6 @@ public class GUI_Main extends JFrame {
 			Log.debug("Failed to set icon.");
 		}
 
-		addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if(GUI_Config.instance != null && GUI_Config.instance.isVisible()) {
-					GUI_Config.instance.toFront();
-				}
-			}
-		});
-
 		lblConfig = new JLabel("Config:");
 		lblConfig.setBounds(10, 12, 70, 28);
 		contentPane.add(lblConfig);
@@ -131,9 +120,7 @@ public class GUI_Main extends JFrame {
 		btnEdit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btnBrowse.setEnabled(false);
-				txtCustomconfig.setEnabled(false);
-				chckbxUseCustomConfig.setEnabled(false);
+				setConfigChooserEnabled(false);
 
 				File cfgFile = getConfig();
 
@@ -141,7 +128,6 @@ public class GUI_Main extends JFrame {
 					GUI_Config.instance.toFront();
 				} else {
 					GUI_Config.instance = new GUI_Config(cfgFile);
-					GUI_Config.instance.setVisible(true);
 				}
 			}
 		});
@@ -456,4 +442,11 @@ public class GUI_Main extends JFrame {
 		Utils.openInBrowser("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/download/" + Bot.getUpdateChecker().getLatestTag() + "/" + Values.BOT_NAME + ".exe");
 		System.exit(0);
 	}
+
+	static void setConfigChooserEnabled(boolean e) {
+		instance.btnBrowse.setEnabled(e);
+		instance.txtCustomconfig.setEnabled(e);
+		instance.chckbxUseCustomConfig.setEnabled(e);
+	}
+
 }

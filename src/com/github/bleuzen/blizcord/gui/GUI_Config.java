@@ -264,18 +264,27 @@ public class GUI_Config extends JFrame {
 					JOptionPane.showMessageDialog(instance, "Failed to save config.", Values.BOT_NAME, JOptionPane.ERROR_MESSAGE);
 				}
 
-				dispose();
-				instance = null;
+				closeWindow();
 
 				GUI_Main.mvToFront();
 			}
 		});
 
-		read();
+		if(read()) {
+			setVisible(true);
+		} else {
+			closeWindow();
+			// Re-enable Config chooser (allow to select a new one)
+			GUI_Main.setConfigChooserEnabled(true);
+		}
 	}
 
-	private void read() {
-		Config.init(configFile, true);
+	private boolean read() {
+		boolean successfullyInitialized = Config.init(configFile, true);
+
+		if(!successfullyInitialized) {
+			return false;
+		}
 
 		commandprefix.setText(Config.get(Config.COMMAND_PREFIX));
 		controlchannel.setText(Config.get(Config.CONTROL_CHANNEL));
@@ -320,10 +329,16 @@ public class GUI_Config extends JFrame {
 			chckbxAdminsRole.setSelected(true);
 		}
 
+		return successfullyInitialized;
 	}
 
 	private void hideGetButton() {
 		btnGet.setVisible(false);
 		bottoken.setSize(206, bottoken.getHeight());
+	}
+
+	private void closeWindow() {
+		dispose();
+		instance = null;
 	}
 }

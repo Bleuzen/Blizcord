@@ -91,7 +91,6 @@ public class Utils {
 		errExit(msg, 1);
 	}
 
-
 	public static void errExit(String msg, int exitCode) {
 		if(a.isGui()) {
 			GUI_Main.onErrExit(msg);
@@ -109,6 +108,19 @@ public class Utils {
 			System.exit(exitCode);
 		} else {
 			System.exit(0);
+		}
+	}
+
+	//TODO
+	public static void TMPerrorButNotCrashGUI(String msg) {
+		if(a.isGui()) {
+			// Only show Error message box, but don't exit
+			GUI_Main.showErrMsgBox(msg);
+		} else {
+			// The old way: crash
+			//TODO: double checks if a.isGui() (again in errExit())
+			//TODO: Write better method?
+			Utils.errExit(msg);
 		}
 	}
 

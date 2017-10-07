@@ -105,15 +105,7 @@ public class Bot extends ListenerAdapter {
 
 	private static boolean start() {
 		if(Config.get(Config.BOT_TOKEN).isEmpty()) {
-			if(a.isGui()) {
-				// Only show Error message box, but don't exit
-				GUI_Main.showErrMsgBox("You must specify a Token in the config file!");
-			} else {
-				// The old way: crash
-				//TODO: double checks if a.isGui() (again in Utils.errExit())
-				//TODO: Write better method in Utils?
-				Utils.errExit("You must specify a Token in the config file!");
-			}
+			Utils.TMPerrorButNotCrashGUI("You must specify a Token in the config file!");
 			return false;
 		}
 
@@ -228,15 +220,7 @@ public class Bot extends ListenerAdapter {
 			return true;
 
 		} catch (Exception e) {
-			if(a.isGui()) {
-				// Only show Error message box, but don't exit
-				GUI_Main.showErrMsgBox(e.getMessage());
-			} else {
-				// The old way: crash
-				//TODO: double checks if a.isGui() (again in Utils.errExit())
-				//TODO: Write better method in Utils?
-				Utils.errExit(e.getMessage());
-			}
+			Utils.TMPerrorButNotCrashGUI(e.getMessage());
 			return false;
 		}
 

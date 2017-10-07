@@ -85,7 +85,7 @@ public class Config {
 					Utils.errExit(gotGeneratedOrUpdatedMSG + " Please edit it now.");
 				}
 			} else {
-				Utils.errExit("Failed to generate config. (Do you have write access here?)", Values.EXIT_CODE_RESTART_GUI);
+				Utils.TMPerrorButNotCrashGUI("Failed to generate config. (Do you have write access here?)");
 			}
 		}
 
