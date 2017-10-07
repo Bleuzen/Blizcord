@@ -15,7 +15,41 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent nativeEvent) {
-		int keyCode = nativeEvent.getKeyCode();
+		/*int keyCode = nativeEvent.getKeyCode();
+		switch (keyCode) {
+		}*/
+
+		// temporary Linux workaround
+		// https://github.com/kwhat/jnativehook/issues/182
+		//TODO: Remove when fixed in JNativeHook
+		if(Utils.getOS().equals(Values.OS_LINUX)) {
+			handleLinuxKey(nativeEvent.getRawCode());
+		} else {
+			handleKeyCode(nativeEvent.getKeyCode());
+		}
+	}
+
+	// temporary Linux workaround
+	// https://github.com/kwhat/jnativehook/issues/182
+	//TODO: Remove when fixed in JNativeHook
+	private void handleLinuxKey(int rawCode) {
+		switch (rawCode) {
+		case 65300:
+			handleKeyCode(NativeKeyEvent.VC_MEDIA_PLAY);
+			break;
+		case 65301:
+			handleKeyCode(NativeKeyEvent.VC_MEDIA_STOP);
+			break;
+		case 65302:
+			handleKeyCode(NativeKeyEvent.VC_MEDIA_PREVIOUS);
+			break;
+		case 65303:
+			handleKeyCode(NativeKeyEvent.VC_MEDIA_NEXT);
+			break;
+		}
+	}
+
+	private void handleKeyCode(int keyCode) {
 		switch (keyCode) {
 		case NativeKeyEvent.VC_MEDIA_PLAY:
 			Log.debug("NativeKeyEvent: VC_MEDIA_PLAY");
@@ -37,9 +71,6 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 		case NativeKeyEvent.VC_MEDIA_NEXT:
 			Log.debug("NativeKeyEvent: VC_MEDIA_NEXT");
 			AudioPlayerThread.getMusicManager().scheduler.nextTrack(1);
-			break;
-
-		default:
 			break;
 		}
 	}
