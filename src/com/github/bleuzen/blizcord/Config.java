@@ -19,7 +19,8 @@ public class Config {
 	public static final String DISPLAY_SONG_AS_GAME = "DISPLAY_SONG_AS_GAME";
 	public static final String UPDATE_CHECK_INTERVAL_HOURS = "UPDATE_CHECK_INTERVAL_HOURS";
 	public static final String ADMINS_ROLE = "ADMINS_ROLE";
-	public static final String VOLUME = "VOLUME";
+	public static final String ALLOW_CUSTOM_VOLUME = "ALLOW_CUSTOM_VOLUME";
+	public static final String STARTING_VOLUME = "STARTING_VOLUME";
 	public static final String ENABLE_MEDIA_CONTROL_KEYS = "ENABLE_MEDIA_CONTROL_KEYS";
 	public static final String AUTO_RECONNECT = "AUTO_RECONNECT";
 	public static final String USE_NATIVE_AUDIO_SYSTEM = "USE_NATIVE_AUDIO_SYSTEM";
@@ -45,7 +46,8 @@ public class Config {
 		defaults.put(VOICE_CHANNEL, "Music");
 		defaults.put(DISPLAY_SONG_AS_GAME, "true");
 		defaults.put(UPDATE_CHECK_INTERVAL_HOURS, "24 #set to 0 to disable");
-		defaults.put(VOLUME, "100");
+		defaults.put(ALLOW_CUSTOM_VOLUME, "false");
+		defaults.put(STARTING_VOLUME, "100");
 		defaults.put(ENABLE_MEDIA_CONTROL_KEYS, "false");
 		defaults.put(AUTO_RECONNECT, "true");
 		defaults.put(USE_NATIVE_AUDIO_SYSTEM, Utils.isUnknownOS() ? "false" : "true"); // enabled by default, but not for unknown OS

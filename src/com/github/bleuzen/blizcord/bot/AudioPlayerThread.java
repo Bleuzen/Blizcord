@@ -55,13 +55,8 @@ public class AudioPlayerThread implements Runnable {
 
 		guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
 
-		// try to set volume
-		try {
-			musicManager.player.setVolume(Integer.parseInt(Config.get(Config.VOLUME)));
-			Log.debug("Volume set to: {}", musicManager.player.getVolume());
-		} catch (NumberFormatException e) {
-			Utils.errExit("Invalid volume", Values.EXIT_CODE_RESTART_GUI);
-		}
+		// try to set the starting volume
+		setVolume(Config.get(Config.STARTING_VOLUME));
 	}
 
 	public static void sendPlaylist(User user, MessageChannel channel) {
@@ -247,6 +242,28 @@ public class AudioPlayerThread implements Runnable {
 
 	public static boolean isPlaying() {
 		return musicManager.player.getPlayingTrack() != null;
+	}
+
+	public static int setVolume(String v) {
+		if(!Config.getBoolean(Config.ALLOW_CUSTOM_VOLUME)) {
+			return Values.SET_VOLUME_ERROR_CUSTOM_VOLUME_NOT_ALLOWED;
+		}
+
+		int volume;
+		try {
+			volume = Integer.parseInt(v);
+
+			if(volume > 100 || volume < 0) {
+				throw new NumberFormatException();
+			}
+		} catch (NumberFormatException e) {
+			Log.debug("Invalid volume: {}", v);
+			return Values.SET_VOLUME_ERROR_INVALID_NUMBER;
+		}
+
+		musicManager.player.setVolume(volume);
+		Log.debug("Player volume set to: {}", musicManager.player.getVolume());
+		return Values.SET_VOLUME_SUCCESSFULLY;
 	}
 
 	public static void addToPlaylist(String arg) {

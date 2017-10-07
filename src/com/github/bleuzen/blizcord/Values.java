@@ -24,4 +24,8 @@ public class Values {
 	public static final String CONFIG_FILE_EXTENSION = "json";
 	static final String DEFAULT_CONFIG_FILENAME = "config." + CONFIG_FILE_EXTENSION;
 
+	public static final int SET_VOLUME_SUCCESSFULLY = 0;
+	public static final int SET_VOLUME_ERROR_CUSTOM_VOLUME_NOT_ALLOWED = 1;
+	public static final int SET_VOLUME_ERROR_INVALID_NUMBER = 2;
+
 }

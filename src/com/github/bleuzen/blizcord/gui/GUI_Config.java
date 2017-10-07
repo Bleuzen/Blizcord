@@ -48,8 +48,8 @@ public class GUI_Config extends JFrame {
 	private final JLabel lblIntervalInHours;
 	private final JButton btnGet;
 	private final JCheckBox chckbxAdminsRole;
-	private final JCheckBox chckbxCustomVolume;
-	private final JSpinner spinnerVolume;
+	private final JCheckBox chckbxAllowCustomVolume;
+	private final JSpinner spinnerStartingVolume;
 	private final JCheckBox chckbxEnableMediaControl;
 	private final JTabbedPane tabbedPane;
 	private final JPanel panel_Basic;
@@ -205,16 +205,17 @@ public class GUI_Config extends JFrame {
 		tabbedPane.addTab("Advanced", null, panel_Advanced, null);
 		panel_Advanced.setLayout(null);
 
-		chckbxCustomVolume = new JCheckBox("Custom Volume");
-		chckbxCustomVolume.setBounds(8, 8, 240, 28);
-		panel_Advanced.add(chckbxCustomVolume);
-		chckbxCustomVolume.setToolTipText("Change the volume (other than 100% requires more CPU)");
+		chckbxAllowCustomVolume = new JCheckBox("Allow to change the Volume");
+		chckbxAllowCustomVolume.setBounds(8, 8, 240, 28);
+		panel_Advanced.add(chckbxAllowCustomVolume);
+		chckbxAllowCustomVolume.setToolTipText("<html>This enables the <i>!volume</i> command.<br>Other than 100% requires more CPU.</html>");
 
-		spinnerVolume = new JSpinner();
-		spinnerVolume.setBounds(276, 8, 64, 28);
-		panel_Advanced.add(spinnerVolume);
-		spinnerVolume.setEnabled(false);
-		spinnerVolume.setModel(new SpinnerNumberModel(100, 5, 100, 5));
+		spinnerStartingVolume = new JSpinner();
+		spinnerStartingVolume.setToolTipText("Starting volume");
+		spinnerStartingVolume.setBounds(276, 8, 64, 28);
+		panel_Advanced.add(spinnerStartingVolume);
+		spinnerStartingVolume.setEnabled(false);
+		spinnerStartingVolume.setModel(new SpinnerNumberModel(100, 0, 100, 5));
 
 		chckbxEnableMediaControl = new JCheckBox("Enable media control keys");
 		chckbxEnableMediaControl.setBounds(8, 38, 262, 28);
@@ -231,10 +232,10 @@ public class GUI_Config extends JFrame {
 		chckbxNativeAudioSystem.setToolTipText("Gets rid of stuttering caused by GC pauses. This may not work on all systems.");
 		chckbxNativeAudioSystem.setBounds(8, 98, 262, 28);
 		panel_Advanced.add(chckbxNativeAudioSystem);
-		chckbxCustomVolume.addActionListener(new ActionListener() {
+		chckbxAllowCustomVolume.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				spinnerVolume.setEnabled(chckbxCustomVolume.isSelected());
+				spinnerStartingVolume.setEnabled(chckbxAllowCustomVolume.isSelected());
 			}
 		});
 
@@ -253,7 +254,8 @@ public class GUI_Config extends JFrame {
 				Config.set(Config.ADMINS_ROLE, adminsrole.getText());
 				Config.set(Config.DISPLAY_SONG_AS_GAME, String.valueOf(display_song_as_game.isSelected()));
 				Config.set(Config.UPDATE_CHECK_INTERVAL_HOURS, (periodic_update_check_box.isSelected() ? update_check_interval_hours_spinner.getValue().toString() : "0"));
-				Config.set(Config.VOLUME, (chckbxCustomVolume.isSelected() ? spinnerVolume.getValue().toString() : "100"));
+				Config.set(Config.ALLOW_CUSTOM_VOLUME, String.valueOf(chckbxAllowCustomVolume.isSelected()));
+				Config.set(Config.STARTING_VOLUME, spinnerStartingVolume.getValue().toString());
 				Config.set(Config.ENABLE_MEDIA_CONTROL_KEYS, String.valueOf(chckbxEnableMediaControl.isSelected()));
 				Config.set(Config.AUTO_RECONNECT, String.valueOf(chckbxAutoReconnect.isSelected()));
 				Config.set(Config.USE_NATIVE_AUDIO_SYSTEM, String.valueOf(chckbxNativeAudioSystem.isSelected()));
@@ -303,11 +305,11 @@ public class GUI_Config extends JFrame {
 			}
 		}
 
-		int vol = Integer.parseInt(Config.get(Config.VOLUME));
+		int vol = Integer.parseInt(Config.get(Config.STARTING_VOLUME));
 		if (vol != 100) {
-			chckbxCustomVolume.setSelected(true);
-			spinnerVolume.setEnabled(true);
-			spinnerVolume.setValue(vol);
+			chckbxAllowCustomVolume.setSelected(true);
+			spinnerStartingVolume.setEnabled(true);
+			spinnerStartingVolume.setValue(vol);
 		}
 
 		chckbxAutoReconnect.setSelected(Config.getBoolean(Config.AUTO_RECONNECT));

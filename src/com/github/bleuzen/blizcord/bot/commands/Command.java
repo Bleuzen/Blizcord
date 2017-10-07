@@ -34,6 +34,7 @@ public abstract class Command {
 		commands.add(new Shuffle());
 		commands.add(new Stop());
 		commands.add(new Uptime());
+		commands.add(new Volume());
 	}
 
 	public boolean compare(String cmd) {
