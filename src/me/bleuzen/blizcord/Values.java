@@ -17,9 +17,9 @@ public class Values {
 
 	public static final int EXIT_CODE_RESTART_GUI = 2;
 
-	static final String OS_LINUX = "linux";
-	static final String OS_WINDOWS = "windows";
-	static final String UNKNOWN_OS = "unknown";
+	public static final String OS_LINUX = "linux";
+	public static final String OS_WINDOWS = "windows";
+	public static final String UNKNOWN_OS = "unknown";
 
 	public static final String CONFIG_FILE_EXTENSION = "json";
 	static final String DEFAULT_CONFIG_FILENAME = "config." + CONFIG_FILE_EXTENSION;

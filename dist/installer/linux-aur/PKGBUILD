@@ -10,7 +10,7 @@ license=('mit')
 depends=('jre8-openjdk')
 install=$pkgname.install
 source=("Blizcord.exe::https://github.com/Bleuzen/Blizcord/releases/download/${pkgver}/Blizcord.exe"
-        "blizcord.png::https://raw.githubusercontent.com/Bleuzen/Blizcord/master/src/me/bleuzen/blizcord/icon.png"
+        "blizcord.png::https://raw.githubusercontent.com/Bleuzen/Blizcord/master/src/me/bleuzen/blizcord/gui/icon.png"
         "blizcord"
         "blizcord-gui"
         "blizcord.desktop")
