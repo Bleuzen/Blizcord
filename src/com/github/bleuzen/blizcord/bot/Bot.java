@@ -95,8 +95,11 @@ public class Bot extends ListenerAdapter {
 
 		Log.info("Config: " + configFile.getAbsolutePath());
 
-		if(!Config.init(configFile, a.isGui())) {
-			Utils.errExit("Failed to load config.", Values.EXIT_CODE_RESTART_GUI);
+		// Load the config (if not already done (by GUI_Config))
+		if(!Config.isInitialized()) {
+			if(!Config.init(configFile, a.isGui())) {
+				Utils.errExit("Failed to load config.", Values.EXIT_CODE_RESTART_GUI);
+			}
 		}
 
 		// Start the bot

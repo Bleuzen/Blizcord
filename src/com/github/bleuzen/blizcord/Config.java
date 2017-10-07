@@ -33,8 +33,14 @@ public class Config {
 	private static File file;
 	private static JSONObject json;
 
+	private static boolean initialized;
+
+	public static boolean isInitialized() {
+		return initialized;
+	}
+
 	public static boolean init(File configFile, boolean fromGUI) { // don't crash after generation if fromGUI
-		boolean initialized = false;
+		initialized = false;
 
 		file = configFile;
 

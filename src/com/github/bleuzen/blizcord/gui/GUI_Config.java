@@ -305,12 +305,10 @@ public class GUI_Config extends JFrame {
 			}
 		}
 
-		int vol = Integer.parseInt(Config.get(Config.STARTING_VOLUME));
-		if (vol != 100) {
-			chckbxAllowCustomVolume.setSelected(true);
-			spinnerStartingVolume.setEnabled(true);
-			spinnerStartingVolume.setValue(vol);
-		}
+		spinnerStartingVolume.setValue(Integer.parseInt(Config.get(Config.STARTING_VOLUME)));
+
+		chckbxAllowCustomVolume.setSelected(Config.getBoolean(Config.ALLOW_CUSTOM_VOLUME));
+		spinnerStartingVolume.setEnabled(chckbxAllowCustomVolume.isSelected());
 
 		chckbxAutoReconnect.setSelected(Config.getBoolean(Config.AUTO_RECONNECT));
 		chckbxNativeAudioSystem.setSelected(Config.getBoolean(Config.USE_NATIVE_AUDIO_SYSTEM));

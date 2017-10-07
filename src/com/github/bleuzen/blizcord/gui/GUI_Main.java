@@ -72,7 +72,7 @@ public class GUI_Main extends JFrame {
 	private File addFileChooserDir;
 	private JPanel panelUpdate;
 	private JLabel lblNewVersion;
-	private JButton btnUpdate;
+	private JButton btnDownloadUpdate;
 
 	public GUI_Main() {
 		instance = this;
@@ -328,15 +328,15 @@ public class GUI_Main extends JFrame {
 		lblNewVersion.setHorizontalAlignment(SwingConstants.CENTER);
 		panelUpdate.add(lblNewVersion, BorderLayout.CENTER);
 
-		btnUpdate = new JButton("Update");
-		btnUpdate.setFocusable(false);
-		btnUpdate.addActionListener(new ActionListener() {
+		btnDownloadUpdate = new JButton("Download");
+		btnDownloadUpdate.setFocusable(false);
+		btnDownloadUpdate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				onClickUpdateButton();
+				onClickDownloadUpdateButton();
 			}
 		});
-		panelUpdate.add(btnUpdate, BorderLayout.EAST);
+		panelUpdate.add(btnDownloadUpdate, BorderLayout.EAST);
 
 		/* ----- */
 
@@ -428,7 +428,7 @@ public class GUI_Main extends JFrame {
 	public static void showUpdatePanel() {
 		if(!Utils.getOS().equals(Values.OS_WINDOWS)) {
 			// Hide the update button for non Windows users, because it downloads the .exe file directly
-			instance.btnUpdate.setVisible(false);
+			instance.btnDownloadUpdate.setVisible(false);
 		}
 
 		if(!instance.panelUpdate.isVisible()) {
@@ -438,7 +438,7 @@ public class GUI_Main extends JFrame {
 		instance.lblNewVersion.setText("A new version is available: " + Bot.getUpdateChecker().getLatestTag());
 	}
 
-	private void onClickUpdateButton() {
+	private void onClickDownloadUpdateButton() {
 		Utils.openInBrowser("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/download/" + Bot.getUpdateChecker().getLatestTag() + "/" + Values.BOT_NAME + ".exe");
 		System.exit(0);
 	}

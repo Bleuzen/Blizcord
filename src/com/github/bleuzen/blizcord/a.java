@@ -84,6 +84,7 @@ public class a {
 			}
 
 		} else {
+			// Start in console
 			Bot.launch(args);
 		}
 
