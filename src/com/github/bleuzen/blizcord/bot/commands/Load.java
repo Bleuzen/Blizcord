@@ -41,7 +41,8 @@ class Load extends Command {
 				return;
 			}
 
-			Bot.joinVoiceChannel(); // try to join if not already
+			// Join the voice channel of the command author before addToPlaylist() joins the default channel
+			Bot.joinVoiceChannel(Bot.getGuild().getMember(author));
 
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playlistFile), StandardCharsets.UTF_8));
 			String line;

@@ -26,11 +26,10 @@ class Play extends Command {
 			return;
 		}
 
-		Bot.joinVoiceChannel(); // try to join if not already
+		// Join the voice channel of the command author before playDirect() joins the default channel
+		Bot.joinVoiceChannel(Bot.getGuild().getMember(author));
 
-		if(Bot.joined) { // if successfully joined
-			AudioPlayerThread.playDirect(arg, false);
-		}
+		AudioPlayerThread.playDirect(arg, false);
 	}
 
 }

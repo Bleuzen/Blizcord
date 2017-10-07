@@ -120,7 +120,7 @@ public class GUI_Config extends JFrame {
 		JLabel voicechannellable = new JLabel("Voice channel:");
 		voicechannellable.setBounds(8, 98, 120, 28);
 		panel_Basic.add(voicechannellable);
-		voicechannellable.setToolTipText("The voice channel which the bot will join");
+		voicechannellable.setToolTipText("<html>The bot tries to join the channel of the user who sent the command.<br>If this fails, it will join the following channel.</html>");
 
 		voicechannel = new JTextField();
 		voicechannel.setBounds(140, 98, 206, 28);

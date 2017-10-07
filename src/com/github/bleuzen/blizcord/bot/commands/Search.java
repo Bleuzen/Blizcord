@@ -27,11 +27,10 @@ class Search extends Command {
 			return;
 		}
 
-		Bot.joinVoiceChannel(); // try to join if not already
+		// Join the voice channel of the command author before addToPlaylist() joins the default channel
+		Bot.joinVoiceChannel(Bot.getGuild().getMember(author));
 
-		if(Bot.joined) { // if successfully joined
-			AudioPlayerThread.addToPlaylist((Values.SEARCH_PREFIX_YOUTUBE + arg), false); // uses the "ytsearch:" prefix of lavaplayer
-		}
+		AudioPlayerThread.addToPlaylist((Values.SEARCH_PREFIX_YOUTUBE + arg), false); // uses the "ytsearch:" prefix of lavaplayer
 	}
 
 }

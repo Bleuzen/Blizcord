@@ -21,6 +21,7 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -236,17 +237,57 @@ public class Bot extends ListenerAdapter {
 	}
 
 	public static void joinVoiceChannel() {
-		if (!joined) {
-			String cName = Config.get(Config.VOICE_CHANNEL);
-			VoiceChannel channel = guild.getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(cName)).findFirst().orElse(null);
-			try {
-				// for multi server: GuildMessageReceivedEvent#event.getGuild()
-				guild.getAudioManager().openAudioConnection(channel);
-				joined = true;
-			} catch(Exception e) {
-				controlChannel.sendMessage("Failed to join voice channel: " + cName + "\n"
-						+ "Please check your config and give me the permission to join it.").queue();
-			}
+		if (joined) {
+			return;
+		}
+
+		String channelName = Config.get(Config.VOICE_CHANNEL);
+		VoiceChannel channel = guild.getVoiceChannels().stream().filter(vChan -> vChan.getName().equalsIgnoreCase(channelName)).findFirst().orElse(null);
+
+		if(channel == null) {
+			controlChannel.sendMessage("Voice channel not found: " + channelName).queue();
+			return;
+		}
+
+		joinVoiceChannel(channel);
+	}
+
+	public static void joinVoiceChannel(Member member) {
+		if (joined) {
+			return;
+		}
+
+		if(member == null) {
+			joinVoiceChannel(); // join default channel
+			return;
+		}
+
+		VoiceChannel channel = member.getVoiceState().getChannel();
+
+		// Check if member is not in a channel
+		if(channel == null) {
+			joinVoiceChannel(); // join default channel
+			return;
+		}
+
+		joinVoiceChannel(channel);
+	}
+
+	public static void joinVoiceChannel(VoiceChannel voiceChannel) {
+		if (joined) {
+			return;
+		}
+
+		if(voiceChannel == null) {
+			return;
+		}
+
+		try {
+			guild.getAudioManager().openAudioConnection(voiceChannel);
+			joined = true;
+		} catch(Exception e) {
+			controlChannel.sendMessage("Failed to join voice channel: " + voiceChannel + "\n"
+					+ "Do I have the permission to join it?").queue();
 		}
 	}
 

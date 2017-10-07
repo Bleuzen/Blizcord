@@ -1,6 +1,7 @@
 package com.github.bleuzen.blizcord.bot.commands;
 
 import com.github.bleuzen.blizcord.bot.AudioPlayerThread;
+import com.github.bleuzen.blizcord.bot.Bot;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -24,6 +25,9 @@ class Add extends Command {
 			channel.sendMessage(author.getAsMention() + " ``Please specify what I should add to the playlist. Put it behind this command.``").queue();
 			return;
 		}
+
+		// Join the voice channel of the command author before addToPlaylist() joins the default channel
+		Bot.joinVoiceChannel(Bot.getGuild().getMember(author));
 
 		AudioPlayerThread.addToPlaylist(arg, false);
 	}
