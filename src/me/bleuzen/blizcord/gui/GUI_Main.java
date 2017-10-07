@@ -211,18 +211,35 @@ public class GUI_Main extends JFrame {
 					@Override
 					public void run() {
 
+						boolean started;
+
 						// start bot
 						if(chckbxUseCustomConfig.isSelected()) {
 							setTitle(getTitle() + " - " + cfgFile.getName());
-							Bot.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
+							started = Bot.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
 						} else {
-							Bot.launch(new String[]{});
+							started = Bot.launch(new String[]{});
 						}
 
-						btnStart.setVisible(false);
-						panelControls.setVisible(true);
+						if(started) {
 
-						lblCurrstatus.setText("Started");
+							btnStart.setVisible(false);
+							panelControls.setVisible(true);
+
+							lblCurrstatus.setText("Started");
+
+						} else {
+							// Failed to start
+
+							// Reset Status
+							lblCurrstatus.setText("Stopped");
+
+							// Re-enable Start and Edit buttons
+							btnStart.setEnabled(true);
+							btnEdit.setEnabled(true);
+
+						}
+
 					}
 				}).start();
 			}

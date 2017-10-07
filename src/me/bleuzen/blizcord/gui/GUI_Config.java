@@ -7,18 +7,22 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URI;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.text.DefaultEditorKit;
 
 import me.bleuzen.blizcord.Config;
 import me.bleuzen.blizcord.Values;
@@ -30,6 +34,8 @@ public class GUI_Config extends JFrame {
 	static GUI_Config instance;
 
 	private final File configFile;
+
+	private final JPopupMenu popupMenu;
 
 	private final JTextField bottoken;
 	private final JTextField controlchannel;
@@ -55,6 +61,18 @@ public class GUI_Config extends JFrame {
 		instance = this;
 
 		configFile = config;
+
+		// Init popup menu
+		popupMenu = new JPopupMenu();
+		/*Action copy = new DefaultEditorKit.CopyAction();
+		copy.putValue(Action.NAME, "Copy");
+		copy.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+		popupMenu.add(copy);*/
+		Action paste = new DefaultEditorKit.PasteAction();
+		paste.putValue(Action.NAME, "Paste");
+		paste.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+		popupMenu.add(paste);
+
 
 		setType(Type.UTILITY);
 		setTitle(configFile.getName());
@@ -83,6 +101,7 @@ public class GUI_Config extends JFrame {
 
 		bottoken = new JTextField();
 		bottoken.setBounds(140, 8, 206, 28);
+		bottoken.setComponentPopupMenu(popupMenu);
 		panel_Basic.add(bottoken);
 
 		JLabel controlchannellable = new JLabel("Control channel:");

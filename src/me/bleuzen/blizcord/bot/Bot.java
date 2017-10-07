@@ -82,7 +82,7 @@ public class Bot extends ListenerAdapter {
 		return startTime;
 	}
 
-	public static void launch(String[] args) {
+	public static boolean launch(String[] args) {
 		Log.info("Starting bot ...");
 
 		// init config
@@ -100,13 +100,21 @@ public class Bot extends ListenerAdapter {
 		}
 
 		// Start the bot
-		start();
+		return start();
 	}
 
-	private static void start() {
+	private static boolean start() {
 		if(Config.get(Config.BOT_TOKEN).isEmpty()) {
-			Utils.errExit("You must specify a Token in the config file!", Values.EXIT_CODE_RESTART_GUI);
-			//TODO: Don't crash anymore
+			if(a.isGui()) {
+				// Only show Error message box, but don't exit
+				GUI_Main.showErrMsgBox("You must specify a Token in the config file!");
+			} else {
+				// The old way: crash
+				//TODO: double checks if a.isGui() (again in Utils.errExit())
+				//TODO: Write better method in Utils?
+				Utils.errExit("You must specify a Token in the config file!");
+			}
+			return false;
 		}
 
 		Log.info("Starting JDA ...");
@@ -210,15 +218,28 @@ public class Bot extends ListenerAdapter {
 			startTime = System.currentTimeMillis();
 
 			Log.info("Successfully started.");
+
+			try {
+				controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all commands.").queue();
+			} catch (PermissionException e) {
+				sendMessage(guild.getOwner().getUser(), "Please give me the permision to read and write in your control channel: " + controlChannel.getName());
+			}
+
+			return true;
+
 		} catch (Exception e) {
-			Utils.errExit(e.getMessage(), Values.EXIT_CODE_RESTART_GUI);
+			if(a.isGui()) {
+				// Only show Error message box, but don't exit
+				GUI_Main.showErrMsgBox(e.getMessage());
+			} else {
+				// The old way: crash
+				//TODO: double checks if a.isGui() (again in Utils.errExit())
+				//TODO: Write better method in Utils?
+				Utils.errExit(e.getMessage());
+			}
+			return false;
 		}
 
-		try {
-			controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all commands.").queue();
-		} catch (PermissionException e) {
-			sendMessage(guild.getOwner().getUser(), "Please give me the permision to read and write in your control channel: " + controlChannel.getName());
-		}
 	}
 
 	public static void shutdown() {
