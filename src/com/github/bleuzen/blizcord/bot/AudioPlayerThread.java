@@ -1,6 +1,5 @@
 package com.github.bleuzen.blizcord.bot;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.github.bleuzen.blizcord.Config;
@@ -20,7 +19,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
 
 public class AudioPlayerThread implements Runnable {
 
@@ -59,41 +57,7 @@ public class AudioPlayerThread implements Runnable {
 		setVolume(Config.get(Config.STARTING_VOLUME));
 	}
 
-	public static void sendPlaylist(User user, MessageChannel channel) {
-		if(isPlaying()) {
-			StringBuilder toSend = new StringBuilder(user.getAsMention() + ""
-					+ " Currently playing:"
-					+ "\n"
-					+ "```"
-					+ Utils.getTrackName(musicManager.player.getPlayingTrack())
-					+ "```"
-					+ "\n");
-			if(musicManager.scheduler.getList().size() > 0) {
-				toSend.append("Upcoming songs:"
-						+ "\n"
-						+ "```");
-				ArrayList<AudioTrack> list = musicManager.scheduler.getList();
-				for(int i = 0; i < list.size(); i++) {
-					toSend.append("\n" + Utils.getTrackName(list.get(i)));
-				}
-				toSend.append("```");
-			} else {
-				toSend.append("There are no upcoming songs.");
-			}
-			if(toSend.length() > Values.MAX_MESSAGE_LENGHT) {
-				final String ending = "...```";
-				toSend.setLength((Values.MAX_MESSAGE_LENGHT - ending.length()));
-				toSend.append(ending);
-			}
-			channel.sendMessage(toSend.toString()).queue();
-		} else {
-			// because gets cleared on stop
-			// isPlaying() > else:
-			channel.sendMessage(user.getAsMention() + " ``The playlist is empty.``").queue();
-		}
-	}
-
-	public static void loadAndPlay(final MessageChannel channel, final String trackUrl, boolean direct, boolean quiet) {
+	private static void loadAndPlay(final MessageChannel channel, final String trackUrl, boolean direct, boolean quiet) {
 		Log.debug("Loading track ... play direct: {}; URL: {}", direct, trackUrl);
 
 		playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
@@ -172,6 +136,44 @@ public class AudioPlayerThread implements Runnable {
 				}
 			}
 		});
+	}
+
+
+	public static void addToPlaylist(String arg, boolean quiet) {
+		Bot.joinVoiceChannel(); // try to join if not already
+
+		// Check if successfully joined
+		if(!Bot.joined) {
+			return;
+		}
+
+		File inputFile = new File(arg);
+		if(inputFile.isDirectory()) {
+			Bot.getControlChannel().sendMessage("Adding all supported files from folder to queue ...").queue();;
+			File[] files = inputFile.listFiles();
+			Arrays.sort(files);
+			int addedFiles = 0;
+			for(File f : files) {
+				if(f.isFile()) {
+					loadAndPlay(Bot.getControlChannel(), f.getAbsolutePath(), false, true);
+					addedFiles++;
+				}
+			}
+			Bot.getControlChannel().sendMessage("``Added " + addedFiles + " files.``").queue();
+		} else {
+			loadAndPlay(Bot.getControlChannel(), arg, false, quiet);
+		}
+	}
+
+	public static void playDirect(String arg, boolean quiet) {
+		Bot.joinVoiceChannel(); // try to join if not already
+
+		// Check if successfully joined
+		if(!Bot.joined) {
+			return;
+		}
+
+		loadAndPlay(Bot.getControlChannel(), arg, true, quiet);
 	}
 
 	private static long getYouTubeStartTimeMS(String trackUrl) {
@@ -264,32 +266,6 @@ public class AudioPlayerThread implements Runnable {
 		musicManager.player.setVolume(volume);
 		Log.debug("Player volume set to: {}", musicManager.player.getVolume());
 		return Values.SET_VOLUME_SUCCESSFULLY;
-	}
-
-	public static void addToPlaylist(String arg) {
-		Bot.joinVoiceChannel(); // try to join if not already
-
-		if(Bot.joined) { // if successfully joined
-
-			File inputFile = new File(arg);
-
-			if(inputFile.isDirectory()) {
-				Bot.getControlChannel().sendMessage("Adding all supported files from folder to queue ...").queue();;
-				File[] files = inputFile.listFiles();
-				Arrays.sort(files);
-				int addedFiles = 0;
-				for(File f : files) {
-					if(f.isFile()) {
-						loadAndPlay(Bot.getControlChannel(), f.getAbsolutePath(), false, true);
-						addedFiles++;
-					}
-				}
-				Bot.getControlChannel().sendMessage("``Added " + addedFiles + " files.``").queue();
-			} else {
-				loadAndPlay(Bot.getControlChannel(), arg, false, false);
-			}
-
-		}
 	}
 
 

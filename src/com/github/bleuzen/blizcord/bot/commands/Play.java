@@ -29,7 +29,7 @@ class Play extends Command {
 		Bot.joinVoiceChannel(); // try to join if not already
 
 		if(Bot.joined) { // if successfully joined
-			AudioPlayerThread.loadAndPlay(channel, arg, true, false);
+			AudioPlayerThread.playDirect(arg, false);
 		}
 	}
 

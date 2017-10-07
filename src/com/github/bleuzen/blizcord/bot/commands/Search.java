@@ -30,7 +30,7 @@ class Search extends Command {
 		Bot.joinVoiceChannel(); // try to join if not already
 
 		if(Bot.joined) { // if successfully joined
-			AudioPlayerThread.loadAndPlay(channel, (Values.SEARCH_PREFIX_YOUTUBE + arg), false, false); // uses the "ytsearch:" prefix of lavaplayer
+			AudioPlayerThread.addToPlaylist((Values.SEARCH_PREFIX_YOUTUBE + arg), false); // uses the "ytsearch:" prefix of lavaplayer
 		}
 	}
 

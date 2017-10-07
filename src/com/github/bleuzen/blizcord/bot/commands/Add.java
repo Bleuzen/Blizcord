@@ -25,7 +25,7 @@ class Add extends Command {
 			return;
 		}
 
-		AudioPlayerThread.addToPlaylist(arg);
+		AudioPlayerThread.addToPlaylist(arg, false);
 	}
 
 }

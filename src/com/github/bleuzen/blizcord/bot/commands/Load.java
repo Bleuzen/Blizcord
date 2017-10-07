@@ -46,7 +46,7 @@ class Load extends Command {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playlistFile), StandardCharsets.UTF_8));
 			String line;
 			while((line = bufferedReader.readLine()) != null) {
-				AudioPlayerThread.loadAndPlay(channel, line, false, true);
+				AudioPlayerThread.addToPlaylist(line, true);
 			}
 			bufferedReader.close();
 

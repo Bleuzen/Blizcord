@@ -258,7 +258,7 @@ public class GUI_Main extends JFrame {
 					// add all selected files
 					File[] selected = fileChooser.getSelectedFiles();
 					for(File f : selected) {
-						AudioPlayerThread.addToPlaylist(f.getAbsolutePath());
+						AudioPlayerThread.addToPlaylist(f.getAbsolutePath(), false);
 					}
 
 					// remember the latest dir
