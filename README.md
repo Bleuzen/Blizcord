@@ -6,7 +6,7 @@ A Discord Bot with (optional) GUI written in Java which can play music from YouT
 
 ## Installation
 ### Linux
-Arch: https://aur.archlinux.org/packages/blizcord/
+Arch / Manjaro: https://aur.archlinux.org/packages/blizcord/
 
 All other distributions:
  - Install Java and wget

@@ -170,7 +170,7 @@ public class Bot extends ListenerAdapter {
 				}
 				if(guild.getVoiceChannelsByName(Config.get(Config.VOICE_CHANNEL), true).isEmpty()) {
 					controller.createVoiceChannel(Config.get(Config.VOICE_CHANNEL)).complete();
-					Log.info("Created music channel.");
+					Log.info("Created default music channel.");
 				}
 			} catch(Exception e) {
 				Log.debug("Failed to create channels.");
