@@ -87,7 +87,7 @@ public class GUI_Main extends JFrame {
 		contentPane.setLayout(null);
 
 		try {
-			InputStream imgStream = GUI_Main.class.getResourceAsStream("icon.png");
+			InputStream imgStream = a.class.getResourceAsStream("icon.png");
 			icon = ImageIO.read(imgStream);
 			iconSet = true;
 			setIconImage(icon);
