@@ -22,10 +22,10 @@ class Loop extends Command {
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		if(AudioPlayerThread.loop) {
 			AudioPlayerThread.loop = false;
-			channel.sendMessage(author.getAsMention() + " ``Looping disabled.``").queue();
+			channel.sendMessage(author.getAsMention() + " Looping: ``disabled``").queue();
 		} else {
 			AudioPlayerThread.loop = true;
-			channel.sendMessage(author.getAsMention() + " ``Looping enabled.``").queue();
+			channel.sendMessage(author.getAsMention() + " Looping: ``enabled``").queue();
 		}
 	}
 

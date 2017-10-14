@@ -37,7 +37,7 @@ class Load extends Command {
 		try {
 			File playlistFile = new File(new File(Config.getAppDir(), "playlists"), arg);
 			if(!playlistFile.exists()) {
-				channel.sendMessage(author.getAsMention() + " Playlist doesn't exist: " + arg).queue();
+				channel.sendMessage(author.getAsMention() + " Playlist doesn't exist: ``" + arg + "``").queue();
 				return;
 			}
 
@@ -51,9 +51,9 @@ class Load extends Command {
 			}
 			bufferedReader.close();
 
-			channel.sendMessage(author.getAsMention() + " Playlist loaded: " + arg).queue();
+			channel.sendMessage(author.getAsMention() + " Playlist loaded: ``" + arg + "``").queue();
 		} catch (Exception e) {
-			channel.sendMessage(author.getAsMention() + " Failed to load playlist: " + arg).queue();
+			channel.sendMessage(author.getAsMention() + " Failed to load playlist: ``" + arg + "``").queue();
 		}
 	}
 

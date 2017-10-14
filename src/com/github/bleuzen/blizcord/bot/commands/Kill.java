@@ -20,7 +20,7 @@ class Kill extends Command {
 
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		channel.sendMessage("Bye").complete(); // complete(): block this thread (send the message first, than shutdown)
+		channel.sendMessage("``Bye!``").complete(); // complete(): block this thread (send the message first, than shutdown)
 		Bot.shutdown();
 	}
 

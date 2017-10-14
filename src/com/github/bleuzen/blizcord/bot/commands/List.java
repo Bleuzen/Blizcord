@@ -43,7 +43,7 @@ class List extends Command {
 				}
 				toSend.append("```");
 			} else {
-				toSend.append("There are no upcoming songs.");
+				toSend.append("``There are no upcoming songs.``");
 			}
 			if(toSend.length() > Values.MAX_MESSAGE_LENGHT) {
 				final String ending = "...```";

@@ -21,6 +21,8 @@ class Stop extends Command {
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		Bot.stopPlayer();
+
+		channel.sendMessage("``Playback stopped.``").queue();
 	}
 
 }

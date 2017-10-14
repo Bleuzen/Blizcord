@@ -35,7 +35,7 @@ class Next extends Command {
 					throw new NumberFormatException();
 				}
 			} catch (NumberFormatException e) {
-				channel.sendMessage(author.getAsMention() + " Invalid number").queue();
+				channel.sendMessage(author.getAsMention() + " ``Invalid number``").queue();
 				return;
 			}
 		}

@@ -51,7 +51,7 @@ class Seek extends Command {
 				throw new NumberFormatException();
 			}
 		} catch(Exception e) {
-			channel.sendMessage(author.getAsMention() +  " Invalid time").queue();
+			channel.sendMessage(author.getAsMention() +  " ``Invalid time``").queue();
 			return;
 		}
 

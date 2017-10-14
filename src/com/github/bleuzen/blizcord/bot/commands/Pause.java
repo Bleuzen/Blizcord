@@ -21,7 +21,7 @@ class Pause extends Command {
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		if(AudioPlayerThread.isPaused()) {
-			channel.sendMessage("``Continue playback ...``").queue();
+			channel.sendMessage("``Resumed.``").queue();
 			AudioPlayerThread.setPaused(false);
 		} else {
 			AudioPlayerThread.setPaused(true);

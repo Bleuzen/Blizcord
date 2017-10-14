@@ -61,7 +61,7 @@ class Save extends Command {
 			// Save
 			writer.close();
 
-			channel.sendMessage(author.getAsMention() + " Playlist saved: " + arg).queue();
+			channel.sendMessage(author.getAsMention() + " Playlist saved: ``" + arg + "``").queue();
 		} catch (Exception e) {
 			channel.sendMessage(author.getAsMention() + " ``Failed to save playlist.``").queue();
 		}

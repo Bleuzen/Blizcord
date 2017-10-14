@@ -73,13 +73,13 @@ public class AudioPlayerThread implements Runnable {
 					}
 
 					// quiet check not needed, since there will be never more than one track / message
-					channel.sendMessage("Now playing: " + Utils.getTrackName(track)).queue();
+					channel.sendMessage("Now playing: ``" + Utils.getTrackName(track) + "``").queue();
 
 				} else {
 
 					addToPlaylist(track);
 					if(!quiet) {
-						channel.sendMessage("Added track to queue: " + Utils.getTrackName(track)).queue();
+						channel.sendMessage("Added track to queue: ``" + Utils.getTrackName(track) + "``").queue();
 					}
 
 				}
@@ -93,7 +93,7 @@ public class AudioPlayerThread implements Runnable {
 
 					AudioTrack directTrack = playlist.getTracks().get(0);
 					playDirect(directTrack, 0);
-					channel.sendMessage("Now playing: " + Utils.getTrackName(directTrack)).queue();
+					channel.sendMessage("Now playing: ``" + Utils.getTrackName(directTrack) + "``").queue();
 
 				} else {
 
@@ -102,7 +102,7 @@ public class AudioPlayerThread implements Runnable {
 						AudioTrack firstSearchResult = playlist.getTracks().get(0);
 						addToPlaylist(firstSearchResult);
 						if(!quiet) {
-							channel.sendMessage("Added track to queue: " + Utils.getTrackName(firstSearchResult)).queue();
+							channel.sendMessage("Added track to queue: ``" + Utils.getTrackName(firstSearchResult) + "``").queue();
 						}
 
 					} else {
@@ -111,7 +111,7 @@ public class AudioPlayerThread implements Runnable {
 							addToPlaylist(track);
 						}
 						if(!quiet) {
-							channel.sendMessage("Added playlist to queue: " + playlist.getName()).queue();
+							channel.sendMessage("Added playlist to queue: ``" + playlist.getName() + "``").queue();
 						}
 
 					}
@@ -122,17 +122,17 @@ public class AudioPlayerThread implements Runnable {
 			@Override
 			public void noMatches() {
 				if(trackUrl.startsWith(Values.SEARCH_PREFIX_YOUTUBE)) {
-					channel.sendMessage("No search results for: " + trackUrl.substring(Values.SEARCH_PREFIX_YOUTUBE.length())).queue();
+					channel.sendMessage("No search results for: ``" + trackUrl.substring(Values.SEARCH_PREFIX_YOUTUBE.length()) + "``").queue();
 					return;
 				}
 
-				channel.sendMessage("Nothing found by: " + trackUrl).queue();
+				channel.sendMessage("Nothing found by: ``" + trackUrl + "``").queue();
 			}
 
 			@Override
 			public void loadFailed(FriendlyException exception) {
 				if(!quiet) {
-					channel.sendMessage("Could not play: " + exception.getMessage()).queue();
+					channel.sendMessage("Could not play: ``" + exception.getMessage() + "``").queue();
 				}
 			}
 		});
@@ -273,7 +273,7 @@ public class AudioPlayerThread implements Runnable {
 	@Override
 	public void run() {
 		final int sleepTime = 200; // update game with 5 fps
-		final int updatesDelay = 12000; // 12 seconds delay between game updates (Discord can only update the game 5 times per minute), see: https://github.com/DV8FromTheWorld/JDA/issues/323
+		final int updatesDelay = 12000; // 12 seconds delay between game updates (Discord only allows to update the game 5 times per minute)
 
 		Game lastGame = null;
 		int updateDelay = 0;
