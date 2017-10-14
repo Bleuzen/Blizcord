@@ -10,6 +10,7 @@ import com.github.bleuzen.blizcord.gui.GUI_Main;
 public class a {
 
 	private static boolean gui;
+	private static boolean useNimbusTheme;
 	private static boolean debug;
 
 	/*
@@ -36,6 +37,7 @@ public class a {
 		Log.init();
 
 		gui = ArgumentUtils.containsArg(args, "--gui");
+		useNimbusTheme = ArgumentUtils.containsArg(args, "--use-nimbus-theme");
 		disableUpdateChecker = ArgumentUtils.containsArg(args, "--disable-update-checker");
 
 		Log.info("Version: " + Values.BOT_VERSION);
@@ -55,24 +57,7 @@ public class a {
 
 			try {
 
-				try {
-					// Use the systems theme
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-					// Linux Fixes
-					if(Utils.getOS().equals(Values.OS_LINUX)) {
-						// Linux Font fix
-						// https://wiki.archlinux.org/index.php/Java_Runtime_Environment_fonts
-						System.setProperty("awt.useSystemAAFontSettings", "gasp");
-
-						// KDE theme fix
-						if(System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
-							UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-						}
-					}
-				} catch (Exception e) {
-					Log.debug("Failed to set look and feel.");
-				}
+				setLookAndFeel();
 
 				Log.debug("Launching GUI ...");
 
@@ -88,6 +73,33 @@ public class a {
 			Bot.launch(args);
 		}
 
+	}
+
+	private static void setLookAndFeel() {
+		try {
+			// Check if we want to use Nimbus
+			if(useNimbusTheme) {
+				UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+				return;
+			}
+
+			// Use the systems theme
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+			// Linux Fixes
+			if(Utils.getOS().equals(Values.OS_LINUX)) {
+				// Linux Font fix
+				// https://wiki.archlinux.org/index.php/Java_Runtime_Environment_fonts
+				System.setProperty("awt.useSystemAAFontSettings", "gasp");
+
+				// KDE theme fix
+				if(System.getenv("XDG_CURRENT_DESKTOP").toLowerCase().equals("kde")) {
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+				}
+			}
+		} catch (Exception e) {
+			Log.debug("Failed to set look and feel.");
+		}
 	}
 
 }

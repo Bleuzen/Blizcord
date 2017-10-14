@@ -142,18 +142,22 @@ public class Utils {
 			return getArgIndex(args, arg) != -1;
 		}
 
-		// returns what is behind an argument
+		// returns the value behind an argument or null
 		public static String getArg(String[] args, String arg) {
-			String result = null; // return null if argument is not given
 			int i = getArgIndex(args, arg);
 			if(i != -1) {
 				try {
-					result = args[i + 1];
+					String result = args[i + 1];
+
+					if(!result.startsWith("--")) {
+						return result;
+					}
 				} catch(ArrayIndexOutOfBoundsException e) {
 					Log.debug("Invalid argument value: {}", arg);
 				}
 			}
-			return result;
+
+			return null;
 		}
 
 	}

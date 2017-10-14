@@ -46,7 +46,7 @@ public class Config {
 
 		defaults = new JSONObject();
 		defaults.put(BOT_TOKEN, "#uncomment this (remove \"#\") and put bot token here. You can create your app / bot and get your token here: " + Values.DISCORD_GET_TOKEN);
-		defaults.put(ADMINS_ROLE, "Admins #comment out (add \"#\") or delete everything behind \"=\" to disable");
+		defaults.put(ADMINS_ROLE, "Bot-Admin #comment out (add \"#\") or delete everything behind \"=\" to disable");
 		defaults.put(CONTROL_CHANNEL, "bot");
 		defaults.put(COMMAND_PREFIX, "!");
 		defaults.put(VOICE_CHANNEL, "Music");
