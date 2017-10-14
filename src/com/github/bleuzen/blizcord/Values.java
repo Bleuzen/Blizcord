@@ -2,7 +2,7 @@ package com.github.bleuzen.blizcord;
 
 public class Values {
 
-	static final boolean DEV = true;
+	static final boolean DEV = false;
 
 	public static final String BOT_VERSION = "0.8.2" 	+ (DEV ? "-dev" : "");
 	public static final String BOT_NAME = "Blizcord";
