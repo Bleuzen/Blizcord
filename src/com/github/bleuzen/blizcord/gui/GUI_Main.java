@@ -212,7 +212,7 @@ public class GUI_Main extends JFrame {
 							btnStart.setVisible(false);
 							panelControls.setVisible(true);
 
-							lblCurrstatus.setText("Started");
+							lblCurrstatus.setText("Running");
 
 						} else {
 							// Failed to start
