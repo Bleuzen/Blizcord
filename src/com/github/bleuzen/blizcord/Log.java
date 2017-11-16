@@ -8,7 +8,6 @@ import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
-import net.dv8tion.jda.core.utils.SimpleLog;
 
 public class Log {
 
@@ -87,7 +86,7 @@ public class Log {
 
 		if(a.isDebug()) {
 			// set JDA logging to DEBUG
-			SimpleLog.LEVEL = org.slf4j.event.Level.DEBUG;
+			jdaLogger.setLevel(Level.DEBUG);
 			// set lavaplayer logging to DEBUG
 			lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.DEBUG);
 			// set JNativeHook logging level to WARNING

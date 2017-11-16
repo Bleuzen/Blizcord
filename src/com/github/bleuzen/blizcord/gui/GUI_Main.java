@@ -1,9 +1,12 @@
 package com.github.bleuzen.blizcord.gui;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,15 +18,17 @@ import java.util.Base64;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -55,10 +60,8 @@ public class GUI_Main extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblConfig;
-	private JCheckBox chckbxUseCustomConfig;
 	private JButton btnEdit;
-	private JTextField txtCustomconfig;
-	private JButton btnBrowse;
+	private JTextField txtConfig;
 	private JButton btnStart;
 	private JLabel lblStatus;
 	private JLabel lblCurrstatus;
@@ -97,24 +100,8 @@ public class GUI_Main extends JFrame {
 		}
 
 		lblConfig = new JLabel("Config:");
-		lblConfig.setBounds(10, 12, 70, 28);
+		lblConfig.setBounds(10, 12, 62, 28);
 		contentPane.add(lblConfig);
-
-		chckbxUseCustomConfig = new JCheckBox("Use custom config");
-		chckbxUseCustomConfig.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				boolean selected = chckbxUseCustomConfig.isSelected();
-				if(!selected) {
-					txtCustomconfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
-				}
-				txtCustomconfig.setEnabled(selected);
-				btnBrowse.setEnabled(selected);
-			}
-		});
-		chckbxUseCustomConfig.setFocusable(false);
-		chckbxUseCustomConfig.setBounds(96, 12, 264, 28);
-		contentPane.add(chckbxUseCustomConfig);
 
 		btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
@@ -135,35 +122,58 @@ public class GUI_Main extends JFrame {
 		btnEdit.setBounds(370, 12, 116, 28);
 		contentPane.add(btnEdit);
 
-		txtCustomconfig = new JTextField();
-		txtCustomconfig.setEnabled(false);
-		txtCustomconfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
-		txtCustomconfig.setBounds(10, 52, 348, 28);
-		contentPane.add(txtCustomconfig);
-
-		btnBrowse = new JButton("Browse");
-		btnBrowse.addActionListener(new ActionListener() {
+		txtConfig = new JTextField();
+		txtConfig.setBounds(72, 12, 292, 28);
+		contentPane.add(txtConfig);
+		txtConfig.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				fileChooser.setAcceptAllFileFilterUsed(false);
-				fileChooser.setFileFilter(new FileNameExtensionFilter(Values.CONFIG_FILE_EXTENSION.toUpperCase() + " file", Values.CONFIG_FILE_EXTENSION));
-				int r = fileChooser.showSaveDialog(null);
-				if(r == JFileChooser.APPROVE_OPTION) {
-					String fileName = fileChooser.getSelectedFile().getAbsolutePath();
-					if(!fileName.endsWith(Values.CONFIG_FILE_EXTENSION)) {
-						fileName += ("." + Values.CONFIG_FILE_EXTENSION);
-					}
+			public void mouseReleased(MouseEvent e) {
+				// Show nothing if config textfield is disabled
+				if(!txtConfig.isEnabled()) {
+					return;
+				}
 
-					txtCustomconfig.setText(fileName);
+				if(SwingUtilities.isRightMouseButton(e)) {
+
+					JPopupMenu contextMenu = new JPopupMenu(null);
+
+					JMenuItem Browse = new JMenuItem("Browse");
+					JMenuItem Reset = new JMenuItem("Reset");
+
+					Browse.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							JFileChooser fileChooser = new JFileChooser();
+							fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+							fileChooser.setAcceptAllFileFilterUsed(false);
+							fileChooser.setFileFilter(new FileNameExtensionFilter(Values.CONFIG_FILE_EXTENSION.toUpperCase() + " file", Values.CONFIG_FILE_EXTENSION));
+							int r = fileChooser.showSaveDialog(null);
+							if(r == JFileChooser.APPROVE_OPTION) {
+								String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+								if(!fileName.endsWith(Values.CONFIG_FILE_EXTENSION)) {
+									fileName += ("." + Values.CONFIG_FILE_EXTENSION);
+								}
+
+								txtConfig.setText(fileName);
+							}
+						}
+					});
+
+					Reset.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							txtConfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
+						}
+					});
+
+					contextMenu.add(Browse);
+					contextMenu.add(Reset);
+					contextMenu.show((Component) e.getSource(), e.getX(), e.getY());
+
 				}
 			}
 		});
-		btnBrowse.setEnabled(false);
-		btnBrowse.setFocusable(false);
-		btnBrowse.setBounds(370, 52, 116, 28);
-		contentPane.add(btnBrowse);
+		txtConfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
 
 		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
@@ -186,9 +196,7 @@ public class GUI_Main extends JFrame {
 
 				// disable controls
 				btnStart.setEnabled(false);
-				btnBrowse.setEnabled(false);
-				txtCustomconfig.setEnabled(false);
-				chckbxUseCustomConfig.setEnabled(false);
+				txtConfig.setEnabled(false);
 				btnEdit.setEnabled(false);
 
 				lblCurrstatus.setText("Starting");
@@ -200,12 +208,9 @@ public class GUI_Main extends JFrame {
 						boolean started;
 
 						// start bot
-						if(chckbxUseCustomConfig.isSelected()) {
-							setTitle(getTitle() + " - " + cfgFile.getName());
-							started = Bot.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
-						} else {
-							started = Bot.launch(new String[]{});
-						}
+						setTitle(getTitle() + " - " + cfgFile.getName());
+						started = Bot.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
+
 
 						if(started) {
 
@@ -346,22 +351,19 @@ public class GUI_Main extends JFrame {
 		}
 
 		// Load the GUI Config
-		File guiConfigFileCustomConfig = new File(System.getProperty("java.io.tmpdir"), "blizcordguicustomconfig");
-		if(guiConfigFileCustomConfig.exists()) {
+		File guiSetBotConfigFile = new File(System.getProperty("java.io.tmpdir"), "blizcordguicustomconfig");
+		if(guiSetBotConfigFile.exists()) {
 			try {
 				// read
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(guiConfigFileCustomConfig), StandardCharsets.UTF_8));
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(guiSetBotConfigFile), StandardCharsets.UTF_8));
 				String readLine = bufferedReader.readLine(); // path to custom config in Base64
 				bufferedReader.close();
 
 				// decode and set
 				String decodedFileName = new String(Base64.getDecoder().decode(readLine), StandardCharsets.UTF_8);
-				File customConfig = new File(decodedFileName);
-				if(customConfig.isFile()) { // ignore if it got deleted or is invalid
-					txtCustomconfig.setText(customConfig.getAbsolutePath());
-					txtCustomconfig.setEnabled(true);
-					btnBrowse.setEnabled(true);
-					chckbxUseCustomConfig.setSelected(true);
+				File loadConfig = new File(decodedFileName);
+				if(loadConfig.isFile()) { // ignore if it got deleted or is invalid
+					txtConfig.setText(loadConfig.getAbsolutePath());
 				}
 			} catch(Exception e) {
 				// Failed to read file, ignore
@@ -372,17 +374,13 @@ public class GUI_Main extends JFrame {
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			@Override
 			public void run() {
-				if(chckbxUseCustomConfig.isSelected()) {
-					try {
-						BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(guiConfigFileCustomConfig, StandardCharsets.UTF_8, false));
-						writer.write(Base64.getEncoder().encodeToString(txtCustomconfig.getText().getBytes(StandardCharsets.UTF_8)));
-						writer.close();
-					} catch(Exception e) {
-						// Ignore
-						// maybe we don't have the write permission here, at least we tryed it ;)
-					}
-				} else {
-					guiConfigFileCustomConfig.delete(); // delete if it exists
+				try {
+					BufferedWriter writer = new BufferedWriter(new FileWriterWithEncoding(guiSetBotConfigFile, StandardCharsets.UTF_8, false));
+					writer.write(Base64.getEncoder().encodeToString(txtConfig.getText().getBytes(StandardCharsets.UTF_8)));
+					writer.close();
+				} catch(Exception e) {
+					// Ignore
+					// maybe we don't have the write permission here, at least we tryed it ;)
 				}
 			}
 		}));
@@ -405,11 +403,7 @@ public class GUI_Main extends JFrame {
 	}
 
 	private File getConfig() {
-		if (chckbxUseCustomConfig.isSelected()) {
-			return new File(txtCustomconfig.getText());
-		} else {
-			return DEFAULT_CONFIG_FILE;
-		}
+		return new File(txtConfig.getText());
 	}
 
 	public static void addToSever(String link) {
@@ -444,9 +438,8 @@ public class GUI_Main extends JFrame {
 	}
 
 	static void setConfigChooserEnabled(boolean e) {
-		instance.btnBrowse.setEnabled(e);
-		instance.txtCustomconfig.setEnabled(e);
-		instance.chckbxUseCustomConfig.setEnabled(e);
-	}
+		instance.txtConfig.setEnabled(e);
 
+		//TODO: No browse, reset
+	}
 }
