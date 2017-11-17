@@ -83,7 +83,7 @@ public class GUI_Main extends JFrame {
 		setTitle(Values.BOT_NAME);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 200);
+		setSize(500, 154);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
@@ -102,78 +102,6 @@ public class GUI_Main extends JFrame {
 		lblConfig = new JLabel("Config:");
 		lblConfig.setBounds(10, 12, 62, 28);
 		contentPane.add(lblConfig);
-
-		btnEdit = new JButton("Edit");
-		btnEdit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setConfigChooserEnabled(false);
-
-				File cfgFile = getConfig();
-
-				if(GUI_Config.instance != null && GUI_Config.instance.isVisible()) {
-					GUI_Config.instance.toFront();
-				} else {
-					GUI_Config.instance = new GUI_Config(cfgFile);
-				}
-			}
-		});
-		btnEdit.setFocusable(false);
-		btnEdit.setBounds(370, 12, 116, 28);
-		contentPane.add(btnEdit);
-
-		txtConfig = new JTextField();
-		txtConfig.setBounds(72, 12, 292, 28);
-		contentPane.add(txtConfig);
-		txtConfig.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// Show nothing if config textfield is disabled
-				if(!txtConfig.isEnabled()) {
-					return;
-				}
-
-				if(SwingUtilities.isRightMouseButton(e)) {
-
-					JPopupMenu contextMenu = new JPopupMenu(null);
-
-					JMenuItem Browse = new JMenuItem("Browse");
-					JMenuItem Reset = new JMenuItem("Reset");
-
-					Browse.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							JFileChooser fileChooser = new JFileChooser();
-							fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-							fileChooser.setAcceptAllFileFilterUsed(false);
-							fileChooser.setFileFilter(new FileNameExtensionFilter(Values.CONFIG_FILE_EXTENSION.toUpperCase() + " file", Values.CONFIG_FILE_EXTENSION));
-							int r = fileChooser.showSaveDialog(null);
-							if(r == JFileChooser.APPROVE_OPTION) {
-								String fileName = fileChooser.getSelectedFile().getAbsolutePath();
-								if(!fileName.endsWith(Values.CONFIG_FILE_EXTENSION)) {
-									fileName += ("." + Values.CONFIG_FILE_EXTENSION);
-								}
-
-								txtConfig.setText(fileName);
-							}
-						}
-					});
-
-					Reset.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							txtConfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
-						}
-					});
-
-					contextMenu.add(Browse);
-					contextMenu.add(Reset);
-					contextMenu.show((Component) e.getSource(), e.getX(), e.getY());
-
-				}
-			}
-		});
-		txtConfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
 
 		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
@@ -235,12 +163,85 @@ public class GUI_Main extends JFrame {
 				}).start();
 			}
 		});
-		btnStart.setFocusable(false);
-		btnStart.setBounds(10, 98, 474, 28);
+
+		btnStart.setBounds(10, 52, 476, 28);
 		contentPane.add(btnStart);
 
+		btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setConfigChooserEnabled(false);
+
+				File cfgFile = getConfig();
+
+				if(GUI_Config.instance != null && GUI_Config.instance.isVisible()) {
+					GUI_Config.instance.toFront();
+				} else {
+					GUI_Config.instance = new GUI_Config(cfgFile);
+				}
+			}
+		});
+		btnEdit.setFocusable(false);
+		btnEdit.setBounds(370, 12, 116, 28);
+		contentPane.add(btnEdit);
+
+		txtConfig = new JTextField();
+		txtConfig.setEditable(false);
+		txtConfig.setBounds(72, 12, 292, 28);
+		contentPane.add(txtConfig);
+		txtConfig.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// Show nothing if config textfield is disabled
+				if(!txtConfig.isEnabled()) {
+					return;
+				}
+
+				if(SwingUtilities.isRightMouseButton(e)) {
+
+					JPopupMenu contextMenu = new JPopupMenu(null);
+
+					JMenuItem Browse = new JMenuItem("Browse");
+					JMenuItem Reset = new JMenuItem("Reset");
+
+					Browse.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							JFileChooser fileChooser = new JFileChooser();
+							fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+							fileChooser.setAcceptAllFileFilterUsed(false);
+							fileChooser.setFileFilter(new FileNameExtensionFilter(Values.CONFIG_FILE_EXTENSION.toUpperCase() + " file", Values.CONFIG_FILE_EXTENSION));
+							int r = fileChooser.showSaveDialog(null);
+							if(r == JFileChooser.APPROVE_OPTION) {
+								String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+								if(!fileName.endsWith(Values.CONFIG_FILE_EXTENSION)) {
+									fileName += ("." + Values.CONFIG_FILE_EXTENSION);
+								}
+
+								txtConfig.setText(fileName);
+							}
+						}
+					});
+
+					Reset.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							txtConfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
+						}
+					});
+
+					contextMenu.add(Browse);
+					contextMenu.add(Reset);
+					contextMenu.show((Component) e.getSource(), e.getX(), e.getY());
+
+				}
+			}
+		});
+		txtConfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
+
 		panelControls = new JPanel();
-		panelControls.setBounds(10, 98, 474, 28);
+		panelControls.setBounds(10, 52, 474, 28);
 		panelControls.setVisible(false);
 		contentPane.add(panelControls);
 
@@ -310,16 +311,16 @@ public class GUI_Main extends JFrame {
 		panelControls.add(btnStop);
 
 		lblStatus = new JLabel("Status:");
-		lblStatus.setBounds(14, 134, 66, 26);
+		lblStatus.setBounds(14, 88, 66, 26);
 		contentPane.add(lblStatus);
 
 		lblCurrstatus = new JLabel("Stopped");
-		lblCurrstatus.setBounds(88, 134, 134, 26);
+		lblCurrstatus.setBounds(88, 88, 134, 26);
 		contentPane.add(lblCurrstatus);
 
 		lblVersion = new JLabel("Version: " + Values.BOT_VERSION);
 		lblVersion.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblVersion.setBounds(344, 134, 134, 26);
+		lblVersion.setBounds(346, 88, 134, 26);
 		contentPane.add(lblVersion);
 
 		panelUpdate = new JPanel();

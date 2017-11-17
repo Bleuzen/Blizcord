@@ -1,6 +1,6 @@
 #!/bin/bash
-VERSION="0.8.2"
-CHECKSUM="8304903a5fdcd516dc5a5582c070bb41"
+VERSION="0.8.3"
+CHECKSUM="dd417c058ee0390ebeaa0a995f30518eb7dff169"
 BLIZCORD_INSTALL_DIR="$HOME/Blizcord/$VERSION"
 
 BLIZCORD_BIN_FILE="$BLIZCORD_INSTALL_DIR/Blizcord.exe"
@@ -15,13 +15,13 @@ if [ ! -e "$BLIZCORD_BIN_FILE" ]; then
 
     CHECKSUM_TEMP_FILE=$(mktemp)
     echo "$CHECKSUM  Blizcord.exe" > $CHECKSUM_TEMP_FILE
-    if md5sum --status -c $CHECKSUM_TEMP_FILE; then
-        echo "MD5 OK"
+    if sha1sum --status -c $CHECKSUM_TEMP_FILE; then
+        echo "SHA1 OK"
         mv Blizcord.exe $BLIZCORD_INSTALL_DIR
         echo "Successfully installed"
         echo
     else
-        echo "Error: The MD5 sum didn't match"
+        echo "Error: The SHA1 sum didn't match"
         exit 1
     fi
 fi
