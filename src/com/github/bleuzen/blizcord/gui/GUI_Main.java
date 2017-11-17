@@ -241,7 +241,7 @@ public class GUI_Main extends JFrame {
 		txtConfig.setText(DEFAULT_CONFIG_FILE.getAbsolutePath());
 
 		panelControls = new JPanel();
-		panelControls.setBounds(10, 52, 474, 28);
+		panelControls.setBounds(10, 52, 476, 28);
 		panelControls.setVisible(false);
 		contentPane.add(panelControls);
 

@@ -2,9 +2,9 @@ package com.github.bleuzen.blizcord;
 
 public class Values {
 
-	static final boolean DEV = false;
+	static final boolean DEV = true;
 
-	public static final String BOT_VERSION = "0.8.3" 	+ (DEV ? "-dev" : "");
+	public static final String BOT_VERSION = "0.8.4" 	+ (DEV ? "-dev" : "");
 	public static final String BOT_NAME = "Blizcord";
 	public static final String BOT_DEVELOPER = "Bleuzen <supgesu@gmail.com>";
 	public static final String BOT_GITHUB_REPO = "Bleuzen/Blizcord";
