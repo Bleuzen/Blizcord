@@ -326,7 +326,7 @@ public class GUI_Main extends JFrame {
 		panelUpdate = new JPanel();
 		panelUpdate.setVisible(false);
 		panelUpdate.setBorder(new LineBorder(null, 2, true));
-		panelUpdate.setBounds(10, 174, 470, 30);
+		panelUpdate.setBounds(10, 128, 470, 30);
 		contentPane.add(panelUpdate);
 		panelUpdate.setLayout(new BorderLayout(0, 0));
 
