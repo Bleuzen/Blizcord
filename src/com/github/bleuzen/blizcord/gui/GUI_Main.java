@@ -45,8 +45,8 @@ import com.github.bleuzen.blizcord.bot.Bot;
 @SuppressWarnings("serial")
 public class GUI_Main extends JFrame {
 
-	private final int WIDTH = 500;
-	private final int HEIGHT = 154;
+	private final static int WIDTH = 500;
+	private final static int HEIGHT = 154;
 
 	private static final File DEFAULT_CONFIG_FILE = Config.getDefaultConfig();
 
@@ -431,7 +431,7 @@ public class GUI_Main extends JFrame {
 
 		if(!instance.panelUpdate.isVisible()) {
 			instance.panelUpdate.setVisible(true);
-			instance.setSize(instance.getWidth(), instance.getHeight() + 50);
+			instance.setSize(WIDTH, HEIGHT + 50);
 		}
 		instance.lblNewVersion.setText("A new version is available: " + Bot.getUpdateChecker().getLatestTag());
 	}
