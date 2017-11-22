@@ -45,6 +45,9 @@ import com.github.bleuzen.blizcord.bot.Bot;
 @SuppressWarnings("serial")
 public class GUI_Main extends JFrame {
 
+	private final int WIDTH = 500;
+	private final int HEIGHT = 154;
+
 	private static final File DEFAULT_CONFIG_FILE = Config.getDefaultConfig();
 
 	private static Image icon;
@@ -83,7 +86,7 @@ public class GUI_Main extends JFrame {
 		setTitle(Values.BOT_NAME);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 154);
+		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
@@ -326,7 +329,7 @@ public class GUI_Main extends JFrame {
 		panelUpdate = new JPanel();
 		panelUpdate.setVisible(false);
 		panelUpdate.setBorder(new LineBorder(null, 2, true));
-		panelUpdate.setBounds(10, 128, 470, 30);
+		panelUpdate.setBounds(10, (HEIGHT - 26), 470, 30);
 		contentPane.add(panelUpdate);
 		panelUpdate.setLayout(new BorderLayout(0, 0));
 

@@ -298,7 +298,7 @@ public class AudioPlayerThread implements Runnable {
 				if(currentTrack == null) {
 					game = null;
 				} else {
-					game = Game.of(Utils.getTrackName(currentTrack));
+					game = Game.playing(Utils.getTrackName(currentTrack));
 				}
 
 				if(lastGame == null) {
