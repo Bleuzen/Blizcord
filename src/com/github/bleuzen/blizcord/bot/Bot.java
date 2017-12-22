@@ -128,6 +128,7 @@ public class Bot extends ListenerAdapter {
 
 			if(Config.getBoolean(Config.USE_NATIVE_AUDIO_SYSTEM)) {
 				builder.setAudioSendFactory(new NativeAudioSendFactory());
+				//builder.setAudioSendFactory(new NativeAudioSendFactory(bufferDuration));
 				Log.debug("Native audio system: enabled");
 			} else {
 				Log.debug("Native audio system: disabled");
@@ -299,7 +300,7 @@ public class Bot extends ListenerAdapter {
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		String message = event.getMessage().getContent();
+		String message = event.getMessage().getContentDisplay();
 		MessageChannel channel = event.getChannel();
 		User author = event.getAuthor();
 

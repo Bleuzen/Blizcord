@@ -30,19 +30,19 @@
     <dependency>
       <groupId>com.sedmelluq</groupId>
       <artifactId>lavaplayer</artifactId>
-      <version>1.2.44</version>
+      <version>1.2.45</version>
     </dependency>
 
     <dependency>
       <groupId>com.sedmelluq</groupId>
       <artifactId>jda-nas</artifactId>
-      <version>1.0.5</version>
+      <version>1.0.6</version>
     </dependency>
 
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>3.3.1_306</version>
+      <version>3.4.0_317</version>
     </dependency>
 
     <dependency>
