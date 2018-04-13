@@ -13,7 +13,7 @@ All other distributions:
  - Download the latest 'blizcord-*-online.sh' from the Releases page.
 
 ### Windows
-Download the latest .exe file from the Releases page.
+Download the latest .exe file from the [Releases](https://github.com/Bleuzen/Blizcord/releases) page.
 
 ## Run
 ### Linux
