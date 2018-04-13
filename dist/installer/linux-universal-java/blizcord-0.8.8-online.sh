@@ -1,7 +1,7 @@
 #!/bin/bash
 VERSION_TAG="0.8.8"
 
-BLIZCORD_INSTALL_DIR="$HOME/bin/Blizcord/$VERSION_TAG"
+BLIZCORD_INSTALL_DIR="$HOME/bin/Blizcord"
 BLIZCORD_FILE_NAME="Blizcord-$VERSION_TAG.exe"
 BLIZCORD_FILE_URL="https://github.com/Bleuzen/Blizcord/releases/download/$VERSION_TAG/$BLIZCORD_FILE_NAME"
 BLIZCORD_SHA1_FILE_URL="$BLIZCORD_FILE_URL.sha1"
@@ -20,7 +20,7 @@ if [ ! -e "$BLIZCORD_BIN_FILE" ]; then
     wget -O $CHECKSUM_TEMP_FILE $BLIZCORD_SHA1_FILE_URL
     if sha1sum --status -c $CHECKSUM_TEMP_FILE; then
         echo "SHA1 OK"
-        mv Blizcord.exe $BLIZCORD_INSTALL_DIR
+        mv $BLIZCORD_FILE_NAME $BLIZCORD_INSTALL_DIR
         echo "Successfully installed"
         echo
     else
