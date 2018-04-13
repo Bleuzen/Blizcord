@@ -10,10 +10,10 @@ Arch / Manjaro: https://aur.archlinux.org/packages/blizcord/
 
 All other distributions:
  - Install Java and wget
- - Download the latest [blizcord-linux-online.sh](https://github.com/Bleuzen/Blizcord/raw/master/dist/installer/linux-universal-java/blizcord-linux-online.sh)
+ - Download the latest 'blizcord-linux-online.sh' from the Releases page.
 
 ### Windows
-Nothing to install, download the latest exe and start it.
+Download the latest .exe file from the Releases page.
 
 ## Run
 ### Linux
