@@ -371,7 +371,7 @@ public class Bot extends ListenerAdapter {
 		// prevent NullPointerException
 		if(api != null) {
 			String uMsg = "A new version is available!\n"
-					+ "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases";
+					+ getUpdateChecker().getLatestTagUrl();
 
 			if(toOwner) {
 				sendMessage(guild.getOwner().getUser(), uMsg);
@@ -398,6 +398,8 @@ public class Bot extends ListenerAdapter {
 			if (updateCheckInterval > 0) {
 				int hours = (1000 * 3600 * updateCheckInterval);
 				// First update check only 5 seconds delayed if NOT from GUI (send message on Discord)
+				// If from GUI, check after some hours (again)
+				// This has nothing to do with the first update check after GUI start
 				new Timer().schedule(getUpdateChecker(), a.isGui() ? hours : 5000, hours);
 			}
 		}

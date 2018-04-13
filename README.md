@@ -32,6 +32,8 @@ This program makes use of the following librarys:
 
 [JDA](https://github.com/DV8FromTheWorld/JDA)
 
+[JSON-java](https://github.com/stleary/JSON-java)
+
 [lavaplayer](https://github.com/sedmelluq/lavaplayer)
 
 [JDA-NAS](https://github.com/sedmelluq/jda-nas)

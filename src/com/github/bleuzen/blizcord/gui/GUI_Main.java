@@ -425,7 +425,7 @@ public class GUI_Main extends JFrame {
 
 	public static void showUpdatePanel() {
 		if(!Utils.getOS().equals(Values.OS_WINDOWS)) {
-			// Hide the update button for non Windows users, because it downloads the .exe file directly
+			// Hide the update button for non Windows users (because currently only .exe file is on the download page)
 			instance.btnDownloadUpdate.setVisible(false);
 		}
 
@@ -437,7 +437,7 @@ public class GUI_Main extends JFrame {
 	}
 
 	private void onClickDownloadUpdateButton() {
-		Utils.openInBrowser("https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/download/" + Bot.getUpdateChecker().getLatestTag() + "/" + Values.BOT_NAME + ".exe");
+		Utils.openInBrowser(Bot.getUpdateChecker().getLatestTagUrl());
 		System.exit(0);
 	}
 

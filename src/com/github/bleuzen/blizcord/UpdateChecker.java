@@ -98,6 +98,10 @@ public class UpdateChecker extends TimerTask {
 		return latestTag;
 	}
 
+	public String getLatestTagUrl() {
+		return "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/tag/" + latestTag;
+	}
+
 	@Override
 	public void run() {
 		// Check for update if needed
