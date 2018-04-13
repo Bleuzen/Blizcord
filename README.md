@@ -10,7 +10,7 @@ Arch / Manjaro: https://aur.archlinux.org/packages/blizcord/
 
 All other distributions:
  - Install Java and wget
- - Download the latest 'blizcord-linux-online.sh' from the Releases page.
+ - Download the latest 'blizcord-*-online.sh' from the Releases page.
 
 ### Windows
 Download the latest .exe file from the Releases page.
