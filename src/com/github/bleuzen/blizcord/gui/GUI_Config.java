@@ -215,7 +215,7 @@ public class GUI_Config extends JFrame {
 		spinnerStartingVolume.setBounds(276, 8, 64, 28);
 		panel_Advanced.add(spinnerStartingVolume);
 		spinnerStartingVolume.setEnabled(false);
-		spinnerStartingVolume.setModel(new SpinnerNumberModel(100, 0, 100, 5));
+		spinnerStartingVolume.setModel(new SpinnerNumberModel(100, 0, Values.MAX_VOUME, 5));
 
 		chckbxEnableMediaControl = new JCheckBox("Enable media control keys");
 		chckbxEnableMediaControl.setBounds(8, 38, 262, 28);

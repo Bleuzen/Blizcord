@@ -84,7 +84,7 @@ public class Bot extends ListenerAdapter {
 	}
 
 	public static boolean launch(String[] args) {
-		Log.info("Starting bot ...");
+		Log.info("Starting bot...");
 
 		// init config
 		String configArg = ArgumentUtils.getArg(args, "--config");
@@ -113,7 +113,7 @@ public class Bot extends ListenerAdapter {
 			return false;
 		}
 
-		Log.info("Starting JDA ...");
+		Log.info("Starting JDA...");
 
 		try {
 			JDABuilder builder = new JDABuilder(AccountType.BOT).setToken(Config.get(Config.BOT_TOKEN));
@@ -152,7 +152,7 @@ public class Bot extends ListenerAdapter {
 					Log.info("To add me to your server visit:" + System.lineSeparator() + inviteUrl);
 				}
 
-				// wait until the bot get added to a server
+				// wait until the bot got added to a server
 				while(api.getGuilds().size() == 0) {
 					Thread.sleep(200);
 				}

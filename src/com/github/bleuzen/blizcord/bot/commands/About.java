@@ -27,19 +27,19 @@ class About extends Command {
 		channel.sendMessage("__**" + Values.BOT_NAME + "**__\n\n"
 				+ "Version: " + Values.BOT_VERSION + "\n"
 				+ "Author: " + Values.BOT_DEVELOPER + "\n"
-				+ "GitHub: https://github.com/" + Values.BOT_GITHUB_REPO
+				+ "Source: https://github.com/" + Values.BOT_GITHUB_REPO
 				+ "\n\n"
 				+ "__**Dependencies**__\n\n"
 				+ "__JDA__\n"
 				+ "Version: " + JDAInfo.VERSION + "\n"
-				+ "GitHub: https://github.com/DV8FromTheWorld/JDA\n"
+				+ "Source: https://github.com/DV8FromTheWorld/JDA\n"
 				+ "__Lavaplayer__\n"
 				+ "Version: " + PlayerLibrary.VERSION + "\n"
-				+ "GitHub: https://github.com/sedmelluq/lavaplayer\n"
+				+ "Source: https://github.com/sedmelluq/lavaplayer\n"
 				+ "__JNativeHook__\n"
-				+ "GitHub: https://github.com/kwhat/jnativehook\n"
+				+ "Source: https://github.com/kwhat/jnativehook\n"
 				+ "__Logback__\n"
-				+ "GitHub: https://github.com/qos-ch/logback").queue();
+				+ "Source: https://github.com/qos-ch/logback").queue();
 
 
 		if(!a.isDisableUpdateChecker() && Bot.getUpdateChecker().isUpdateAvailable()) {

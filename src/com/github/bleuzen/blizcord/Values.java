@@ -4,7 +4,7 @@ public class Values {
 
 	static final boolean DEV = false;
 
-	public static final String BOT_VERSION = "0.8.8" 	+ (DEV ? "-dev" : "");
+	public static final String BOT_VERSION = "0.8.9" 	+ (DEV ? "-dev" : "");
 	public static final String BOT_NAME = "Blizcord";
 	public static final String BOT_DEVELOPER = "Bleuzen <supgesu@gmail.com>";
 	public static final String BOT_GITHUB_REPO = "Bleuzen/Blizcord";
@@ -27,5 +27,7 @@ public class Values {
 	public static final int SET_VOLUME_SUCCESSFULLY = 0;
 	public static final int SET_VOLUME_ERROR_CUSTOM_VOLUME_NOT_ALLOWED = 1;
 	public static final int SET_VOLUME_ERROR_INVALID_NUMBER = 2;
+
+	public static final int MAX_VOUME = 200;
 
 }
