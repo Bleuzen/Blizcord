@@ -1,6 +1,7 @@
 package com.github.bleuzen.blizcord.bot;
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 import com.github.bleuzen.blizcord.Config;
 import com.github.bleuzen.blizcord.Log;
@@ -91,9 +92,19 @@ public class AudioPlayerThread implements Runnable {
 
 				if(direct) {
 
-					AudioTrack directTrack = playlist.getTracks().get(0);
+					List<AudioTrack> tracks = playlist.getTracks();
+					AudioTrack directTrack = tracks.get(0);
 					playDirect(directTrack, 0);
 					channel.sendMessage("Now playing: ``" + Utils.getTrackName(directTrack) + "``").queue();
+
+					// Add all the other tracks of the playlist too
+					int trackcount = tracks.size();
+					if(trackcount > 1) {
+						for(int i = 1; i < trackcount; i++) {
+							AudioTrack track = tracks.get(i);
+							addToPlaylist(track);
+						}
+					}
 
 				} else {
 

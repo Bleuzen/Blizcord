@@ -30,9 +30,9 @@
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>3.6.0_375</version>
+      <version>3.6.0_376</version>
     </dependency>
-    
+
     <!-- Because JDA ships with an very old version -->
     <!-- https://mvnrepository.com/artifact/org.json/json -->
     <dependency>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>com.sedmelluq</groupId>
       <artifactId>lavaplayer</artifactId>
-      <version>1.3.3</version>
+      <version>1.3.6</version>
     </dependency>
 
     <dependency>
