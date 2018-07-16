@@ -109,7 +109,7 @@ public class Bot extends ListenerAdapter {
 
 	private static boolean start() {
 		if(Config.get(Config.BOT_TOKEN).isEmpty()) {
-			Utils.TMPerrorButNotCrashGUI("You must specify a Token in the config file!");
+			Utils.handleErrorNCG("You must specify a Token in the config file!");
 			return false;
 		}
 
@@ -174,12 +174,15 @@ public class Bot extends ListenerAdapter {
 					Log.info("Created default music channel.");
 				}
 			} catch(Exception e) {
+				Utils.printException(e);
 				Log.debug("Failed to create channels.");
 			}
 
 			try {
 				controlChannel = guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).get(0); // true for Ignore Case
 			} catch(IndexOutOfBoundsException e) {
+				Utils.printException(e);
+				//TODO: Does it realy need to exit here?
 				Utils.errExit("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.", Values.EXIT_CODE_RESTART_GUI);
 			}
 
@@ -188,6 +191,8 @@ public class Bot extends ListenerAdapter {
 				try {
 					adminRole = guild.getRolesByName(adminsRoleName, true).get(0); // true for Ignore Case
 				} catch(IndexOutOfBoundsException e) {
+					Utils.printException(e);
+					//TODO: Does it realy need to exit here?
 					Utils.errExit("There is no '" + adminsRoleName + "' Role.", Values.EXIT_CODE_RESTART_GUI);
 				}
 			}
@@ -225,7 +230,7 @@ public class Bot extends ListenerAdapter {
 			return true;
 
 		} catch (Exception e) {
-			Utils.TMPerrorButNotCrashGUI(e.getMessage());
+			Utils.handleExceptionNCG(e);
 			return false;
 		}
 
@@ -287,6 +292,7 @@ public class Bot extends ListenerAdapter {
 			guild.getAudioManager().openAudioConnection(voiceChannel);
 			joined = true;
 		} catch(Exception e) {
+			Utils.printException(e);
 			controlChannel.sendMessage("Failed to join voice channel: " + voiceChannel + "\n"
 					+ "Do I have the permission to join it?").queue();
 		}

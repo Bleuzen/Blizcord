@@ -111,16 +111,43 @@ public class Utils {
 		}
 	}
 
-	//TODO
-	public static void TMPerrorButNotCrashGUI(String msg) {
+	public static void handleError(String m) {
+		Utils.errExit(m);
+	}
+
+	// "NCG" = "Not Crash GUI"
+	// this is the same as handleError(m) but does not crash if GUI
+	public static void handleErrorNCG(String m) {
 		if(a.isGui()) {
 			// Only show Error message box, but don't exit
-			GUI_Main.showErrMsgBox(msg);
+			GUI_Main.showErrMsgBox(m);
 		} else {
-			// The old way: crash
-			//TODO: double checks if a.isGui() (again in errExit())
-			//TODO: Write better method?
-			Utils.errExit(msg);
+			// If not using GUI -> The old way: crash
+			//TODO: double checks if a.isGui() (again in errExit()), Write better method?
+			Utils.errExit(m);
+		}
+	}
+
+	public static void handleException(Exception e) {
+		if(a.isDebug()) {
+			e.printStackTrace();
+		}
+
+		handleError(e.getMessage());
+	}
+
+	// "NCG" = "Not Crash GUI"
+	public static void handleExceptionNCG(Exception e) {
+		if(a.isDebug()) {
+			e.printStackTrace();
+		}
+
+		handleErrorNCG(e.getMessage());
+	}
+
+	public static void printException(Exception e) {
+		if(a.isDebug()) {
+			e.printStackTrace();
 		}
 	}
 

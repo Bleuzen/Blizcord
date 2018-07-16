@@ -93,7 +93,7 @@ public class Config {
 					Utils.errExit(gotGeneratedOrUpdatedMSG + " Please edit it now.");
 				}
 			} else {
-				Utils.TMPerrorButNotCrashGUI("Failed to generate config. (Do you have write access here?)");
+				Utils.handleErrorNCG("Failed to generate config. (Do you have write access here?)");
 			}
 		}
 
