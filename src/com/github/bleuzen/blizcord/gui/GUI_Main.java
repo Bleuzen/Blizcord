@@ -99,6 +99,7 @@ public class GUI_Main extends JFrame {
 			setIconImage(icon);
 			imgStream.close();
 		} catch(Exception e) {
+			Utils.printException(e);
 			Log.debug("Failed to set icon.");
 		}
 
@@ -383,7 +384,7 @@ public class GUI_Main extends JFrame {
 					writer.write(Base64.getEncoder().encodeToString(txtConfig.getText().getBytes(StandardCharsets.UTF_8)));
 					writer.close();
 				} catch(Exception e) {
-					// Ignore
+					Utils.printException(e);
 					// maybe we don't have the write permission here, at least we tryed it ;)
 				}
 			}
