@@ -101,6 +101,7 @@ public class Config {
 	}
 
 	public static String get(String key) {
+		Log.debug("Reading config key: {}", key);
 		return toValue(json.getString(key));
 	}
 
@@ -114,6 +115,7 @@ public class Config {
 
 	private static void setRaw(String key, String value) {
 		json.put(key, value);
+		Log.debug("Config key set: {}", key);
 	}
 
 	private static boolean generate(ArrayList<String> toAdd) {
@@ -127,9 +129,13 @@ public class Config {
 	public static boolean save() {
 		try {
 			json.write(new FileWriter(file), 2, 0).close();
+			Log.debug("Config saved");
 			return true;
 		} catch (Exception e) {
-			//e.printStackTrace();
+			if(a.isDebug()) {
+				e.printStackTrace();
+				Log.debug("Failed to save config file");
+			}
 			return false;
 		}
 	}

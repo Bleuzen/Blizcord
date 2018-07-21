@@ -2,6 +2,7 @@ package com.github.bleuzen.blizcord.bot.commands;
 
 import java.util.ArrayList;
 
+import com.github.bleuzen.blizcord.Config;
 import com.github.bleuzen.blizcord.Utils;
 
 import net.dv8tion.jda.core.entities.Guild;
@@ -12,7 +13,11 @@ public abstract class Command {
 
 	public static ArrayList<Command> commands;
 
+	private static String prefix;
+
 	public static void init() {
+		prefix = Config.get(Config.COMMAND_PREFIX);
+
 		commands = new ArrayList<>();
 
 		commands.add(new About());
@@ -35,6 +40,10 @@ public abstract class Command {
 		commands.add(new Stop());
 		commands.add(new Uptime());
 		commands.add(new Volume());
+	}
+
+	public static String getPrefix() {
+		return prefix;
 	}
 
 	public boolean compare(String cmd) {

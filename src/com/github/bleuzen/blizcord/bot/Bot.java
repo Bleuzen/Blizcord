@@ -222,7 +222,7 @@ public class Bot extends ListenerAdapter {
 			Log.info("Successfully started.");
 
 			try {
-				controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Config.get(Config.COMMAND_PREFIX) + "help`` to see all commands.").queue();
+				controlChannel.sendMessage(Values.BOT_NAME + " v" + Values.BOT_VERSION + " started.\nType ``" + Command.getPrefix() + "help`` to see all commands.").queue();
 			} catch (PermissionException e) {
 				sendMessage(guild.getOwner().getUser(), "Please give me the permision to read and write in your control channel: " + controlChannel.getName());
 			}
@@ -310,11 +310,11 @@ public class Bot extends ListenerAdapter {
 		MessageChannel channel = event.getChannel();
 		User author = event.getAuthor();
 
-		if ( (channel == controlChannel || channel.getType() == ChannelType.PRIVATE) && message.startsWith(Config.get(Config.COMMAND_PREFIX)) && (!author.getId().equals(api.getSelfUser().getId())) ) {
+		if ( (channel == controlChannel || channel.getType() == ChannelType.PRIVATE) && message.startsWith(Command.getPrefix()) && (!author.getId().equals(api.getSelfUser().getId())) ) {
 
 			Log.debug("Got command from {}: {}", author.getName(), message);
 
-			String[] cmdarg = message.substring(Config.get(Config.COMMAND_PREFIX).length()).split(" ", 2);
+			String[] cmdarg = message.substring(Command.getPrefix().length()).split(" ", 2);
 			String cmd = cmdarg[0];
 			String arg;
 			try {

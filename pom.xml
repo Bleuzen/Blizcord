@@ -30,7 +30,7 @@
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>3.7.0_382</version>
+      <version>3.7.1_385</version>
     </dependency>
 
     <!-- Because JDA ships with an very old version -->
