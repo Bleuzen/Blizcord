@@ -141,7 +141,14 @@ public class Config {
 	}
 
 	private static String toValue(String v) {
-		return v.split("#")[0].trim();
+		try {
+			return v.split(Values.CONFIG_COMMENT)[0].trim();
+		} catch (Exception e) {
+			Utils.printException(e);
+			//Log.debug("Invalid config value: {}", v);
+			Log.debug("Invalid config value"); // Do not print 'v' because it could contain sensitive data like the token
+		}
+		return "";
 	}
 
 	public static File getAppDir() {

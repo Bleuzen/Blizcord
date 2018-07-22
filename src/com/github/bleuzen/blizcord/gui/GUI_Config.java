@@ -247,11 +247,12 @@ public class GUI_Config extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				btnApply.setEnabled(false);
 
-				Config.set(Config.BOT_TOKEN, bottoken.getText());
-				Config.set(Config.CONTROL_CHANNEL, controlchannel.getText());
-				Config.set(Config.COMMAND_PREFIX, commandprefix.getText());
-				Config.set(Config.VOICE_CHANNEL, voicechannel.getText());
-				Config.set(Config.ADMINS_ROLE, adminsrole.getText());
+				// use checkValue() if it is a String
+				Config.set(Config.BOT_TOKEN, checkValue(bottoken.getText()));
+				Config.set(Config.CONTROL_CHANNEL, checkValue(controlchannel.getText()));
+				Config.set(Config.COMMAND_PREFIX, checkValue(commandprefix.getText()));
+				Config.set(Config.VOICE_CHANNEL, checkValue(voicechannel.getText()));
+				Config.set(Config.ADMINS_ROLE, checkValue(adminsrole.getText()));
 				Config.set(Config.DISPLAY_SONG_AS_GAME, String.valueOf(display_song_as_game.isSelected()));
 				Config.set(Config.UPDATE_CHECK_INTERVAL_HOURS, (periodic_update_check_box.isSelected() ? update_check_interval_hours_spinner.getValue().toString() : "0"));
 				Config.set(Config.ALLOW_CUSTOM_VOLUME, String.valueOf(chckbxAllowCustomVolume.isSelected()));
@@ -330,6 +331,15 @@ public class GUI_Config extends JFrame {
 		}
 
 		return successfullyInitialized;
+	}
+
+	// Returns if the String is a valid config value and displays a warning message if not
+	private static String checkValue(String v) {
+		if(v.contains(Values.CONFIG_COMMENT)) {
+			JOptionPane.showMessageDialog(instance, "Invalid config value: " + v + "\n'#' is not allowed.", Values.BOT_NAME, JOptionPane.WARNING_MESSAGE);
+			return "";
+		}
+		return v;
 	}
 
 	private void hideGetButton() {
