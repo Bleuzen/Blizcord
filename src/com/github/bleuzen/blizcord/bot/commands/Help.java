@@ -27,7 +27,7 @@ class Help extends Command {
 				+ "!search <youtube video title>   (Plays the first video that was found)\n"
 				+ "!save <playlist>                (Save the current playlist)\n"
 				+ "!load <playlist>                (Load a saved playlist)\n"
-				+ "!loadshuffle <playlist>         (Load a list and shuffle it)"
+				+ "!loadshuffle <playlist>         (Load a list and shuffle it)\n"
 				+ "!lists                          (List the saved playlists)\n"
 				+ "!pause                          (Pause or resume the current track)\n"
 				+ "!stop                           (Stop the playback and clear the playlist)\n"
