@@ -14,7 +14,6 @@ import com.github.bleuzen.blizcord.bot.commands.Command;
 import com.github.bleuzen.blizcord.gui.GUI_Main;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 
-import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
@@ -116,7 +115,7 @@ public class Bot extends ListenerAdapter {
 		Log.info("Starting JDA...");
 
 		try {
-			JDABuilder builder = new JDABuilder(AccountType.BOT).setToken(Config.get(Config.BOT_TOKEN));
+			JDABuilder builder = new JDABuilder(Config.get(Config.BOT_TOKEN));
 
 			if(Config.getBoolean(Config.AUTO_RECONNECT)) {
 				builder.setAutoReconnect(true);
@@ -134,12 +133,15 @@ public class Bot extends ListenerAdapter {
 				Log.debug("Native audio system: disabled");
 			}
 
-			api = builder.buildBlocking();
+			// Connect to Discord
+			api = builder.build();
+			// Wait until connected
+			api.awaitReady();
 
 			api.addEventListener(new Bot());
 
 
-			// test for only one server
+			// check if only one server
 			int guilds = api.getGuilds().size();
 			if(guilds == 0) {
 
@@ -182,7 +184,7 @@ public class Bot extends ListenerAdapter {
 				controlChannel = guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).get(0); // true for Ignore Case
 			} catch(IndexOutOfBoundsException e) {
 				Utils.printException(e);
-				//TODO: Does it realy need to exit here?
+				//TODO: Does it really need to exit here?
 				Utils.errExit("There is no '" + Config.get(Config.CONTROL_CHANNEL) + "' Text Channel.", Values.EXIT_CODE_RESTART_GUI);
 			}
 
@@ -192,7 +194,7 @@ public class Bot extends ListenerAdapter {
 					adminRole = guild.getRolesByName(adminsRoleName, true).get(0); // true for Ignore Case
 				} catch(IndexOutOfBoundsException e) {
 					Utils.printException(e);
-					//TODO: Does it realy need to exit here?
+					//TODO: Does it really need to exit here?
 					Utils.errExit("There is no '" + adminsRoleName + "' Role.", Values.EXIT_CODE_RESTART_GUI);
 				}
 			}

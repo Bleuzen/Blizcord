@@ -28,6 +28,7 @@ public abstract class Command {
 		commands.add(new List());
 		commands.add(new Lists());
 		commands.add(new Load());
+		commands.add(new Loadshuffle());
 		commands.add(new Loop());
 		commands.add(new Next());
 		commands.add(new Pause());
