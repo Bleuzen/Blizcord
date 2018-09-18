@@ -114,15 +114,16 @@ public class GUI_Main extends JFrame {
 				File cfgFile = getConfig();
 
 				if(!cfgFile.exists()) {
-					showMsgBox("The config file doesn't exist already. Please use the 'Edit' button first.");
+					showMsgBox("The config file does not exist. Please use the 'Edit' button first.");
 					return;
 				}
 
 				// check if Config is already saved (by GUI_Config)
 				// GUI_Config.instance gets reset to null after Config got saved
-				// If not null, display an error
+				// If not null (config editor still open) tell the user
 				if(GUI_Config.instance != null) {
 					showMsgBox("You forgot to Apply (save) the config.");
+					GUI_Config.instance.toFront();
 					return;
 				}
 
@@ -137,17 +138,14 @@ public class GUI_Main extends JFrame {
 					@Override
 					public void run() {
 
-						boolean started;
-
-						// start bot
-						setTitle(getTitle() + " - " + cfgFile.getName());
-						started = Bot.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
-
+						boolean started = Bot.launch(new String[]{"--config", cfgFile.getAbsolutePath()});
 
 						if(started) {
 
 							btnStart.setVisible(false);
 							panelControls.setVisible(true);
+
+							setTitle(getTitle() + " - " + cfgFile.getName());
 
 							lblCurrstatus.setText("Running");
 

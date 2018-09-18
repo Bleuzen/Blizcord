@@ -44,7 +44,7 @@ public class a {
 		Log.info("Developer: " + Values.BOT_DEVELOPER);
 
 		if(Utils.isUnknownOS()) {
-			Log.warn("Your operating system is not supported yet. Some features may not work.");
+			Log.warn("Your operating system is not supported. Some features may not work.");
 		}
 
 		if(gui) {
