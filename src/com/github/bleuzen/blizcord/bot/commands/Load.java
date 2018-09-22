@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import com.github.bleuzen.blizcord.Config;
 import com.github.bleuzen.blizcord.bot.AudioPlayerThread;
@@ -28,32 +30,45 @@ class Load extends Command {
 
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
-		// arg = playlist name
-		if(arg == null) {
+		// arg = playlist
+		loadPlaylist(arg, author, channel, false);
+	}
+
+	public static void loadPlaylist(String playlist, User author, MessageChannel channel, boolean shuffle) {
+		if(playlist == null) {
 			channel.sendMessage(author.getAsMention() + " ``Please specify a playlist name. Put it behind this command.``").queue();
 			return;
 		}
 		// Load the playlist
 		try {
-			File playlistFile = new File(new File(Config.getAppDir(), "playlists"), arg);
+			File playlistFile = new File(new File(Config.getAppDir(), "playlists"), playlist);
 			if(!playlistFile.exists()) {
-				channel.sendMessage(author.getAsMention() + " Playlist doesn't exist: ``" + arg + "``").queue();
+				channel.sendMessage(author.getAsMention() + " Playlist doesn't exist: ``" + playlist + "``").queue();
 				return;
 			}
 
 			// Join the voice channel of the command author before addToPlaylist() joins the default channel
 			Bot.joinVoiceChannel(Bot.getGuild().getMember(author));
 
+			ArrayList<String> tracklist = new ArrayList<>();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(playlistFile), StandardCharsets.UTF_8));
 			String line;
 			while((line = bufferedReader.readLine()) != null) {
-				AudioPlayerThread.addToPlaylist(line, true);
+				tracklist.add(line);
 			}
 			bufferedReader.close();
 
-			channel.sendMessage(author.getAsMention() + " Playlist loaded: ``" + arg + "``").queue();
+			if(shuffle) {
+				Collections.shuffle(tracklist);
+			}
+
+			for(String track : tracklist) {
+				AudioPlayerThread.addToPlaylist(track, true);
+			}
+
+			channel.sendMessage(author.getAsMention() + " Playlist loaded: ``" + playlist + "``").queue();
 		} catch (Exception e) {
-			channel.sendMessage(author.getAsMention() + " Failed to load playlist: ``" + arg + "``").queue();
+			channel.sendMessage(author.getAsMention() + " Failed to load playlist: ``" + playlist + "``").queue();
 		}
 	}
 
