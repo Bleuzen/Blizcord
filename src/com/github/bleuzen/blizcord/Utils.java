@@ -1,6 +1,7 @@
 package com.github.bleuzen.blizcord;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +62,9 @@ public class Utils {
 
 	public static String getTrackName(AudioTrack track) {
 		String sourceName = track.getSourceManager().getSourceName();
-		if(sourceName.equals("local") || sourceName.equals("http")) {
+		if(sourceName.equals("local")) {
+			return new File(track.getInfo().uri).getName();
+		} else if(sourceName.equals("http")) {
 			return track.getIdentifier();
 		} else {
 			return track.getInfo().title;

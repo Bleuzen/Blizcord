@@ -29,6 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -85,7 +86,7 @@ public class GUI_Main extends JFrame {
 
 		setTitle(Values.BOT_NAME);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
