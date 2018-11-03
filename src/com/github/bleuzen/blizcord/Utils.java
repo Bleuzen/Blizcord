@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import com.github.bleuzen.blizcord.bot.Bot;
 import com.github.bleuzen.blizcord.gui.GUI_Main;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -63,7 +64,14 @@ public class Utils {
 	public static String getTrackName(AudioTrack track) {
 		String sourceName = track.getSourceManager().getSourceName();
 		if(sourceName.equals("local")) {
-			return new File(track.getInfo().uri).getName();
+			AudioTrackInfo info = track.getInfo();
+			String author = info.author;
+			String title = info.title;
+			if(!author.equals("Unknown artist") && !title.equals("Unknown title")) {
+				return author + " - " + title;
+			} else {
+				return new File(track.getInfo().uri).getName();
+			}
 		} else if(sourceName.equals("http")) {
 			return track.getIdentifier();
 		} else {
