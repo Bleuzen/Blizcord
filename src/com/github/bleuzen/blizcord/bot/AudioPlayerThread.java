@@ -292,8 +292,7 @@ public class AudioPlayerThread implements Runnable {
 	/* UPDATE GAME */
 	@Override
 	public void run() {
-		// TODO: Less FPS for less CPU usage?
-		final int sleepTime = 200; // update game with 5 fps
+		final int sleepTime = 500; // update game with 2 fps
 		final int updatesDelay = 12000; // 12 seconds delay between game updates (Discord only allows to update the game 5 times per minute)
 
 		Game lastGame = null;
