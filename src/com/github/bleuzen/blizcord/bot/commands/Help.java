@@ -38,6 +38,7 @@ class Help extends Command {
 				+ "!repeat (<how many times>)      (Repeat the current playlist)\n"
 				+ "!shuffle                        (Randomize the track order)\n"
 				+ "!loop                           (Re add played track to the end of the playlist)\n"
+				+ "!playtime                       (Time in currently playing song)\n"
 				+ "!uptime                         (See how long the bot is already online)\n"
 				+ "!about                          (Print about message)\n"
 				+ "!kill                           (Kill the bot)"

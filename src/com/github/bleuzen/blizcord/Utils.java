@@ -49,7 +49,7 @@ public class Utils {
 		return TimeUnit.SECONDS.toMillis(s);
 	}
 
-	public static String durationToTimeString(long duration) {
+	public static String durationToUpTimeString(long duration) {
 		TimeUnit scale = TimeUnit.MILLISECONDS;
 		long days = scale.toDays(duration);
 		duration -= TimeUnit.DAYS.toMillis(days);
@@ -59,6 +59,14 @@ public class Utils {
 		duration -= TimeUnit.MINUTES.toMillis(minutes);
 		long seconds = scale.toSeconds(duration);
 		return String.format("%d days, %d hours, %d minutes, %d seconds", days, hours, minutes, seconds);
+	}
+
+	public static String durationToTackPosition(long duration) {
+		TimeUnit scale = TimeUnit.MILLISECONDS;
+		long minutes = scale.toMinutes(duration);
+		duration -= TimeUnit.MINUTES.toMillis(minutes);
+		long seconds = scale.toSeconds(duration);
+		return String.format("%d:%s", minutes, String.format("%02d", seconds));
 	}
 
 	public static String getTrackName(AudioTrack track) {

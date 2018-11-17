@@ -22,7 +22,7 @@ class Uptime extends Command {
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		long duration = System.currentTimeMillis() - Bot.getStartTime();
-		channel.sendMessage(author.getAsMention() + " Uptime: ``" + Utils.durationToTimeString(duration) + "``").queue();
+		channel.sendMessage(author.getAsMention() + " Uptime: ``" + Utils.durationToUpTimeString(duration) + "``").queue();
 	}
 
 }

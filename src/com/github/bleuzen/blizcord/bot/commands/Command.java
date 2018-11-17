@@ -33,6 +33,7 @@ public abstract class Command {
 		commands.add(new Next());
 		commands.add(new Pause());
 		commands.add(new Play());
+		commands.add(new Playtime());
 		commands.add(new Repeat());
 		commands.add(new Save());
 		commands.add(new Search());

@@ -10,6 +10,7 @@ import com.github.bleuzen.blizcord.Values;
 import com.github.bleuzen.blizcord.a;
 import com.github.bleuzen.blizcord.gui.GUI_Main;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -45,6 +46,14 @@ public class AudioPlayerThread implements Runnable {
 
 	public static GuildMusicManager getMusicManager() {
 		return musicManager;
+	}
+
+	public static AudioPlayer getPlayer() {
+		return getMusicManager().player;
+	}
+
+	public static AudioTrack getCurrentTrack() {
+		return getPlayer().getPlayingTrack();
 	}
 
 	private static synchronized void initGuildAudioPlayer(Guild guild) {
@@ -283,6 +292,7 @@ public class AudioPlayerThread implements Runnable {
 	/* UPDATE GAME */
 	@Override
 	public void run() {
+		// TODO: Less FPS for less CPU usage?
 		final int sleepTime = 200; // update game with 5 fps
 		final int updatesDelay = 12000; // 12 seconds delay between game updates (Discord only allows to update the game 5 times per minute)
 
