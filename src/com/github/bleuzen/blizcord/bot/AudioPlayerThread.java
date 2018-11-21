@@ -230,24 +230,24 @@ public class AudioPlayerThread implements Runnable {
 	public static void addToPlaylist(AudioTrack track) {
 		//connectToFirstVoiceChannel(guild.getAudioManager());
 
-		musicManager.scheduler.queue(track);
+		getMusicManager().scheduler.queue(track);
 	}
 
 	static void playDirect(AudioTrack track, long startingPositionMS) {
 		//connectToFirstVoiceChannel(guild.getAudioManager());
-		musicManager.player.startTrack(track, false);
+		getPlayer().startTrack(track, false);
 
 		if(startingPositionMS > 0) {
-			musicManager.player.getPlayingTrack().setPosition(startingPositionMS);
+			getPlayer().getPlayingTrack().setPosition(startingPositionMS);
 		}
 	}
 
 	static void stop() {
-		musicManager.player.stopTrack();
+		getPlayer().stopTrack();
 	}
 
 	public static void setPaused(boolean p) {
-		musicManager.player.setPaused(p);
+		getPlayer().setPaused(p);
 
 		if(a.isGui()) {
 			GUI_Main.settglbtnPauseSelected(p);
@@ -255,7 +255,7 @@ public class AudioPlayerThread implements Runnable {
 	}
 
 	public static boolean isPaused() {
-		return musicManager.player.isPaused();
+		return getPlayer().isPaused();
 	}
 
 	public static void togglePause() {
@@ -263,7 +263,7 @@ public class AudioPlayerThread implements Runnable {
 	}
 
 	public static boolean isPlaying() {
-		return musicManager.player.getPlayingTrack() != null;
+		return getPlayer().getPlayingTrack() != null;
 	}
 
 	public static int setVolume(String v) {
@@ -283,9 +283,13 @@ public class AudioPlayerThread implements Runnable {
 			return Values.SET_VOLUME_ERROR_INVALID_NUMBER;
 		}
 
-		musicManager.player.setVolume(volume);
+		getPlayer().setVolume(volume);
 		Log.debug("Player volume set to: {}", musicManager.player.getVolume());
 		return Values.SET_VOLUME_SUCCESSFULLY;
+	}
+
+	public static int getVolume() {
+		return getPlayer().getVolume();
 	}
 
 

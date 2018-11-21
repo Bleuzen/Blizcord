@@ -22,7 +22,8 @@ class Volume extends Command {
 	@Override
 	public void execute(String arg, User author, MessageChannel channel, Guild guild) {
 		if(arg == null) {
-			channel.sendMessage(author.getAsMention() + " ``Please write the new volume behind this command.``").queue();
+			channel.sendMessage("``Current volume: " + AudioPlayerThread.getVolume() + " %``\n"
+					+ author.getAsMention() + " ``If you want to change the volume, please write the new volume behind this command.``").queue();
 			return;
 		}
 
@@ -30,7 +31,7 @@ class Volume extends Command {
 
 		switch(r) {
 		case Values.SET_VOLUME_SUCCESSFULLY:
-			channel.sendMessage(author.getAsMention() + " Volume set to: ``" + arg + "%``").queue();
+			channel.sendMessage(author.getAsMention() + " ``Volume set to: " + arg + " %``").queue();
 			break;
 
 		case Values.SET_VOLUME_ERROR_CUSTOM_VOLUME_NOT_ALLOWED:
