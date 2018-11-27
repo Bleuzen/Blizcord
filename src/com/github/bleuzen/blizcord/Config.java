@@ -113,6 +113,10 @@ public class Config {
 		setRaw(key, toValue(value));
 	}
 
+	public static void set(String key, int value) {
+		set(key, String.valueOf(value));
+	}
+
 	private static void setRaw(String key, String value) {
 		json.put(key, value);
 		Log.debug("Config key set: {}", key);

@@ -240,6 +240,14 @@ public class Bot extends ListenerAdapter {
 
 	public static void shutdown() {
 		Log.info("Shutting down ...");
+
+		// Save volume
+		if(Config.getBoolean(Config.ALLOW_CUSTOM_VOLUME)) {
+			Config.set(Config.STARTING_VOLUME, AudioPlayerThread.getVolume());
+			Config.save();
+		}
+
+		// Shutdown JDA
 		//api.shutdown(); // done by shutdown hook of JDA
 		System.exit(0);
 	}
