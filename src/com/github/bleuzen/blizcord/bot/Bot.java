@@ -58,7 +58,7 @@ public class Bot extends ListenerAdapter {
 			}
 
 			// Init updateChecker
-			updateChecker = new UpdateChecker(Values.BOT_GITHUB_REPO);
+			updateChecker = new UpdateChecker();
 		}
 
 		return updateChecker;
@@ -390,7 +390,7 @@ public class Bot extends ListenerAdapter {
 		// prevent NullPointerException
 		if(api != null) {
 			String uMsg = "A new version is available!\n"
-					+ getUpdateChecker().getLatestTagUrl();
+					+ getUpdateChecker().getDownloadUrl();
 
 			if(toOwner) {
 				sendMessage(guild.getOwner().getUser(), uMsg);

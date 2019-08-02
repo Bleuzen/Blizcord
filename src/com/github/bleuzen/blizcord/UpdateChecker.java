@@ -11,37 +11,26 @@ import com.github.bleuzen.blizcord.gui.GUI_Main;
 
 public class UpdateChecker extends TimerTask {
 
-	private final String GITHUB_REPO;
+	private static final String UPDATER_URL = "https://gitlab.com/Bleuzen/versions/raw/master/blizcord/v1/data.json";
 
 	private boolean updateAvailable = false;
-	private String latestTag = null;
-
-	public UpdateChecker(String githubRepo) {
-		GITHUB_REPO = githubRepo;
-	}
+	
+	private String latestVersion = null;
+	private String downloadUrl = null;
 
 	private void checkForUpdate() {
-		Log.info("[Updater] Checking for updates ...");
+		Log.info("[Updater] Checking for updates...");
 
 		try {
-			JSONObject json = fetchJSON("https://api.github.com/repos/" + GITHUB_REPO + "/releases/latest");
+			JSONObject json = fetchJSON(UPDATER_URL);
 
-			String tagName = json.getString("tag_name");
-			boolean prerelease = json.getBoolean("prerelease");
+			latestVersion = json.getString("version");
+			downloadUrl = json.getString("downloadUrl");
 
-			Log.debug("[Updater] [JSON] tag_name: " + tagName);
-			Log.debug("[Updater] [JSON] prerelease: " + prerelease);
+			Log.debug("[Updater] [JSON] online version: " + latestVersion);
 
-			if(prerelease) {
-				updateAvailable = false;
-				Log.debug("[Updater] Skipping version comparison");
-				return;
-			}
-
-			latestTag = tagName;
-
-			String online = tagName;
-			String local = Values.BOT_VERSION;
+			final String online = latestVersion;
+			final String local = Values.BOT_VERSION;
 
 			updateAvailable = compare(local, online);
 		} catch (Exception e) {
@@ -85,7 +74,11 @@ public class UpdateChecker extends TimerTask {
 			newer = valsOnline.length > valsLocal.length;
 		}
 
-		Log.debug("[Updater] Newer: {}", newer);
+		if (newer) {
+			Log.info("[Updater] An update is available!");
+		} else {
+			Log.info("[Updater] No update available.");
+		}
 
 		return newer;
 	}
@@ -94,12 +87,12 @@ public class UpdateChecker extends TimerTask {
 		return updateAvailable;
 	}
 
-	public String getLatestTag() {
-		return latestTag;
+	public String getLatestVersion() {
+		return latestVersion;
 	}
-
-	public String getLatestTagUrl() {
-		return "https://github.com/" + Values.BOT_GITHUB_REPO + "/releases/tag/" + latestTag;
+	
+	public String getDownloadUrl() {
+		return downloadUrl;
 	}
 
 	@Override

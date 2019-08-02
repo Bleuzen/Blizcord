@@ -433,11 +433,11 @@ public class GUI_Main extends JFrame {
 			instance.panelUpdate.setVisible(true);
 			instance.setSize(WIDTH, HEIGHT + 50);
 		}
-		instance.lblNewVersion.setText("A new version is available: " + Bot.getUpdateChecker().getLatestTag());
+		instance.lblNewVersion.setText("A new version is available: " + Bot.getUpdateChecker().getLatestVersion());
 	}
 
 	private void onClickDownloadUpdateButton() {
-		Utils.openInBrowser(Bot.getUpdateChecker().getLatestTagUrl());
+		Utils.openInBrowser(Bot.getUpdateChecker().getDownloadUrl());
 		System.exit(0);
 	}
 
