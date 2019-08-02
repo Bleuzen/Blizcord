@@ -1,4 +1,5 @@
 package com.github.bleuzen.blizcord.bot;
+
 import java.io.File;
 import java.util.Timer;
 
@@ -14,6 +15,7 @@ import com.github.bleuzen.blizcord.bot.commands.Command;
 import com.github.bleuzen.blizcord.gui.GUI_Main;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 
+import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
@@ -115,7 +117,8 @@ public class Bot extends ListenerAdapter {
 		Log.info("Starting JDA...");
 
 		try {
-			JDABuilder builder = new JDABuilder(Config.get(Config.BOT_TOKEN));
+			JDABuilder builder = new JDABuilder(AccountType.BOT);
+			builder.setToken(Config.get(Config.BOT_TOKEN));
 
 			if(Config.getBoolean(Config.AUTO_RECONNECT)) {
 				builder.setAutoReconnect(true);
