@@ -1,0 +1,7 @@
+/bin/
+/target/
+
+# Eclipse
+/.settings
+/.classpath
+/.project
