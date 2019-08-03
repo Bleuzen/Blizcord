@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>../build/jar/Blizcord-pg.jar</jar>
-  <outfile>../build/jar/Blizcord.exe</outfile>
+  <jar>../build/Blizcord-pg.jar</jar>
+  <outfile>../build/Blizcord.exe</outfile>
   <errTitle>Blizcord</errTitle>
   <cmdLine>--gui</cmdLine>
   <chdir>.</chdir>

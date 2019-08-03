@@ -3,8 +3,9 @@
     <property name="src.dir"     value="src"/>
 
     <property name="build.dir"   value="build"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
+
+    <!-- <property name="classes.dir" value="${build.dir}/classes"/> -->
+    <property name="classes.dir" value="target/classes"/>
 
     <property name="main-class"  value="com.github.bleuzen.blizcord.a"/>
 
@@ -29,8 +30,8 @@
     </target>
 
     <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+        <mkdir dir="${build.dir}"/>
+        <jar destfile="${build.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
             <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
 			<zipfileset dir="${src.dir}/com/github/bleuzen/blizcord" includes="icon.png" prefix="com/github/bleuzen/blizcord"/>
 			<manifest>
@@ -60,7 +61,7 @@
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
-                <path location="${jar.dir}/${ant.project.name}.jar"/>
+                <path location="${build.dir}/${ant.project.name}.jar"/>
             </classpath>
         </java>
     </target>
