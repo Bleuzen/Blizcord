@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Ant: Build Exe" type="AntRunConfiguration">
+    <antsettings antfile="file://$PROJECT_DIR$/build.xml" target="exe" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Maven: Copy dependencies" run_configuration_type="MavenRunConfiguration" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Blizcord GUI" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.github.bleuzen.blizcord.a" />
+    <module name="Blizcord" />
+    <option name="PROGRAM_PARAMETERS" value="--gui" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
