@@ -5,10 +5,10 @@ import com.github.bleuzen.blizcord.a;
 import com.github.bleuzen.blizcord.bot.Bot;
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 
-import net.dv8tion.jda.core.JDAInfo;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.JDAInfo;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 class About extends Command {
 

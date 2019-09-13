@@ -4,9 +4,9 @@ import com.github.bleuzen.blizcord.Values;
 import com.github.bleuzen.blizcord.bot.AudioPlayerThread;
 import com.github.bleuzen.blizcord.bot.Bot;
 
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 class Search extends Command {
 

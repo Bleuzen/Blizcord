@@ -1,8 +1,8 @@
 package com.github.bleuzen.blizcord.bot;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-
 import com.github.bleuzen.blizcord.Config;
 import com.github.bleuzen.blizcord.Log;
 import com.github.bleuzen.blizcord.Utils;
@@ -18,9 +18,9 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class AudioPlayerThread implements Runnable {
 
@@ -299,7 +299,7 @@ public class AudioPlayerThread implements Runnable {
 		final int sleepTime = 500; // update game with 2 fps
 		final int updatesDelay = 12000; // 12 seconds delay between game updates (Discord only allows to update the game 5 times per minute)
 
-		Game lastGame = null;
+		Activity lastActivity = null;
 		int updateDelay = 0;
 
 		while(true) {
@@ -317,31 +317,31 @@ public class AudioPlayerThread implements Runnable {
 			if(updateDelay <= 0) { // check if we can update again
 
 				// Update game if needed
-				Game game;
+				Activity activity;
 				AudioTrack currentTrack = musicManager.player.getPlayingTrack();
 				if(currentTrack == null) {
-					game = null;
+					activity = null;
 				} else {
-					game = Game.playing(Utils.getTrackName(currentTrack));
+					activity = Activity.playing(Utils.getTrackName(currentTrack));
 				}
 
-				if(lastGame == null) {
-					if(game != null) {
-						Bot.setGame(game);
-						lastGame = game;
+				if(lastActivity == null) {
+					if(activity != null) {
+						Bot.setActivity(activity);
+						lastActivity = activity;
 						updateDelay = updatesDelay;
 						//Log.print("UPDATE GAME LGN: " + game.getName());
 					}
 				} else {
-					if(game == null) {
-						Bot.setGame(null);
-						lastGame = null;
+					if(activity == null) {
+						Bot.setActivity(null);
+						lastActivity = null;
 						updateDelay = updatesDelay;
 						//Log.print("UPDATE GAME NULL");
 					} else {
-						if(!lastGame.getName().equals(game.getName())) {
-							Bot.setGame(game);
-							lastGame = game;
+						if(!lastActivity.getName().equals(activity.getName())) {
+							Bot.setActivity(activity);
+							lastActivity = activity;
 							updateDelay = updatesDelay;
 							//Log.print("UPDATE GAME NE: " + game.getName());
 						}

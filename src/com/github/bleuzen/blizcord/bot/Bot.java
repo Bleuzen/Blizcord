@@ -2,7 +2,6 @@ package com.github.bleuzen.blizcord.bot;
 
 import java.io.File;
 import java.util.Timer;
-
 import com.github.bleuzen.blizcord.Config;
 import com.github.bleuzen.blizcord.Log;
 import com.github.bleuzen.blizcord.NativeKeyListener;
@@ -14,25 +13,15 @@ import com.github.bleuzen.blizcord.a;
 import com.github.bleuzen.blizcord.bot.commands.Command;
 import com.github.bleuzen.blizcord.gui.GUI_Main;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
-
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.PermissionException;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.managers.GuildController;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Bot extends ListenerAdapter {
 
@@ -141,7 +130,7 @@ public class Bot extends ListenerAdapter {
 			// Wait until connected
 			api.awaitReady();
 
-			api.addEventListener(new Bot());
+			api.addEventListener(new Bot()); // Renamed in JDA 4 ( JDABuilder.addEventListener -> JDABuilder.addEventListeners ) // why not here?
 
 
 			// check if only one server
@@ -149,7 +138,7 @@ public class Bot extends ListenerAdapter {
 			if(guilds == 0) {
 
 				// https://discordapi.com/permissions.html#3402768
-				String inviteUrl = api.asBot().getInviteUrl(Permission.getPermissions(3402768));
+				String inviteUrl = api.getInviteUrl(Permission.getPermissions(3402768));
 
 				if(a.isGui()) {
 					GUI_Main.addToSever(inviteUrl);
@@ -169,13 +158,12 @@ public class Bot extends ListenerAdapter {
 			guild = api.getGuilds().get(0);
 
 			try {
-				GuildController controller = guild.getController();
 				if(guild.getTextChannelsByName(Config.get(Config.CONTROL_CHANNEL), true).isEmpty()) { // create channel if not exists
-					controller.createTextChannel(Config.get(Config.CONTROL_CHANNEL)).complete();
+					guild.createTextChannel(Config.get(Config.CONTROL_CHANNEL)).complete();
 					Log.info("Created control channel.");
 				}
 				if(guild.getVoiceChannelsByName(Config.get(Config.VOICE_CHANNEL), true).isEmpty()) {
-					controller.createVoiceChannel(Config.get(Config.VOICE_CHANNEL)).complete();
+					guild.createVoiceChannel(Config.get(Config.VOICE_CHANNEL)).complete();
 					Log.info("Created default music channel.");
 				}
 			} catch(Exception e) {
@@ -352,12 +340,9 @@ public class Bot extends ListenerAdapter {
 				}
 			}
 
-			if(commandFound) {
-				return;
+			if(!commandFound) {
+				channel.sendMessage(author.getAsMention() + " ``Unknown command``").queue();
 			}
-
-			channel.sendMessage(author.getAsMention() + " ``Unknown command``").queue();
-
 		}
 	}
 
@@ -379,10 +364,10 @@ public class Bot extends ListenerAdapter {
 		AudioPlayerThread.setPaused(false);
 	}
 
-	static void setGame(Game game) {
-		api.getPresence().setGame(game);
+	static void setActivity(Activity activity) {
+		api.getPresence().setActivity(activity);
 
-		Log.debug("Set game to: {}", game);
+		Log.debug("Set Activity to: {}", activity);
 	}
 
 	public static void sendUpdateMessage(boolean toOwner) {

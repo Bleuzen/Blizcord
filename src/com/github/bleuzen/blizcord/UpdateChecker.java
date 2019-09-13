@@ -54,8 +54,6 @@ public class UpdateChecker extends TimerTask {
 		local = toVersionString(local);
 		online = toVersionString(online);
 
-		Log.debug("[Updater] Online version: {}", online);
-
 		String[] valsLocal = local.split("\\.");
 		String[] valsOnline = online.split("\\.");
 

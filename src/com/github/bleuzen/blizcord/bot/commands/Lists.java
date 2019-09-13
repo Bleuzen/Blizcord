@@ -5,9 +5,9 @@ import java.io.File;
 import com.github.bleuzen.blizcord.Config;
 import com.github.bleuzen.blizcord.Values;
 
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 class Lists extends Command {
 

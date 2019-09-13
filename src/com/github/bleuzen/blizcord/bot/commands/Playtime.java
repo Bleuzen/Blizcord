@@ -4,9 +4,9 @@ import com.github.bleuzen.blizcord.Utils;
 import com.github.bleuzen.blizcord.bot.AudioPlayerThread;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class Playtime extends Command {
 
