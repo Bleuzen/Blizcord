@@ -31,7 +31,7 @@
 
     <target name="jar" depends="compile">
         <mkdir dir="${build.dir}"/>
-        <jar destfile="${build.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+        <jar destfile="${build.dir}/${ant.project.name}.jar" basedir="${classes.dir}" duplicate="preserve">
             <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
 			<zipfileset dir="${src.dir}/com/github/bleuzen/blizcord" includes="icon.png" prefix="com/github/bleuzen/blizcord"/>
 			<manifest>
