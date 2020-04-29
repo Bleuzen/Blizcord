@@ -29,6 +29,6 @@ public class Values {
 	public static final int SET_VOLUME_ERROR_CUSTOM_VOLUME_NOT_ALLOWED = 1;
 	public static final int SET_VOLUME_ERROR_INVALID_NUMBER = 2;
 
-	public static final int MAX_VOUME = 200;
+	public static final int MAX_VOLUME = 200;
 
 }

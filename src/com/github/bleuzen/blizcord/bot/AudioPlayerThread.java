@@ -275,7 +275,7 @@ public class AudioPlayerThread implements Runnable {
 		try {
 			volume = Integer.parseInt(v);
 
-			if(volume > Values.MAX_VOUME || volume < 0) {
+			if(volume > Values.MAX_VOLUME || volume < 0) {
 				throw new NumberFormatException();
 			}
 		} catch (NumberFormatException e) {
