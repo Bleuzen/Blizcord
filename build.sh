@@ -7,8 +7,8 @@
 # As an alternative, you can use IntelliJ IDEA to build the jar. It comes with Maven and Ant. Build configs for it exist in this repo.
 
 
-# Force to build with Java 11
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+# Force to build with Java 8
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
 
 # Download dependencies with maven
 mvn dependency:copy-dependencies
