@@ -5,11 +5,11 @@
     <property name="build.dir"   value="build"/>
 
     <!-- <property name="classes.dir" value="${build.dir}/classes"/> -->
-    <property name="classes.dir" value="target/classes"/>
+    <property name="classes.dir" value="build/target/classes"/>
 
     <property name="main-class"  value="com.github.bleuzen.blizcord.a"/>
 
-	<property name="lib.dir"     value="target/dependency"/>
+	<property name="lib.dir"     value="build/target/dependency"/>
 
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
