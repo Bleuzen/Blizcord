@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Blizcord GUI" type="Application" factoryName="Application">
+  <configuration default="false" name="Blizcord GUI (Debug)" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.github.bleuzen.blizcord.a" />
     <module name="Blizcord" />
-    <option name="PROGRAM_PARAMETERS" value="--gui" />
+    <option name="PROGRAM_PARAMETERS" value="--gui --debug" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

@@ -11,7 +11,7 @@ import com.github.bleuzen.blizcord.gui.GUI_Main;
 
 public class UpdateChecker extends TimerTask {
 
-	private static final String UPDATER_URL = "https://gitlab.com/Bleuzen/versions/raw/master/blizcord/v1/data.json";
+	private static final String UPDATER_URL = "https://raw.githubusercontent.com/Bleuzen/metadata/master/blizcord/v1/data.json";
 
 	private boolean updateAvailable = false;
 	
