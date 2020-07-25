@@ -42,9 +42,9 @@ class Lists extends Command {
 		}
 		outputMsg.append("```");
 
-		if(outputMsg.length() > Values.MAX_MESSAGE_LENGHT) {
+		if(outputMsg.length() > Values.MAX_MESSAGE_LENGTH) {
 			final String ending = "...```";
-			outputMsg.setLength((Values.MAX_MESSAGE_LENGHT - ending.length()));
+			outputMsg.setLength((Values.MAX_MESSAGE_LENGTH - ending.length()));
 			outputMsg.append(ending);
 		}
 		channel.sendMessage(outputMsg.toString()).queue();

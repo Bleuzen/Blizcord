@@ -45,9 +45,9 @@ class List extends Command {
 			} else {
 				toSend.append("``There are no upcoming songs.``");
 			}
-			if(toSend.length() > Values.MAX_MESSAGE_LENGHT) {
+			if(toSend.length() > Values.MAX_MESSAGE_LENGTH) {
 				final String ending = "...```";
-				toSend.setLength((Values.MAX_MESSAGE_LENGHT - ending.length()));
+				toSend.setLength((Values.MAX_MESSAGE_LENGTH - ending.length()));
 				toSend.append(ending);
 			}
 			channel.sendMessage(toSend.toString()).queue();
