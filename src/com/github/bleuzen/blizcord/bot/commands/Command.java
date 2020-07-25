@@ -35,6 +35,7 @@ public abstract class Command {
 		commands.add(new Play());
 		commands.add(new Playtime());
 		commands.add(new Repeat());
+		commands.add(new Rmlist());
 		commands.add(new Save());
 		commands.add(new Search());
 		commands.add(new Seek());
