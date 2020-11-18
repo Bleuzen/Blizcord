@@ -22,6 +22,8 @@
 
     <target name="clean">
         <delete dir="${build.dir}"/>
+        <delete dir="${classes.dir}"/>
+        <delete dir="${lib.dir}"/>
     </target>
 
     <target name="compile">
