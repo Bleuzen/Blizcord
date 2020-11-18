@@ -106,8 +106,9 @@ public class Bot extends ListenerAdapter {
 		Log.info("Starting JDA...");
 
 		try {
-			JDABuilder builder = new JDABuilder(AccountType.BOT);
-			builder.setToken(Config.get(Config.BOT_TOKEN));
+			JDABuilder builder = JDABuilder.createDefault(Config.get(Config.BOT_TOKEN));
+
+			builder.addEventListeners(new Bot());
 
 			if(Config.getBoolean(Config.AUTO_RECONNECT)) {
 				builder.setAutoReconnect(true);
@@ -129,9 +130,6 @@ public class Bot extends ListenerAdapter {
 			api = builder.build();
 			// Wait until connected
 			api.awaitReady();
-
-			api.addEventListener(new Bot()); // Renamed in JDA 4 ( JDABuilder.addEventListener -> JDABuilder.addEventListeners ) // why not here?
-
 
 			// check if only one server
 			int guilds = api.getGuilds().size();
