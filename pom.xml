@@ -35,7 +35,7 @@
     <dependency>
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
-      <version>4.2.1_255</version>
+      <version>4.2.1_262</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.json/json -->
