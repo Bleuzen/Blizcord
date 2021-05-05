@@ -42,13 +42,13 @@
         </jar>
     </target>
 	
-	<target name="obfuscate" depends="jar">
+	<target name="optimize" depends="jar">
 		<taskdef resource="proguard/ant/task.properties"
-				 classpath="${proguard.dir}\lib\proguard.jar" />
+				 classpath="${proguard.dir}\lib\proguard-ant.jar" />
 		<proguard configuration="dist/proguard.conf" />
 	</target>
 
-	<target name="exe" depends="obfuscate">
+	<target name="exe" depends="optimize">
 		<taskdef name="launch4j"
 				 classname="net.sf.launch4j.ant.Launch4jTask"
 				 classpath="${launch4j.dir}/launch4j.jar
