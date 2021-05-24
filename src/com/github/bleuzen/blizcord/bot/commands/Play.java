@@ -11,7 +11,7 @@ class Play extends Command {
 
 	@Override
 	public String getName() {
-		return "play";
+		return "p";
 	}
 
 	@Override
