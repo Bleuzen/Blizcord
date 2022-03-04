@@ -46,6 +46,7 @@
       <version>20211205</version>
     </dependency>
 
+    <!-- Maybe replace with: https://github.com/Walkyst/lavaplayer-fork -->
     <dependency>
       <groupId>com.sedmelluq</groupId>
       <artifactId>lavaplayer</artifactId>
