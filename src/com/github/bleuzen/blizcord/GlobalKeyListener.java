@@ -2,14 +2,14 @@ package com.github.bleuzen.blizcord;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-import org.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 
 import com.github.bleuzen.blizcord.bot.AudioPlayerThread;
 import com.github.bleuzen.blizcord.bot.Bot;
 
-public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyListener {
+public class GlobalKeyListener implements com.github.kwhat.jnativehook.keyboard.NativeKeyListener {
 
 	private static Level loggingLevel;
 
@@ -96,7 +96,7 @@ public class NativeKeyListener implements org.jnativehook.keyboard.NativeKeyList
 
 			// Init JNativeHook
 			GlobalScreen.registerNativeHook();
-			GlobalScreen.addNativeKeyListener(new NativeKeyListener());
+			GlobalScreen.addNativeKeyListener(new GlobalKeyListener());
 
 			Log.debug("JNativeHook initialized.");
 		} catch (NativeHookException e) {

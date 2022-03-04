@@ -90,7 +90,7 @@ public class Log {
 			// set lavaplayer logging to DEBUG
 			lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.DEBUG);
 			// set JNativeHook logging level to WARNING
-			NativeKeyListener.setLevel(java.util.logging.Level.WARNING);
+			GlobalKeyListener.setLevel(java.util.logging.Level.WARNING);
 		} else {
 			if(a.isGui()) {
 				// disable JDA logging (only ERROR)
@@ -98,14 +98,14 @@ public class Log {
 				// disable lavaplayer logging
 				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.OFF);
 				// set JNativeHook logging level to OFF
-				NativeKeyListener.setLevel(java.util.logging.Level.OFF);
+				GlobalKeyListener.setLevel(java.util.logging.Level.OFF);
 			} else {
 				// set JDA logging to WARN
 				jdaLogger.setLevel(Level.WARN);
 				// set lavaplayer logging to WARN
 				lavaplayerLogger.setLevel(ch.qos.logback.classic.Level.WARN);
 				// set JNativeHook logging level to WARNING
-				NativeKeyListener.setLevel(java.util.logging.Level.WARNING);
+				GlobalKeyListener.setLevel(java.util.logging.Level.WARNING);
 			}
 		}
 	}

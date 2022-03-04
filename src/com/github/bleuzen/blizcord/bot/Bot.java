@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Timer;
 import com.github.bleuzen.blizcord.Config;
 import com.github.bleuzen.blizcord.Log;
-import com.github.bleuzen.blizcord.NativeKeyListener;
+import com.github.bleuzen.blizcord.GlobalKeyListener;
 import com.github.bleuzen.blizcord.UpdateChecker;
 import com.github.bleuzen.blizcord.Utils;
 import com.github.bleuzen.blizcord.Utils.ArgumentUtils;
@@ -13,7 +13,6 @@ import com.github.bleuzen.blizcord.a;
 import com.github.bleuzen.blizcord.bot.commands.Command;
 import com.github.bleuzen.blizcord.gui.GUI_Main;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
@@ -198,7 +197,7 @@ public class Bot extends ListenerAdapter {
 
 			// Start NativeKeyListener
 			if(Config.getBoolean(Config.ENABLE_MEDIA_CONTROL_KEYS)) {
-				NativeKeyListener.init();
+				GlobalKeyListener.init();
 			}
 
 			// Start checking for updates
